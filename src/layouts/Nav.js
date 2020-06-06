@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FiMenu } from 'react-icons/fi';
+import { RiMenuLine } from 'react-icons/ri';
 
 const Container = styled.div`
 	position: fixed;
@@ -18,11 +18,11 @@ const MenuIcon = styled.svg`
 	cursor: pointer;
 `;
 
-export default function Nav() {
+export default function Nav({ setIsMenuOpen }) {
 	return (
 		<Container>
-			<div onClick={() => console.log('hello')}>
-				<MenuIcon as={FiMenu} />
+			<div onClick={() => setIsMenuOpen(true)}>
+				<MenuIcon as={RiMenuLine} />
 			</div>
 		</Container>
 	);
