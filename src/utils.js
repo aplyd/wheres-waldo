@@ -1,4 +1,6 @@
-export const getImageDims = (imgSrc) => {
-	let rect = imgSrc.getBoundingClientRect();
-	return { top: rect.top, bottom: rect.bottom };
-};
+// export const getImageDims = (imageSource) => {
+// 	if (imageSource) {
+// 		let rect = imageSource.getBoundingClientRect();
+// 		return { top: rect.top, bottom: rect.bottom };
+// 	}
+// };
