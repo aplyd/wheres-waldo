@@ -1,6 +1,7 @@
 import React, { useState, useReducer } from 'react';
 import styled from 'styled-components';
 import { GlobalStyle, Spacer } from './GlobalStyle';
+import image1 from './images/OTfytjA.jpg';
 
 import Cover from './layouts/Cover';
 import Nav from './layouts/Nav';
@@ -10,7 +11,13 @@ import Scoreboard from './layouts/Scoreboard';
 
 const Container = styled.div`
 	width: 100%;
+	height: 100vh;
+`;
+
+const ImageContainer = styled.div`
+	width: 100%;
 	height: 100%;
+	max-width: 1920px;
 `;
 
 function reducer(state, action) {
@@ -58,7 +65,7 @@ function reducer(state, action) {
 const initialState = {
 	isMenuOpen: false,
 	timer: 0,
-	isCoverShown: true,
+	isCoverShown: false,
 	isScoreShown: false,
 	isAboutShown: false,
 };
@@ -72,6 +79,9 @@ function App() {
 			{state.isMenuOpen && <Menu dispatch={dispatch} />}
 			<Container>
 				<Nav dispatch={dispatch} />
+				<ImageContainer>
+					<img src={image1} alt=""></img>
+				</ImageContainer>
 			</Container>
 			{state.isCoverShown && <Cover dispatch={dispatch} />}
 			{state.isScoreShown && <Scoreboard />}
