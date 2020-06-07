@@ -28,10 +28,10 @@ const Timer = styled.h1`
 	line-height: 1em;
 `;
 
-export default function Nav({ dispatch }) {
+export default function Nav({ layoutDispatch }) {
 	return (
 		<Container>
-			<div onClick={() => dispatch({ type: 'toggle menu' })}>
+			<div onClick={() => layoutDispatch({ type: 'toggle menu' })}>
 				<MenuIcon as={RiMenuLine} />
 			</div>
 			<div>

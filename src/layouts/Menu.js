@@ -41,30 +41,30 @@ const MenuItem = styled.div`
 	}
 `;
 
-export default function Menu({ dispatch }) {
+export default function Menu({ layoutDispatch }) {
 	const resume = {
 		title: 'Resume',
-		action: () => dispatch({ type: 'show game' }),
+		action: () => layoutDispatch({ type: 'show game' }),
 	};
 
 	const info = {
 		title: 'Info',
-		action: () => dispatch({ type: 'show info' }),
+		action: () => layoutDispatch({ type: 'show info' }),
 	};
 
 	const newGame = {
 		title: 'New Game',
-		action: () => dispatch({ type: 'start game' }),
+		action: () => layoutDispatch({ type: 'start game' }),
 	};
 
 	const scoreboard = {
 		title: 'Scoreboard',
-		action: () => dispatch({ type: 'show scores' }),
+		action: () => layoutDispatch({ type: 'show scores' }),
 	};
 
 	return (
 		<Container>
-			<div onClick={() => dispatch({ type: 'toggle menu' })}>
+			<div onClick={() => layoutDispatch({ type: 'toggle menu' })}>
 				<CloseIcon as={MdClose} />
 			</div>
 

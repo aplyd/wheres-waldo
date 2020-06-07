@@ -24,12 +24,14 @@ const StartGameBtn = styled.button`
 	border-radius: 8px;
 `;
 
-export default function Cover({ dispatch }) {
+export default function Cover({ layoutDispatch }) {
 	return (
 		<Container>
 			<Title>Where's Waldo?</Title>
 			<Spacer height={'24px'} />
-			<StartGameBtn onClick={() => dispatch({ type: 'start game' })}>
+			<StartGameBtn
+				onClick={() => layoutDispatch({ type: 'start game' })}
+			>
 				Start
 			</StartGameBtn>
 		</Container>

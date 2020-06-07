@@ -27,12 +27,12 @@ const Selection = styled.div`
 	width: 40px;
 	height: 40px;
 	position: absolute;
-	top: 17%;
+	top: 18%;
 	left: 42%;
 	border: solid 2px red;
 `;
 
-function reducer(state, action) {
+function layoutReducer(state, action) {
 	switch (action.type) {
 		case 'toggle menu':
 			return { ...state, isMenuOpen: !state.isMenuOpen };
@@ -70,29 +70,66 @@ function reducer(state, action) {
 				isAboutShown: false,
 			};
 		case 'image resize':
-			console.log('sttate');
 			return {
 				...state,
-				imageHeight: action.height,
+				currentImageHeight: action.height,
 			};
 		default:
 			return state;
 	}
 }
 
-const initialState = {
+function userReducer(state, action) {
+	switch (action.type) {
+		case 'click':
+			return {
+				...state,
+				userClick: action.coords,
+			};
+		case 'selection':
+			return {
+				...state,
+				characterSelection: action.selection,
+			};
+		default:
+			return state;
+	}
+}
+
+const initialLayoutState = {
 	isMenuOpen: false,
 	timer: 0,
-	isCoverShown: false,
+	isCoverShown: true,
 	isScoreShown: false,
 	isAboutShown: false,
 	currentImage: image1,
-	waldoCoords: { x: 0, y: 0 },
-	imageHeight: 0,
+	waldoCoords: { x: [42, '%'], y: [18, '%'] },
+	currentImageHeight: 0,
+};
+
+//temporary, should live on the backend so users can't access
+const intialUserState = {
+	imageOne: {
+		waldo: { x: [42, '%'], y: [18, '%'] },
+		other: {},
+	},
+	imageTwo: {
+		waldo: {},
+		other: {},
+	},
+	imageThree: {
+		waldo: {},
+		other: {},
+	},
+	userClick: { x: [0, '%'], y: [0, '%'] },
 };
 
 function App() {
-	const [state, dispatch] = useReducer(reducer, initialState);
+	const [layoutState, layoutDispatch] = useReducer(
+		layoutReducer,
+		initialLayoutState
+	);
+	const [userState, userDispatch] = useReducer(userReducer, intialUserState);
 	const [imageRef, observedHeight] = useImageHeight();
 
 	const getClickArea = (e) => {
@@ -105,9 +142,9 @@ function App() {
 	return (
 		<React.Fragment>
 			<GlobalStyle />
-			{state.isMenuOpen && <Menu dispatch={dispatch} />}
+			{layoutState.isMenuOpen && <Menu layoutDispatch={layoutDispatch} />}
 			<Container>
-				<Nav dispatch={dispatch} />
+				<Nav layoutDispatch={layoutDispatch} />
 				<Spacer height={'52px'} />
 				<ImageContainer
 					onClick={(e) => {
@@ -118,9 +155,11 @@ function App() {
 					<img src={image1} alt="" ref={imageRef}></img>
 				</ImageContainer>
 			</Container>
-			{state.isCoverShown && <Cover dispatch={dispatch} />}
-			{state.isScoreShown && <Scoreboard />}
-			{state.isAboutShown && <About />}
+			{layoutState.isCoverShown && (
+				<Cover layoutDispatch={layoutDispatch} />
+			)}
+			{layoutState.isScoreShown && <Scoreboard />}
+			{layoutState.isAboutShown && <About />}
 
 			<Spacer height={'48px'} />
 		</React.Fragment>
