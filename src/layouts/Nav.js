@@ -7,6 +7,7 @@ const Container = styled.div`
 	height: 52px;
 	width: 100%;
 	background-color: black;
+	z-index: 1;
 `;
 
 const MenuIcon = styled.svg`
@@ -18,11 +19,23 @@ const MenuIcon = styled.svg`
 	cursor: pointer;
 `;
 
-export default function Nav({ setIsMenuOpen }) {
+const Timer = styled.h1`
+	color: white;
+	font-size: 44px;
+	top: 4px;
+	right: 4px;
+	position: absolute;
+	line-height: 1em;
+`;
+
+export default function Nav({ dispatch }) {
 	return (
 		<Container>
-			<div onClick={() => setIsMenuOpen(true)}>
+			<div onClick={() => dispatch({ type: 'toggle menu' })}>
 				<MenuIcon as={RiMenuLine} />
+			</div>
+			<div>
+				<Timer>0:00</Timer>
 			</div>
 		</Container>
 	);

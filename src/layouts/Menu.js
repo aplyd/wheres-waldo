@@ -41,42 +41,46 @@ const MenuItem = styled.div`
 	}
 `;
 
-const Space = styled(Spacer)`
-	height: 20%;
-`;
+export default function Menu({ dispatch }) {
+	const resume = {
+		title: 'Resume',
+		action: () => dispatch({ type: 'show game' }),
+	};
 
-export default function Menu({ setIsMenuOpen }) {
-	const about = {
-		title: 'About',
-		action: () => console.log('about'),
+	const info = {
+		title: 'Info',
+		action: () => dispatch({ type: 'show info' }),
 	};
 
 	const newGame = {
 		title: 'New Game',
-		action: () => console.log('new game'),
+		action: () => dispatch({ type: 'start game' }),
 	};
 
 	const scoreboard = {
 		title: 'Scoreboard',
-		action: () => console.log('scoreboard'),
+		action: () => dispatch({ type: 'show scores' }),
 	};
 
 	return (
 		<Container>
-			<div onClick={() => setIsMenuOpen(false)}>
+			<div onClick={() => dispatch({ type: 'toggle menu' })}>
 				<CloseIcon as={MdClose} />
 			</div>
-			<Space />
+
 			<MenuItemsContainer>
-				{[about, newGame, scoreboard].map((item, index) => {
+				<Spacer height={'24px'} />
+				{[resume, info, newGame, scoreboard].map((item, index) => {
 					return (
-						<MenuItem onClick={item.action} key={index}>
-							<h2>{item.title}</h2>
-						</MenuItem>
+						<React.Fragment key={index}>
+							<Spacer height={'24px'} />
+							<MenuItem onClick={item.action}>
+								<h2>{item.title}</h2>
+							</MenuItem>
+						</React.Fragment>
 					);
 				})}
 			</MenuItemsContainer>
-			<Space />
 		</Container>
 	);
 }
