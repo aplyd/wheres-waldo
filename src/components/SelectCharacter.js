@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 const Container = styled.div`
 	position: absolute;
-	left: ${(props) => `calc(${props.x}% + 48px)`};
-	top: ${(props) => props.y + '%'};
+	left: ${(props) => props.offsets.left};
+	top: ${(props) => props.offsets.top};
 	background-color: white;
 	border-radius: 8px;
 	&& > div:first-child {
@@ -19,13 +19,14 @@ const Container = styled.div`
 
 const SelectionItem = styled.div`
 	cursor: pointer;
+	text-align: center;
 	&&:hover {
 		color: white;
 		background-color: black;
 	}
 	&& > h2 {
 		font-size: 20px;
-		padding: 12px;
+		padding: 10px 14px;
 	}
 `;
 
@@ -43,6 +44,8 @@ export default function SelectCharacter({
 	dropdownPosition,
 	userDispatch,
 	layoutDispatch,
+	clickedCoords,
+	imageHeight,
 }) {
 	const characterSelectOptions = [
 		{
@@ -87,8 +90,32 @@ export default function SelectCharacter({
 		},
 	];
 
+	const getOffset = () => {
+		const obj = {};
+		const offsets = {
+			right: `calc(${dropdownPosition.x}% + 48px)`,
+			left: `calc(${dropdownPosition.x}% - 96px)`,
+			up: `calc(${dropdownPosition.y}% - 218px)`,
+			down: `calc(${dropdownPosition.y}%)`,
+		};
+
+		clickedCoords.x + 108 > window.innerWidth
+			? (obj.left = offsets.left)
+			: (obj.left = offsets.right);
+
+		clickedCoords.y - 52 + 262 < imageHeight
+			? (obj.top = offsets.down)
+			: (obj.top = offsets.up);
+
+		return obj;
+	};
+
 	return (
-		<Container x={dropdownPosition.x} y={dropdownPosition.y}>
+		<Container
+			x={dropdownPosition.x}
+			y={dropdownPosition.y}
+			offsets={getOffset()}
+		>
 			{characterSelectOptions.map((option, index) => {
 				return (
 					<SelectionItem

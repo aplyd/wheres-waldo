@@ -109,6 +109,7 @@ function layoutReducer(state, action) {
 			return {
 				...state,
 				clicked: action.clicked,
+				clickedCoords: action.clickedCoords,
 				isSelectCharacterShown: true,
 			};
 		default:
@@ -140,6 +141,7 @@ const initialLayoutState = {
 	currentImage: image1,
 	isSelectCharacterShown: false,
 	clicked: null,
+	clickedCoords: null,
 };
 
 //temporary, should live on the backend so users can't access
@@ -187,6 +189,10 @@ function App() {
 				x: (x / imageDims.width) * 100,
 				y: (y / imageDims.height) * 100,
 			},
+			clickedCoords: {
+				x: e.clientX,
+				y: e.clientY,
+			},
 		});
 	};
 
@@ -213,6 +219,8 @@ function App() {
 							dropdownPosition={layoutState.clicked}
 							userDispatch={userDispatch}
 							layoutDispatch={layoutDispatch}
+							clickedCoords={layoutState.clickedCoords}
+							imageHeight={imageDims.height}
 						/>
 					)}
 					<Image src={image1} alt="" ref={imageRef}></Image>
