@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { GlobalStyle, Spacer } from './GlobalStyle';
 import image1 from './images/OTfytjA.jpg';
 
-import { getImageDims } from './utils';
-import { useImageHeight } from './hooks/useImageHeight';
+import { useImageDims } from './hooks/useImageDims';
 
 import Cover from './layouts/Cover';
 import Nav from './layouts/Nav';
@@ -34,6 +33,14 @@ const Selection = styled.div`
 	top: 18%;
 	left: 42%;
 	border: solid 2px red;
+`;
+const UserSelection = styled.div`
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	top: ${(props) => props.y && props.y};
+	left: ${(props) => props.x && props.x};
+	border: solid 4px black;
 `;
 
 const Image = styled.img`
@@ -107,6 +114,11 @@ function userReducer(state, action) {
 				...state,
 				characterSelection: action.selection,
 			};
+		case 'clicked':
+			return {
+				...state,
+				clicked: action.clicked,
+			};
 		default:
 			return state;
 	}
@@ -121,8 +133,6 @@ const initialLayoutState = {
 	isAboutShown: false,
 	isImageShown: true,
 	currentImage: image1,
-	waldoCoords: { x: [42, '%'], y: [18, '%'] },
-	currentImageHeight: 0,
 };
 
 //temporary, should live on the backend so users can't access
@@ -139,7 +149,7 @@ const intialUserState = {
 		waldo: {},
 		other: {},
 	},
-	userClick: { x: [0, '%'], y: [0, '%'] },
+	clicked: { x: 0, y: 0 },
 };
 
 //TODO - get where an image was clicked in percentage so it's responsive
@@ -150,14 +160,45 @@ function App() {
 		initialLayoutState
 	);
 	const [userState, userDispatch] = useReducer(userReducer, intialUserState);
-	const [imageRef, observedHeight] = useImageHeight(layoutState.isImageShown);
-	console.log(observedHeight);
+	const [imageDims, setImageDims] = useState({ height: 0, width: 0 });
+	const [imageRef, observedDims] = useImageDims();
+
+	useEffect(() => {
+		if (observedDims) {
+			setImageDims(observedDims);
+		}
+	}, [observedDims]);
+
+	// top: ${(props) => {
+	// 	if (props.imageDims) {
+	// 		const withoutNavHeight = props.y - 72;
+	// 		return (withoutNavHeight / props.imageDims.height) * 100 + '%';
+	// 	}
+	// }};
+	// left: ${(props) => {
+	// 	if (props.imageDims) {
+	// 		const withoutSelectionContainerWidth = props.x - 20;
+	// 		return (
+	// 			(withoutSelectionContainerWidth / props.imageDims.width) * 100 +
+	// 			'%'
+	// 		);
+	// 	}
+	// }};
 
 	const getClickArea = (e) => {
 		e.persist();
-		console.log('click:');
-		console.log(e.clientX, e.clientY);
-		console.log('window width:', window.innerWidth);
+		const x = e.clientX - 20;
+		const y = e.clientY - 72;
+
+		userDispatch({
+			type: 'clicked',
+			clicked: {
+				x: (x / imageDims.width) * 100 + '%',
+				y: (y / imageDims.height) * 100 + '%',
+			},
+		});
+
+		// console.log('window width:', window.innerWidth);
 	};
 
 	return (
@@ -172,7 +213,10 @@ function App() {
 					}}
 				>
 					<Selection />
-
+					<UserSelection
+						x={userState.clicked.x}
+						y={userState.clicked.y}
+					/>
 					<Image src={image1} alt="" ref={imageRef}></Image>
 				</ImageContainer>
 			</Container>
