@@ -31,14 +31,16 @@ const Timer = styled.h1`
 
 export default function Nav({ layoutDispatch }) {
 	return (
-		<Container>
-			<div onClick={() => layoutDispatch({ type: 'toggle menu' })}>
-				<MenuIcon as={RiMenuLine} />
-			</div>
-			<div>
-				<Timer>0:00</Timer>
-			</div>
+		<>
+			<Container>
+				<div onClick={() => layoutDispatch({ type: 'toggle menu' })}>
+					<MenuIcon as={RiMenuLine} />
+				</div>
+				<div>
+					<Timer>0:00</Timer>
+				</div>
+			</Container>
 			<Spacer height={'52px'} />
-		</Container>
+		</>
 	);
 }

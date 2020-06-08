@@ -44,7 +44,7 @@ const MenuItem = styled.div`
 export default function Menu({ layoutDispatch }) {
 	const resume = {
 		title: 'Resume',
-		action: () => layoutDispatch({ type: 'show game' }),
+		action: () => layoutDispatch({ type: 'resume' }),
 	};
 
 	const info = {

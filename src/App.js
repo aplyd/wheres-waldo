@@ -55,6 +55,7 @@ function layoutReducer(state, action) {
 				isCoverShown: false,
 				isScoreShown: false,
 				isAboutShown: false,
+				isImageShown: true,
 			};
 		case 'show info':
 			return {
@@ -63,6 +64,7 @@ function layoutReducer(state, action) {
 				isMenuOpen: false,
 				isCoverShown: false,
 				isScoreShown: false,
+				isImageShown: false,
 				//also need to reset timer here
 			};
 		case 'show scores':
@@ -72,14 +74,16 @@ function layoutReducer(state, action) {
 				isCoverShown: false,
 				isScoreShown: true,
 				isAboutShown: false,
+				isImageShown: false,
 			};
-		case 'show game':
+		case 'resume':
 			return {
 				...state,
 				isMenuOpen: false,
 				isCoverShown: false,
 				isScoreShown: false,
 				isAboutShown: false,
+				isImageShown: true,
 			};
 		case 'image resize':
 			return {
@@ -115,6 +119,7 @@ const initialLayoutState = {
 	isCoverShown: false,
 	isScoreShown: false,
 	isAboutShown: false,
+	isImageShown: true,
 	currentImage: image1,
 	waldoCoords: { x: [42, '%'], y: [18, '%'] },
 	currentImageHeight: 0,
@@ -137,13 +142,16 @@ const intialUserState = {
 	userClick: { x: [0, '%'], y: [0, '%'] },
 };
 
+//TODO - get where an image was clicked in percentage so it's responsive
+
 function App() {
 	const [layoutState, layoutDispatch] = useReducer(
 		layoutReducer,
 		initialLayoutState
 	);
 	const [userState, userDispatch] = useReducer(userReducer, intialUserState);
-	// const [imageRef, observedHeight] = useImageHeight();
+	const [imageRef, observedHeight] = useImageHeight(layoutState.isImageShown);
+	console.log(observedHeight);
 
 	const getClickArea = (e) => {
 		e.persist();
@@ -164,8 +172,8 @@ function App() {
 					}}
 				>
 					<Selection />
-					{/* <img src={image1} alt="" ref={imageRef}></img> */}
-					<Image src={image1} alt=""></Image>
+
+					<Image src={image1} alt="" ref={imageRef}></Image>
 				</ImageContainer>
 			</Container>
 			{layoutState.isCoverShown && (
