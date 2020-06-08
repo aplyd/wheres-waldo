@@ -10,6 +10,7 @@ import Nav from './layouts/Nav';
 import Menu from './layouts/Menu';
 import About from './layouts/About';
 import Scoreboard from './layouts/Scoreboard';
+import SelectCharacter from './components/SelectCharacter';
 
 const Container = styled.div`
 	width: 100%;
@@ -38,9 +39,10 @@ const UserSelection = styled.div`
 	width: 40px;
 	height: 40px;
 	position: absolute;
-	top: ${(props) => props.y && props.y};
-	left: ${(props) => props.x && props.x};
+	top: ${(props) => props.y && props.y + '%'};
+	left: ${(props) => props.x && props.x + '%'};
 	border: solid 4px black;
+	border-radius: 8px;
 `;
 
 const Image = styled.img`
@@ -97,6 +99,18 @@ function layoutReducer(state, action) {
 				...state,
 				currentImageHeight: action.height,
 			};
+		case 'close character selection':
+			return {
+				...state,
+				isSelectCharacterShown: !state.isSelectCharacterShown,
+				clicked: null,
+			};
+		case 'clicked':
+			return {
+				...state,
+				clicked: action.clicked,
+				isSelectCharacterShown: true,
+			};
 		default:
 			return state;
 	}
@@ -104,21 +118,12 @@ function layoutReducer(state, action) {
 
 function userReducer(state, action) {
 	switch (action.type) {
-		case 'click':
-			return {
-				...state,
-				userClick: action.coords,
-			};
-		case 'selection':
+		case 'select character':
 			return {
 				...state,
 				characterSelection: action.selection,
 			};
-		case 'clicked':
-			return {
-				...state,
-				clicked: action.clicked,
-			};
+
 		default:
 			return state;
 	}
@@ -133,12 +138,14 @@ const initialLayoutState = {
 	isAboutShown: false,
 	isImageShown: true,
 	currentImage: image1,
+	isSelectCharacterShown: false,
+	clicked: null,
 };
 
 //temporary, should live on the backend so users can't access
 const intialUserState = {
 	imageOneTargets: {
-		waldo: { x: [42, '%'], y: [18, '%'] },
+		waldo: { x: 42, y: 18 },
 		other: {},
 	},
 	imageTwoTargets: {
@@ -149,10 +156,9 @@ const intialUserState = {
 		waldo: {},
 		other: {},
 	},
-	clicked: { x: 0, y: 0 },
 };
 
-//TODO - get where an image was clicked in percentage so it's responsive
+//TODO - add dragging support for user selection
 
 function App() {
 	const [layoutState, layoutDispatch] = useReducer(
@@ -169,36 +175,19 @@ function App() {
 		}
 	}, [observedDims]);
 
-	// top: ${(props) => {
-	// 	if (props.imageDims) {
-	// 		const withoutNavHeight = props.y - 72;
-	// 		return (withoutNavHeight / props.imageDims.height) * 100 + '%';
-	// 	}
-	// }};
-	// left: ${(props) => {
-	// 	if (props.imageDims) {
-	// 		const withoutSelectionContainerWidth = props.x - 20;
-	// 		return (
-	// 			(withoutSelectionContainerWidth / props.imageDims.width) * 100 +
-	// 			'%'
-	// 		);
-	// 	}
-	// }};
-
 	const getClickArea = (e) => {
 		e.persist();
 		const x = e.clientX - 20;
 		const y = e.clientY - 72;
 
-		userDispatch({
+		//changed from user
+		layoutDispatch({
 			type: 'clicked',
 			clicked: {
-				x: (x / imageDims.width) * 100 + '%',
-				y: (y / imageDims.height) * 100 + '%',
+				x: (x / imageDims.width) * 100,
+				y: (y / imageDims.height) * 100,
 			},
 		});
-
-		// console.log('window width:', window.innerWidth);
 	};
 
 	return (
@@ -213,10 +202,19 @@ function App() {
 					}}
 				>
 					<Selection />
-					<UserSelection
-						x={userState.clicked.x}
-						y={userState.clicked.y}
-					/>
+					{layoutState.clicked && (
+						<UserSelection
+							x={layoutState.clicked && layoutState.clicked.x}
+							y={layoutState.clicked && layoutState.clicked.y}
+						/>
+					)}
+					{layoutState.isSelectCharacterShown && (
+						<SelectCharacter
+							dropdownPosition={layoutState.clicked}
+							userDispatch={userDispatch}
+							layoutDispatch={layoutDispatch}
+						/>
+					)}
 					<Image src={image1} alt="" ref={imageRef}></Image>
 				</ImageContainer>
 			</Container>
