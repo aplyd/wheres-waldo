@@ -7,8 +7,8 @@ export const Spacer = styled.div`
 `;
 
 export const GlobalStyle = createGlobalStyle`
-    ::root {
-      
+    #root, body {
+        background-color: black;
     }
 
     button {

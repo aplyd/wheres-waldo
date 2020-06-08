@@ -14,13 +14,17 @@ import Scoreboard from './layouts/Scoreboard';
 
 const Container = styled.div`
 	width: 100%;
-	height: 100vh;
+	height: 100%;
+	background-color: black;
 `;
 
 const ImageContainer = styled.div`
-	width: 100%;
 	max-width: 1920px;
 	position: relative;
+	@media screen and (max-width: 800px) {
+		height: 100vh;
+		overflow-x: scroll;
+	}
 `;
 
 const Selection = styled.div`
@@ -30,6 +34,14 @@ const Selection = styled.div`
 	top: 18%;
 	left: 42%;
 	border: solid 2px red;
+`;
+
+const Image = styled.img`
+	@media screen and (max-width: 800px) {
+		height: 100vh;
+		width: auto;
+		overflow-x: scroll;
+	}
 `;
 
 function layoutReducer(state, action) {
@@ -99,7 +111,8 @@ function userReducer(state, action) {
 const initialLayoutState = {
 	isMenuOpen: false,
 	timer: 0,
-	isCoverShown: true,
+	//set back to true when finished
+	isCoverShown: false,
 	isScoreShown: false,
 	isAboutShown: false,
 	currentImage: image1,
@@ -109,15 +122,15 @@ const initialLayoutState = {
 
 //temporary, should live on the backend so users can't access
 const intialUserState = {
-	imageOne: {
+	imageOneTargets: {
 		waldo: { x: [42, '%'], y: [18, '%'] },
 		other: {},
 	},
-	imageTwo: {
+	imageTwoTargets: {
 		waldo: {},
 		other: {},
 	},
-	imageThree: {
+	imageThreeTargets: {
 		waldo: {},
 		other: {},
 	},
@@ -130,7 +143,7 @@ function App() {
 		initialLayoutState
 	);
 	const [userState, userDispatch] = useReducer(userReducer, intialUserState);
-	const [imageRef, observedHeight] = useImageHeight();
+	// const [imageRef, observedHeight] = useImageHeight();
 
 	const getClickArea = (e) => {
 		e.persist();
@@ -145,14 +158,14 @@ function App() {
 			{layoutState.isMenuOpen && <Menu layoutDispatch={layoutDispatch} />}
 			<Container>
 				<Nav layoutDispatch={layoutDispatch} />
-				<Spacer height={'52px'} />
 				<ImageContainer
 					onClick={(e) => {
 						getClickArea(e);
 					}}
 				>
 					<Selection />
-					<img src={image1} alt="" ref={imageRef}></img>
+					{/* <img src={image1} alt="" ref={imageRef}></img> */}
+					<Image src={image1} alt=""></Image>
 				</ImageContainer>
 			</Container>
 			{layoutState.isCoverShown && (

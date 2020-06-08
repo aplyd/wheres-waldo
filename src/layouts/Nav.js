@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { RiMenuLine } from 'react-icons/ri';
+import { Spacer } from '../GlobalStyle';
 
 const Container = styled.div`
 	position: fixed;
@@ -37,6 +38,7 @@ export default function Nav({ layoutDispatch }) {
 			<div>
 				<Timer>0:00</Timer>
 			</div>
+			<Spacer height={'52px'} />
 		</Container>
 	);
 }
