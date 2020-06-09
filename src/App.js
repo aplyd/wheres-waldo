@@ -11,6 +11,7 @@ import Menu from './layouts/Menu';
 import About from './layouts/About';
 import Scoreboard from './layouts/Scoreboard';
 import SelectCharacter from './components/SelectCharacter';
+import CharacterFound from './components/CharacterFound';
 
 const Container = styled.div`
 	width: 100%;
@@ -27,14 +28,6 @@ const ImageContainer = styled.div`
 	}
 `;
 
-const Selection = styled.div`
-	width: 40px;
-	height: 40px;
-	position: absolute;
-	top: 18%;
-	left: 42%;
-	border: solid 2px red;
-`;
 const UserSelection = styled.div`
 	width: 40px;
 	height: 40px;
@@ -106,12 +99,22 @@ function layoutReducer(state, action) {
 				clicked: null,
 			};
 		case 'clicked':
-			return {
-				...state,
-				clicked: action.clicked,
-				clickedCoords: action.clickedCoords,
-				isSelectCharacterShown: true,
-			};
+			//if the dropdown and selection are already displayed, close them
+			if (state.clicked) {
+				return {
+					...state,
+					isSelectCharacterShown: false,
+					clickedCoords: null,
+					clicked: null,
+				};
+			} else {
+				return {
+					...state,
+					clicked: action.clicked,
+					clickedCoords: action.clickedCoords,
+					isSelectCharacterShown: true,
+				};
+			}
 		default:
 			return state;
 	}
@@ -119,12 +122,16 @@ function layoutReducer(state, action) {
 
 function userReducer(state, action) {
 	switch (action.type) {
-		case 'select character':
+		case 'select character from dropdown':
 			return {
 				...state,
 				characterSelection: action.selection,
 			};
-
+		case 'character found':
+			const updatedTargets = { ...state };
+			//change imageOne to current image later
+			updatedTargets.imageOneTargets[action.character].found = true;
+			return updatedTargets;
 		default:
 			return state;
 	}
@@ -134,7 +141,7 @@ const initialLayoutState = {
 	isMenuOpen: false,
 	timer: 0,
 	//set back to true when finished
-	isCoverShown: false,
+	isCoverShown: true,
 	isScoreShown: false,
 	isAboutShown: false,
 	isImageShown: true,
@@ -147,7 +154,7 @@ const initialLayoutState = {
 //temporary, should live on the backend so users can't access
 const intialUserState = {
 	imageOneTargets: {
-		waldo: { x: 42, y: 18 },
+		waldo: { x: 42, y: 18, found: false },
 		other: {},
 	},
 	imageTwoTargets: {
@@ -196,7 +203,7 @@ function App() {
 		});
 	};
 
-	const checkUserSelection = () => {
+	const checkUserSelection = (character) => {
 		//using percentages so the image can be responsive
 		//and are clicked on image will be the same
 
@@ -209,13 +216,20 @@ function App() {
 		const clickY = layoutState.clicked.y + (20 / imageDims.height) * 100;
 		const clickX = layoutState.clicked.x + (20 / imageDims.width) * 100;
 
+		//if the target character is within the user selected area
 		if (
 			clickX + selectionWidthInPercentage > waldoX &&
 			clickX - selectionWidthInPercentage < waldoX &&
 			clickY + selectionHeightInPercentage > waldoY &&
 			clickY - selectionHeightInPercentage < waldoY
 		) {
-			//found character, do something
+			userDispatch({
+				type: 'character found',
+				character,
+			});
+			layoutDispatch({
+				type: 'clicked',
+			});
 		}
 	};
 
@@ -230,7 +244,12 @@ function App() {
 						getClickArea(e);
 					}}
 				>
-					<Selection />
+					{/* TODO - move to seperate component */}
+					{userState.imageOneTargets.waldo.found && (
+						<CharacterFound
+							foundCoords={userState.imageOneTargets.waldo}
+						/>
+					)}
 					{layoutState.clicked && (
 						<UserSelection
 							x={layoutState.clicked && layoutState.clicked.x}

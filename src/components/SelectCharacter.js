@@ -27,6 +27,7 @@ const SelectionItem = styled.div`
 	&& > h2 {
 		font-size: 20px;
 		padding: 10px 14px;
+		text-transform: capitalize;
 	}
 `;
 
@@ -50,45 +51,19 @@ export default function SelectCharacter({
 }) {
 	const characterSelectOptions = [
 		{
-			name: 'Waldo',
-			action: () =>
-				// userDispatch({
-				// 	type: 'select character',
-				// 	selection: 'Waldo',
-				// }),
-				checkUserSelection('Waldo'),
+			name: 'waldo',
 		},
 		{
-			name: 'Wizard',
-			action: () =>
-				userDispatch({
-					type: 'select character',
-					selection: 'Wizard Whitebeard',
-				}),
+			name: 'wizard',
 		},
 		{
-			name: 'Odlaw',
-			action: () =>
-				userDispatch({
-					type: 'select character',
-					selection: 'Odlaw',
-				}),
+			name: 'odlaw',
 		},
 		{
-			name: 'Woof',
-			action: () =>
-				userDispatch({
-					type: 'select character',
-					selection: 'Woof',
-				}),
+			name: 'woof',
 		},
 		{
-			name: 'Wendy',
-			action: () =>
-				userDispatch({
-					type: 'select character',
-					selection: 'Wendy',
-				}),
+			name: 'wendy',
 		},
 	];
 
@@ -126,7 +101,7 @@ export default function SelectCharacter({
 					<SelectionItem
 						onClick={(e) => {
 							e.stopPropagation();
-							option.action();
+							checkUserSelection(option.name);
 						}}
 						key={index}
 					>
