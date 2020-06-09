@@ -196,6 +196,29 @@ function App() {
 		});
 	};
 
+	const checkUserSelection = () => {
+		//using percentages so the image can be responsive
+		//and are clicked on image will be the same
+
+		//size waldo can be found within (width of the selection square in %)
+		const selectionWidthInPercentage = ((40 / imageDims.width) * 100) / 2;
+		const selectionHeightInPercentage = ((40 / imageDims.height) * 100) / 2;
+		const waldoY = userState.imageOneTargets.waldo.y;
+		const waldoX = userState.imageOneTargets.waldo.x;
+		//adding the percentage the selection container is offset by
+		const clickY = layoutState.clicked.y + (20 / imageDims.height) * 100;
+		const clickX = layoutState.clicked.x + (20 / imageDims.width) * 100;
+
+		if (
+			clickX + selectionWidthInPercentage > waldoX &&
+			clickX - selectionWidthInPercentage < waldoX &&
+			clickY + selectionHeightInPercentage > waldoY &&
+			clickY - selectionHeightInPercentage < waldoY
+		) {
+			//found character, do something
+		}
+	};
+
 	return (
 		<React.Fragment>
 			<GlobalStyle />
@@ -221,6 +244,7 @@ function App() {
 							layoutDispatch={layoutDispatch}
 							clickedCoords={layoutState.clickedCoords}
 							imageHeight={imageDims.height}
+							checkUserSelection={checkUserSelection}
 						/>
 					)}
 					<Image src={image1} alt="" ref={imageRef}></Image>

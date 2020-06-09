@@ -46,15 +46,17 @@ export default function SelectCharacter({
 	layoutDispatch,
 	clickedCoords,
 	imageHeight,
+	checkUserSelection,
 }) {
 	const characterSelectOptions = [
 		{
 			name: 'Waldo',
 			action: () =>
-				userDispatch({
-					type: 'select character',
-					selection: 'Waldo',
-				}),
+				// userDispatch({
+				// 	type: 'select character',
+				// 	selection: 'Waldo',
+				// }),
+				checkUserSelection('Waldo'),
 		},
 		{
 			name: 'Wizard',
@@ -90,6 +92,7 @@ export default function SelectCharacter({
 		},
 	];
 
+	//off sets the dropdown to remain within the window/image
 	const getOffset = () => {
 		const obj = {};
 		const offsets = {
@@ -99,10 +102,12 @@ export default function SelectCharacter({
 			down: `calc(${dropdownPosition.y}%)`,
 		};
 
+		//108 is width of dropdown + selection square
 		clickedCoords.x + 108 > window.innerWidth
 			? (obj.left = offsets.left)
 			: (obj.left = offsets.right);
 
+		//52 is nav height, 262 is dropdown height
 		clickedCoords.y - 52 + 262 < imageHeight
 			? (obj.top = offsets.down)
 			: (obj.top = offsets.up);
