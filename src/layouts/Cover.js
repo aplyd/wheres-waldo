@@ -37,12 +37,12 @@ const Title = styled.h1`
 `;
 
 const StartGameBtn = styled.button`
-	background-color: green;
+	background-color: black;
 	border: none;
 	color: white;
-	width: 120px;
+	width: 140px;
 	font-size: 20px;
-	height: 48px;
+	height: 68px;
 	border-radius: 8px;
 `;
 
@@ -51,7 +51,7 @@ export default function Cover({ layoutDispatch }) {
 		<>
 			<Container>
 				<Title>Where's Waldo?</Title>
-				<Spacer height={'42px'} />
+				<Spacer height={'62px'} />
 				<StartGameBtn
 					onClick={() => layoutDispatch({ type: 'start game' })}
 				>

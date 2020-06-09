@@ -32,7 +32,7 @@ const SelectionItem = styled.div`
 `;
 
 const CloseDropdown = styled(SelectionItem)`
-	background-color: red;
+	background-color: black;
 	color: white;
 	&&:hover {
 		color: black;
@@ -41,7 +41,7 @@ const CloseDropdown = styled(SelectionItem)`
 	text-align: center;
 `;
 
-export default function SelectCharacter({
+export default function CharacterDropdown({
 	dropdownPosition,
 	userDispatch,
 	layoutDispatch,
@@ -49,6 +49,8 @@ export default function SelectCharacter({
 	imageHeight,
 	checkUserSelection,
 }) {
+	//TODO - character options should come from userState so that when
+	// a character is found, it is removed from the list
 	const characterSelectOptions = [
 		{
 			name: 'waldo',

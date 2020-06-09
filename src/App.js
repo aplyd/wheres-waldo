@@ -10,8 +10,7 @@ import Nav from './layouts/Nav';
 import Menu from './layouts/Menu';
 import About from './layouts/About';
 import Scoreboard from './layouts/Scoreboard';
-import SelectCharacter from './components/SelectCharacter';
-import CharacterFound from './components/CharacterFound';
+import ImageElements from './components/ImageElements';
 
 const Container = styled.div`
 	width: 100%;
@@ -26,16 +25,6 @@ const ImageContainer = styled.div`
 		height: 100vh;
 		overflow-x: scroll;
 	}
-`;
-
-const UserSelection = styled.div`
-	width: 40px;
-	height: 40px;
-	position: absolute;
-	top: ${(props) => props.y && props.y + '%'};
-	left: ${(props) => props.x && props.x + '%'};
-	border: solid 4px black;
-	border-radius: 8px;
 `;
 
 const Image = styled.img`
@@ -93,35 +82,31 @@ function layoutReducer(state, action) {
 				currentImageHeight: action.height,
 			};
 		case 'close character selection':
+			const allClicks =
+				state.clicked.length > 0
+					? [...state.clicked, state.currentClick]
+					: [state.currentClick];
 			return {
 				...state,
 				isSelectCharacterShown: !state.isSelectCharacterShown,
-				clicked: null,
+				clicked: allClicks,
 			};
 		case 'clicked':
 			//if the dropdown and selection are already displayed, close them
-			if (state.clicked) {
+			if (state.isSelectCharacterShown) {
 				return {
 					...state,
 					isSelectCharacterShown: false,
-					clickedCoords: null,
-					clicked: null,
 				};
 			} else {
 				return {
 					...state,
-					clicked: action.clicked,
+					// clicked: [...state.clicked, action.clicked],
 					clickedCoords: action.clickedCoords,
+					currentClick: action.clicked,
 					isSelectCharacterShown: true,
 				};
 			}
-		default:
-			return state;
-	}
-}
-
-function userReducer(state, action) {
-	switch (action.type) {
 		case 'select character from dropdown':
 			return {
 				...state,
@@ -129,7 +114,7 @@ function userReducer(state, action) {
 			};
 		case 'character found':
 			const updatedTargets = { ...state };
-			//change imageOne to current image later
+			//TODO - change imageOne to current image later
 			updatedTargets.imageOneTargets[action.character].found = true;
 			return updatedTargets;
 		default:
@@ -141,18 +126,15 @@ const initialLayoutState = {
 	isMenuOpen: false,
 	timer: 0,
 	//set back to true when finished
-	isCoverShown: true,
+	isCoverShown: false,
 	isScoreShown: false,
 	isAboutShown: false,
 	isImageShown: true,
 	currentImage: image1,
 	isSelectCharacterShown: false,
-	clicked: null,
+	clicked: [],
+	currentClick: null,
 	clickedCoords: null,
-};
-
-//temporary, should live on the backend so users can't access
-const intialUserState = {
 	imageOneTargets: {
 		waldo: { x: 42, y: 18, found: false },
 		other: {},
@@ -174,7 +156,6 @@ function App() {
 		layoutReducer,
 		initialLayoutState
 	);
-	const [userState, userDispatch] = useReducer(userReducer, intialUserState);
 	const [imageDims, setImageDims] = useState({ height: 0, width: 0 });
 	const [imageRef, observedDims] = useImageDims();
 
@@ -192,10 +173,12 @@ function App() {
 		//changed from user
 		layoutDispatch({
 			type: 'clicked',
+			//in percentages
 			clicked: {
 				x: (x / imageDims.width) * 100,
 				y: (y / imageDims.height) * 100,
 			},
+			//in coordinates
 			clickedCoords: {
 				x: e.clientX,
 				y: e.clientY,
@@ -210,8 +193,9 @@ function App() {
 		//size waldo can be found within (width of the selection square in %)
 		const selectionWidthInPercentage = ((40 / imageDims.width) * 100) / 2;
 		const selectionHeightInPercentage = ((40 / imageDims.height) * 100) / 2;
-		const waldoY = userState.imageOneTargets.waldo.y;
-		const waldoX = userState.imageOneTargets.waldo.x;
+		//TODO - change this function to accept any character, not just waldo
+		const waldoY = layoutState.imageOneTargets.waldo.y;
+		const waldoX = layoutState.imageOneTargets.waldo.x;
 		//adding the percentage the selection container is offset by
 		const clickY = layoutState.clicked.y + (20 / imageDims.height) * 100;
 		const clickX = layoutState.clicked.x + (20 / imageDims.width) * 100;
@@ -223,9 +207,23 @@ function App() {
 			clickY + selectionHeightInPercentage > waldoY &&
 			clickY - selectionHeightInPercentage < waldoY
 		) {
-			userDispatch({
+			return true;
+		}
+	};
+
+	const addClick = (character) => {
+		if (checkUserSelection(character)) {
+			layoutDispatch({
 				type: 'character found',
 				character,
+			});
+			layoutDispatch({
+				type: 'clicked',
+			});
+		} else {
+			//TODO - need to add to reducer
+			layoutDispatch({
+				type: 'character not found',
 			});
 			layoutDispatch({
 				type: 'clicked',
@@ -239,36 +237,23 @@ function App() {
 			{layoutState.isMenuOpen && <Menu layoutDispatch={layoutDispatch} />}
 			<Container>
 				<Nav layoutDispatch={layoutDispatch} />
+				{/* image and container */}
 				<ImageContainer
 					onClick={(e) => {
 						getClickArea(e);
 					}}
 				>
-					{/* TODO - move to seperate component */}
-					{userState.imageOneTargets.waldo.found && (
-						<CharacterFound
-							foundCoords={userState.imageOneTargets.waldo}
-						/>
-					)}
-					{layoutState.clicked && (
-						<UserSelection
-							x={layoutState.clicked && layoutState.clicked.x}
-							y={layoutState.clicked && layoutState.clicked.y}
-						/>
-					)}
-					{layoutState.isSelectCharacterShown && (
-						<SelectCharacter
-							dropdownPosition={layoutState.clicked}
-							userDispatch={userDispatch}
-							layoutDispatch={layoutDispatch}
-							clickedCoords={layoutState.clickedCoords}
-							imageHeight={imageDims.height}
-							checkUserSelection={checkUserSelection}
-						/>
-					)}
+					{/* consolidated characterDropdown, characterReveal and userSelection into ImageElements */}
+					<ImageElements
+						layoutState={layoutState}
+						layoutDispatch={layoutDispatch}
+						imageDims={imageDims}
+						checkUserSelection={checkUserSelection}
+					/>
 					<Image src={image1} alt="" ref={imageRef}></Image>
 				</ImageContainer>
 			</Container>
+			{/* these are the different "pages" */}
 			{layoutState.isCoverShown && (
 				<Cover layoutDispatch={layoutDispatch} />
 			)}
