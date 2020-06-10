@@ -43,11 +43,10 @@ const CloseDropdown = styled(SelectionItem)`
 
 export default function CharacterDropdown({
 	dropdownPosition,
-	userDispatch,
 	layoutDispatch,
-	clickedCoords,
+	currentClickCoords,
 	imageHeight,
-	checkUserSelection,
+	addClick,
 }) {
 	//TODO - character options should come from userState so that when
 	// a character is found, it is removed from the list
@@ -69,23 +68,25 @@ export default function CharacterDropdown({
 		},
 	];
 
+	console.log(dropdownPosition);
+
 	//off sets the dropdown to remain within the window/image
 	const getOffset = () => {
 		const obj = {};
 		const offsets = {
-			right: `calc(${dropdownPosition.x}% + 48px)`,
-			left: `calc(${dropdownPosition.x}% - 96px)`,
-			up: `calc(${dropdownPosition.y}% - 218px)`,
-			down: `calc(${dropdownPosition.y}%)`,
+			right: `calc(${dropdownPosition && dropdownPosition.x}% + 48px)`,
+			left: `calc(${dropdownPosition && dropdownPosition.x}% - 96px)`,
+			up: `calc(${dropdownPosition && dropdownPosition.y}% - 218px)`,
+			down: `calc(${dropdownPosition && dropdownPosition.y}%)`,
 		};
 
 		//108 is width of dropdown + selection square
-		clickedCoords.x + 108 > window.innerWidth
+		currentClickCoords.x + 108 > window.innerWidth
 			? (obj.left = offsets.left)
 			: (obj.left = offsets.right);
 
 		//52 is nav height, 262 is dropdown height
-		clickedCoords.y - 52 + 262 < imageHeight
+		currentClickCoords.y - 52 + 262 < imageHeight
 			? (obj.top = offsets.down)
 			: (obj.top = offsets.up);
 
@@ -94,8 +95,8 @@ export default function CharacterDropdown({
 
 	return (
 		<Container
-			x={dropdownPosition.x}
-			y={dropdownPosition.y}
+			x={dropdownPosition && dropdownPosition.x}
+			y={dropdownPosition && dropdownPosition.y}
 			offsets={getOffset()}
 		>
 			{characterSelectOptions.map((option, index) => {
@@ -103,7 +104,7 @@ export default function CharacterDropdown({
 					<SelectionItem
 						onClick={(e) => {
 							e.stopPropagation();
-							checkUserSelection(option.name);
+							addClick(option.name);
 						}}
 						key={index}
 					>
@@ -114,7 +115,7 @@ export default function CharacterDropdown({
 			<CloseDropdown
 				onClick={(e) => {
 					e.stopPropagation();
-					layoutDispatch({ type: 'close character selection' });
+					layoutDispatch({ type: 'clicked' });
 				}}
 			>
 				<h2>X</h2>

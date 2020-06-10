@@ -39,6 +39,7 @@ function layoutReducer(state, action) {
 	switch (action.type) {
 		case 'toggle menu':
 			return { ...state, isMenuOpen: !state.isMenuOpen };
+
 		case 'start game':
 			return {
 				...state,
@@ -48,6 +49,7 @@ function layoutReducer(state, action) {
 				isAboutShown: false,
 				isImageShown: true,
 			};
+
 		case 'show info':
 			return {
 				...state,
@@ -58,6 +60,7 @@ function layoutReducer(state, action) {
 				isImageShown: false,
 				//also need to reset timer here
 			};
+
 		case 'show scores':
 			return {
 				...state,
@@ -67,6 +70,7 @@ function layoutReducer(state, action) {
 				isAboutShown: false,
 				isImageShown: false,
 			};
+
 		case 'resume':
 			return {
 				...state,
@@ -76,21 +80,13 @@ function layoutReducer(state, action) {
 				isAboutShown: false,
 				isImageShown: true,
 			};
+
 		case 'image resize':
 			return {
 				...state,
 				currentImageHeight: action.height,
 			};
-		case 'close character selection':
-			const allClicks =
-				state.clicked.length > 0
-					? [...state.clicked, state.currentClick]
-					: [state.currentClick];
-			return {
-				...state,
-				isSelectCharacterShown: !state.isSelectCharacterShown,
-				clicked: allClicks,
-			};
+
 		case 'clicked':
 			//if the dropdown and selection are already displayed, close them
 			if (state.isSelectCharacterShown) {
@@ -102,21 +98,44 @@ function layoutReducer(state, action) {
 				return {
 					...state,
 					// clicked: [...state.clicked, action.clicked],
-					clickedCoords: action.clickedCoords,
-					currentClick: action.clicked,
+					currentClickCoords: action.currentClickCoords,
+					currentClickPercentage: action.currentClickPercentage,
 					isSelectCharacterShown: true,
 				};
 			}
-		case 'select character from dropdown':
-			return {
-				...state,
-				characterSelection: action.selection,
-			};
+
 		case 'character found':
-			const updatedTargets = { ...state };
+			const correctClick = {
+				x: state.currentClickPercentage.x,
+				y: state.currentClickPercentage.y,
+				chararacterFound: true,
+			};
+			const updatedState = { ...state };
+			updatedState.clicksArray.push(correctClick);
 			//TODO - change imageOne to current image later
-			updatedTargets.imageOneTargets[action.character].found = true;
-			return updatedTargets;
+			updatedState.imageOneTargets[action.character].found = true;
+			updatedState.isSelectCharacterShown = false;
+			return updatedState;
+
+		case 'character not found':
+			const wrongClick = {
+				x: state.currentClickPercentage.x,
+				y: state.currentClickPercentage.y,
+				chararacterFound: false,
+			};
+			console.log(wrongClick);
+			// const allClicks =
+			// 	state.clicksArray.length > 0
+			// 		? [...state.clicksArray, wrongClick]
+			// 		: [wrongClick];
+			// return {
+			// 	...state,
+			// 	isSelectCharacterShown: !state.isSelectCharacterShown,
+			// 	clicksArray: allClicks,
+			// };
+
+			return { ...state };
+
 		default:
 			return state;
 	}
@@ -131,10 +150,14 @@ const initialLayoutState = {
 	isAboutShown: false,
 	isImageShown: true,
 	currentImage: image1,
+	//the selection container & dropdown
 	isSelectCharacterShown: false,
-	clicked: [],
-	currentClick: null,
-	clickedCoords: null,
+	//all previous clicks to display on image (incorrect get hidden)
+	clicksArray: [],
+	//current click in percentage
+	currentClickPercentage: null,
+	//current click coords
+	currentClickCoords: null,
 	imageOneTargets: {
 		waldo: { x: 42, y: 18, found: false },
 		other: {},
@@ -174,12 +197,12 @@ function App() {
 		layoutDispatch({
 			type: 'clicked',
 			//in percentages
-			clicked: {
+			currentClickPercentage: {
 				x: (x / imageDims.width) * 100,
 				y: (y / imageDims.height) * 100,
 			},
 			//in coordinates
-			clickedCoords: {
+			currentClickCoords: {
 				x: e.clientX,
 				y: e.clientY,
 			},
@@ -197,8 +220,12 @@ function App() {
 		const waldoY = layoutState.imageOneTargets.waldo.y;
 		const waldoX = layoutState.imageOneTargets.waldo.x;
 		//adding the percentage the selection container is offset by
-		const clickY = layoutState.clicked.y + (20 / imageDims.height) * 100;
-		const clickX = layoutState.clicked.x + (20 / imageDims.width) * 100;
+		//TODO - maybe this is currentClickCoords instead
+		const clickY =
+			layoutState.currentClickPercentage.y +
+			(20 / imageDims.height) * 100;
+		const clickX =
+			layoutState.currentClickPercentage.x + (20 / imageDims.width) * 100;
 
 		//if the target character is within the user selected area
 		if (
@@ -212,21 +239,17 @@ function App() {
 	};
 
 	const addClick = (character) => {
+		console.log(character);
+
 		if (checkUserSelection(character)) {
 			layoutDispatch({
 				type: 'character found',
 				character,
 			});
-			layoutDispatch({
-				type: 'clicked',
-			});
 		} else {
-			//TODO - need to add to reducer
+			//TODO - 'character not found' need to add to reducer
 			layoutDispatch({
 				type: 'character not found',
-			});
-			layoutDispatch({
-				type: 'clicked',
 			});
 		}
 	};
@@ -248,9 +271,13 @@ function App() {
 						layoutState={layoutState}
 						layoutDispatch={layoutDispatch}
 						imageDims={imageDims}
-						checkUserSelection={checkUserSelection}
+						addClick={addClick}
 					/>
-					<Image src={image1} alt="" ref={imageRef}></Image>
+					<Image
+						src={layoutState.currentImage}
+						alt=""
+						ref={imageRef}
+					></Image>
 				</ImageContainer>
 			</Container>
 			{/* these are the different "pages" */}

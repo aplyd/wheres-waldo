@@ -17,7 +17,7 @@ export default function ImageElements({
 	layoutState,
 	layoutDispatch,
 	imageDims,
-	checkUserSelection,
+	addClick,
 }) {
 	return (
 		<>
@@ -32,21 +32,21 @@ export default function ImageElements({
 			{layoutState.isSelectCharacterShown && (
 				<>
 					<CharacterDropdown
-						dropdownPosition={layoutState.currentClick}
+						dropdownPosition={layoutState.currentClickPercentage}
 						userDispatch={layoutDispatch}
 						layoutDispatch={layoutDispatch}
-						clickedCoords={layoutState.clickedCoords}
+						currentClickCoords={layoutState.currentClickCoords}
 						imageHeight={imageDims.height}
-						checkUserSelection={checkUserSelection}
+						addClick={addClick}
 					/>
 					<UserSelection
 						x={
-							layoutState.currentClick &&
-							layoutState.currentClick.x
+							layoutState.currentClickPercentage &&
+							layoutState.currentClickPercentage.x
 						}
 						y={
-							layoutState.currentClick &&
-							layoutState.currentClick.y
+							layoutState.currentClickPercentage &&
+							layoutState.currentClickPercentage.y
 						}
 					/>
 				</>
