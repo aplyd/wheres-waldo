@@ -123,18 +123,15 @@ function layoutReducer(state, action) {
 				y: state.currentClickPercentage.y,
 				chararacterFound: false,
 			};
-			console.log(wrongClick);
-			// const allClicks =
-			// 	state.clicksArray.length > 0
-			// 		? [...state.clicksArray, wrongClick]
-			// 		: [wrongClick];
-			// return {
-			// 	...state,
-			// 	isSelectCharacterShown: !state.isSelectCharacterShown,
-			// 	clicksArray: allClicks,
-			// };
-
-			return { ...state };
+			const allClicks =
+				state.clicksArray.length > 0
+					? [...state.clicksArray, wrongClick]
+					: [wrongClick];
+			return {
+				...state,
+				isSelectCharacterShown: false,
+				clicksArray: allClicks,
+			};
 
 		default:
 			return state;

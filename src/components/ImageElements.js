@@ -25,9 +25,17 @@ export default function ImageElements({
 				<ShowResult foundCoords={layoutState.imageOneTargets.waldo} />
 			)}
 			{/* clicked - previous clicked spaces, correct state, incorrect fadeout */}
-			{/* {layoutState.clicked && (
-				
-			)} */}
+			{layoutState.clicksArray.length > 0 &&
+				layoutState.clicksArray.map((result, index) => {
+					return (
+						<ShowResult
+							key={index}
+							x={result.x}
+							y={result.y}
+							found={result.characterFound}
+						/>
+					);
+				})}
 			{/* currently clicked and showing dropdown */}
 			{layoutState.isSelectCharacterShown && (
 				<>

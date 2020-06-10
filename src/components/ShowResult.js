@@ -50,9 +50,9 @@ const Container = styled.div`
 		}
 	}
 `;
-export default function ShowResult({ foundCoords, found }) {
+export default function ShowResult({ x, y, found }) {
 	return (
-		<Container x={foundCoords.x} y={foundCoords.y} found={found}>
+		<Container x={x} y={y} found={found}>
 			{found ? <h3>&#x2713;</h3> : <h3>X</h3>}
 		</Container>
 	);
