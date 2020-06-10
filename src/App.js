@@ -116,11 +116,6 @@ function layoutReducer(state, action) {
 			}
 
 		case 'character found':
-			// updatedState.clicksArray.push(correctClick);
-			// //TODO - change imageOne to current image later
-			// updatedState.imageOneTargets[action.character].found = true;
-			// updatedState.isSelectCharacterShown = false;
-
 			const correctClick = {
 				x: state.currentClickPercentage.x,
 				y: state.currentClickPercentage.y,
@@ -132,9 +127,11 @@ function layoutReducer(state, action) {
 				clicksArray: [...state.clicksArray, correctClick],
 				isSelectCharacterShown: false,
 			};
-
 			//this line is problematic
-			// updateState.imageOneTargets.waldo.found = true;
+			updateState.imageOneTargets.waldo.found = true;
+
+			console.log(action.character);
+			console.log(updateState.imageOneTargets.waldo);
 
 			return updateState;
 

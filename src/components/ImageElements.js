@@ -21,9 +21,6 @@ export default function ImageElements({
 }) {
 	return (
 		<>
-			{layoutState.imageOneTargets.waldo.found && (
-				<ShowResult foundCoords={layoutState.imageOneTargets.waldo} />
-			)}
 			{/* clicked - previous clicked spaces, correct state, incorrect fadeout */}
 			{layoutState.clicksArray.length > 0 &&
 				layoutState.clicksArray.map((result, index) => {
