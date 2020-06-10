@@ -44,9 +44,9 @@ const CloseDropdown = styled(SelectionItem)`
 export default function CharacterDropdown({
 	dropdownPosition,
 	layoutDispatch,
-	currentClickCoords,
 	imageHeight,
 	addClick,
+	layoutState,
 }) {
 	//TODO - character options should come from userState so that when
 	// a character is found, it is removed from the list
@@ -68,8 +68,6 @@ export default function CharacterDropdown({
 		},
 	];
 
-	console.log(dropdownPosition);
-
 	//off sets the dropdown to remain within the window/image
 	const getOffset = () => {
 		const obj = {};
@@ -81,12 +79,12 @@ export default function CharacterDropdown({
 		};
 
 		//108 is width of dropdown + selection square
-		currentClickCoords.x + 108 > window.innerWidth
+		layoutState.currentClickCoords.x + 108 > window.innerWidth
 			? (obj.left = offsets.left)
 			: (obj.left = offsets.right);
 
 		//52 is nav height, 262 is dropdown height
-		currentClickCoords.y - 52 + 262 < imageHeight
+		layoutState.currentClickCoords.y - 52 + 262 < imageHeight
 			? (obj.top = offsets.down)
 			: (obj.top = offsets.up);
 
@@ -99,18 +97,20 @@ export default function CharacterDropdown({
 			y={dropdownPosition && dropdownPosition.y}
 			offsets={getOffset()}
 		>
-			{characterSelectOptions.map((option, index) => {
-				return (
-					<SelectionItem
-						onClick={(e) => {
-							e.stopPropagation();
-							addClick(option.name);
-						}}
-						key={index}
-					>
-						<h2>{option.name}</h2>
-					</SelectionItem>
-				);
+			{Object.values(layoutState.imageOne).map((char, index) => {
+				if (!char.found) {
+					return (
+						<SelectionItem
+							onClick={(e) => {
+								e.stopPropagation();
+								addClick(char.name);
+							}}
+							key={index}
+						>
+							<h2>{char.name}</h2>
+						</SelectionItem>
+					);
+				}
 			})}
 			<CloseDropdown
 				onClick={(e) => {

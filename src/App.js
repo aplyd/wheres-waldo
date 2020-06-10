@@ -1,7 +1,7 @@
 import React, { useReducer, useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GlobalStyle, Spacer } from './GlobalStyle';
-import image1 from './images/OTfytjA.jpg';
+import imageOne from './images/OTfytjA.jpg';
 
 import { useImageDims } from './hooks/useImageDims';
 
@@ -127,11 +127,9 @@ function layoutReducer(state, action) {
 				clicksArray: [...state.clicksArray, correctClick],
 				isSelectCharacterShown: false,
 			};
-			//this line is problematic
-			updateState.imageOneTargets.waldo.found = true;
 
-			console.log(action.character);
-			console.log(updateState.imageOneTargets.waldo);
+			//TODO - need to update this so that it handles any image
+			updateState.imageOne.waldo.found = true;
 
 			return updateState;
 
@@ -179,7 +177,7 @@ const initialLayoutState = {
 	isScoreShown: false,
 	isAboutShown: false,
 	isImageShown: true,
-	currentImage: image1,
+	currentImage: imageOne,
 	selectionContainer: null,
 	//the selection container & dropdown
 	isSelectCharacterShown: false,
@@ -189,17 +187,26 @@ const initialLayoutState = {
 	currentClickPercentage: null,
 	//current click coords
 	currentClickCoords: null,
-	imageOneTargets: {
-		waldo: { x: 42, y: 18, found: false },
-		other: {},
+	imageOne: {
+		waldo: { name: 'waldo', x: 42, y: 18, found: false },
+		wizard: { name: 'wizard', x: 0, y: 0, found: false },
+		odlaw: { name: 'odlaw', x: 0, y: 0, found: false },
+		woof: { name: 'woof', x: 0, y: 0, found: false },
+		wendy: { name: 'wendy', x: 0, y: 0, found: false },
 	},
-	imageTwoTargets: {
-		waldo: {},
-		other: {},
+	imageTwo: {
+		waldo: { name: 'waldo', x: 42, y: 18, found: false },
+		wizard: { name: 'wizard', x: 0, y: 0, found: false },
+		odlaw: { name: 'odlaw', x: 0, y: 0, found: false },
+		woof: { name: 'woof', x: 0, y: 0, found: false },
+		wendy: { name: 'wendy', x: 0, y: 0, found: false },
 	},
-	imageThreeTargets: {
-		waldo: {},
-		other: {},
+	imageThree: {
+		waldo: { name: 'waldo', x: 42, y: 18, found: false },
+		wizard: { name: 'wizard', x: 0, y: 0, found: false },
+		odlaw: { name: 'odlaw', x: 0, y: 0, found: false },
+		woof: { name: 'woof', x: 0, y: 0, found: false },
+		wendy: { name: 'wendy', x: 0, y: 0, found: false },
 	},
 };
 
@@ -249,8 +256,9 @@ function App() {
 		const selectionHeightInPercentage = ((40 / imageDims.height) * 100) / 2;
 
 		//TODO - change this function to accept any character, not just waldo
-		const waldoY = layoutState.imageOneTargets.waldo.y;
-		const waldoX = layoutState.imageOneTargets.waldo.x;
+		const waldoY = layoutState.imageOne.waldo.y;
+		const waldoX = layoutState.imageOne.waldo.x;
+		console.log(waldoX);
 
 		//adding the percentage the selection container is offset by
 		const clickY =

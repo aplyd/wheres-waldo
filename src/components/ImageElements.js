@@ -40,9 +40,9 @@ export default function ImageElements({
 						dropdownPosition={layoutState.currentClickPercentage}
 						userDispatch={layoutDispatch}
 						layoutDispatch={layoutDispatch}
-						currentClickCoords={layoutState.currentClickCoords}
 						imageHeight={imageDims.height}
 						addClick={addClick}
+						layoutState={layoutState}
 					/>
 					<UserSelection
 						x={

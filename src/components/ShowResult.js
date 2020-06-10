@@ -92,7 +92,7 @@ export default function ShowResult({ x, y, found }) {
 		<>
 			{found ? (
 				<CorrectContainer x={x} y={y}>
-					<Icon as={MdCheck} />{' '}
+					<Icon as={MdCheck} />
 				</CorrectContainer>
 			) : (
 				<WrongContainer x={x} y={y}>
