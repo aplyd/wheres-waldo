@@ -33,6 +33,17 @@ const Image = styled.img`
 		width: auto;
 		overflow-x: scroll;
 	}
+	/* cursor: none; */
+`;
+
+const UserSelection = styled.div`
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	top: ${(props) => props.y};
+	left: ${(props) => props.x};
+	border: solid 4px black;
+	border-radius: 8px;
 `;
 
 function layoutReducer(state, action) {
@@ -105,23 +116,33 @@ function layoutReducer(state, action) {
 			}
 
 		case 'character found':
+			// updatedState.clicksArray.push(correctClick);
+			// //TODO - change imageOne to current image later
+			// updatedState.imageOneTargets[action.character].found = true;
+			// updatedState.isSelectCharacterShown = false;
+
 			const correctClick = {
 				x: state.currentClickPercentage.x,
 				y: state.currentClickPercentage.y,
-				chararacterFound: true,
+				characterFound: true,
 			};
-			const updatedState = { ...state };
-			updatedState.clicksArray.push(correctClick);
-			//TODO - change imageOne to current image later
-			updatedState.imageOneTargets[action.character].found = true;
-			updatedState.isSelectCharacterShown = false;
-			return updatedState;
+
+			const updateState = {
+				...state,
+				clicksArray: [...state.clicksArray, correctClick],
+				isSelectCharacterShown: false,
+			};
+
+			//this line is problematic
+			// updateState.imageOneTargets.waldo.found = true;
+
+			return updateState;
 
 		case 'character not found':
 			const wrongClick = {
 				x: state.currentClickPercentage.x,
 				y: state.currentClickPercentage.y,
-				chararacterFound: false,
+				characterFound: false,
 			};
 			const allClicks =
 				state.clicksArray.length > 0
@@ -132,6 +153,21 @@ function layoutReducer(state, action) {
 				isSelectCharacterShown: false,
 				clicksArray: allClicks,
 			};
+		case 'toggle selection container':
+			if (action.coords) {
+				return {
+					selectionContainer: {
+						x: action.coords.x,
+						y: action.coords.y,
+					},
+					...state,
+				};
+			} else {
+				return {
+					selectionContainer: null,
+					...state,
+				};
+			}
 
 		default:
 			return state;
@@ -147,6 +183,7 @@ const initialLayoutState = {
 	isAboutShown: false,
 	isImageShown: true,
 	currentImage: image1,
+	selectionContainer: null,
 	//the selection container & dropdown
 	isSelectCharacterShown: false,
 	//all previous clicks to display on image (incorrect get hidden)
@@ -213,11 +250,12 @@ function App() {
 		//size waldo can be found within (width of the selection square in %)
 		const selectionWidthInPercentage = ((40 / imageDims.width) * 100) / 2;
 		const selectionHeightInPercentage = ((40 / imageDims.height) * 100) / 2;
+
 		//TODO - change this function to accept any character, not just waldo
 		const waldoY = layoutState.imageOneTargets.waldo.y;
 		const waldoX = layoutState.imageOneTargets.waldo.x;
+
 		//adding the percentage the selection container is offset by
-		//TODO - maybe this is currentClickCoords instead
 		const clickY =
 			layoutState.currentClickPercentage.y +
 			(20 / imageDims.height) * 100;
@@ -236,15 +274,12 @@ function App() {
 	};
 
 	const addClick = (character) => {
-		console.log(character);
-
 		if (checkUserSelection(character)) {
 			layoutDispatch({
 				type: 'character found',
 				character,
 			});
 		} else {
-			//TODO - 'character not found' need to add to reducer
 			layoutDispatch({
 				type: 'character not found',
 			});
@@ -274,7 +309,19 @@ function App() {
 						src={layoutState.currentImage}
 						alt=""
 						ref={imageRef}
+						// onMouseMove={(e) =>
+						// 	layoutDispatch({
+						// 		type: 'toggle selection container',
+						// 		coords: { x: e.clientX, y: e.clientY },
+						// 	})
+						// }
 					></Image>
+					{/* {layoutState.selectionContainer && (
+						<UserSelection
+							x={layoutState.selectionContainer.coords.x}
+							y={layoutState.selectionContainer.coords.y}
+						/>
+					)} */}
 				</ImageContainer>
 			</Container>
 			{/* these are the different "pages" */}

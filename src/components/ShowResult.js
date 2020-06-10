@@ -8,48 +8,50 @@ const Container = styled.div`
 	color: white;
 	border-radius: 8px;
 	position: absolute;
-	top: ${(props) => `calc(${props.y}% - 12px)`};
-	left: ${(props) => `calc(${props.x}% - 12px)`};
+	top: ${(props) => `calc(${props.y}% + 7px)`};
+	left: ${(props) => `calc(${props.x}% + 7px)`};
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	&& > h3 {
 		font-weight: bold;
-	}
-
-	-webkit-animation: ${(props) =>
-		props.found
-			? null
-			: `fade-out-bck 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both`};
-	animation: ${(props) =>
-		props.found
-			? null
-			: `fade-out-bck 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both`};
-	@-webkit-keyframes fade-out-bck {
-		0% {
-			-webkit-transform: translateZ(0);
-			transform: translateZ(0);
-			opacity: 1;
-		}
-		100% {
-			-webkit-transform: translateZ(-80px);
-			transform: translateZ(-80px);
-			opacity: 0;
-		}
-	}
-	@keyframes fade-out-bck {
-		0% {
-			-webkit-transform: translateZ(0);
-			transform: translateZ(0);
-			opacity: 1;
-		}
-		100% {
-			-webkit-transform: translateZ(-80px);
-			transform: translateZ(-80px);
-			opacity: 0;
-		}
+		cursor: default;
 	}
 `;
+
+// -webkit-animation: ${(props) =>
+// 	props.found
+// 		? null
+// 		: `fade-out-bck 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both`};
+// animation: ${(props) =>
+// 	props.found
+// 		? null
+// 		: `fade-out-bck 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both`};
+// @-webkit-keyframes fade-out-bck {
+// 	0% {
+// 		-webkit-transform: translateZ(0);
+// 		transform: translateZ(0);
+// 		opacity: 1;
+// 	}
+// 	100% {
+// 		-webkit-transform: translateZ(-80px);
+// 		transform: translateZ(-80px);
+// 		opacity: 0;
+// 	}
+// }
+// @keyframes fade-out-bck {
+// 	0% {
+// 		-webkit-transform: translateZ(0);
+// 		transform: translateZ(0);
+// 		opacity: 1;
+// 	}
+// 	100% {
+// 		-webkit-transform: translateZ(-80px);
+// 		transform: translateZ(-80px);
+// 		opacity: 0;
+// 	}
+// }
+
 export default function ShowResult({ x, y, found }) {
 	return (
 		<Container x={x} y={y} found={found}>
