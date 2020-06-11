@@ -48,26 +48,6 @@ export default function CharacterDropdown({
 	addClick,
 	layoutState,
 }) {
-	//TODO - character options should come from userState so that when
-	// a character is found, it is removed from the list
-	const characterSelectOptions = [
-		{
-			name: 'waldo',
-		},
-		{
-			name: 'wizard',
-		},
-		{
-			name: 'odlaw',
-		},
-		{
-			name: 'woof',
-		},
-		{
-			name: 'wendy',
-		},
-	];
-
 	const charactersRemaining = Object.values(layoutState.imageOne).filter(
 		(char) => {
 			return !char.found && char;

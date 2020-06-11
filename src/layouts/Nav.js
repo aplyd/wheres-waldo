@@ -9,24 +9,31 @@ const Container = styled.div`
 	width: 100%;
 	background-color: black;
 	z-index: 1;
+	text-align: center;
 `;
 
 const MenuIcon = styled.svg`
 	color: white;
-	font-size: 44px;
+	font-size: 40px;
 	position: absolute;
-	top: 4px;
+	top: 6px;
 	left: 4px;
 	cursor: pointer;
 `;
 
 const Timer = styled.h1`
 	color: white;
-	font-size: 44px;
-	top: 4px;
+	font-size: 33px;
+	top: 10.5px;
 	right: 4px;
 	position: absolute;
 	line-height: 1em;
+`;
+
+const Title = styled.h1`
+	color: white;
+	padding-top: 8px;
+	font-size: 33px;
 `;
 
 export default function Nav({ layoutDispatch, isTimerActive }) {
@@ -51,6 +58,9 @@ export default function Nav({ layoutDispatch, isTimerActive }) {
 			<Container>
 				<div onClick={() => layoutDispatch({ type: 'toggle menu' })}>
 					<MenuIcon as={RiMenuLine} />
+				</div>
+				<div>
+					{window.innerWidth > 475 && <Title>Where's Waldo?</Title>}
 				</div>
 				<div>
 					<Timer>

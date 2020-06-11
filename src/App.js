@@ -2,6 +2,7 @@ import React, { useReducer, useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GlobalStyle, Spacer } from './GlobalStyle';
 import imageOne from './images/OTfytjA.jpg';
+import firebase from './firebase';
 
 import { useImageDims } from './hooks/useImageDims';
 
@@ -48,8 +49,17 @@ const UserSelection = styled.div`
 
 function layoutReducer(state, action) {
 	switch (action.type) {
+		case 'save uid':
+			return {
+				...state,
+				uid: action.uid,
+			};
 		case 'toggle menu':
-			return { ...state, isMenuOpen: !state.isMenuOpen };
+			return {
+				...state,
+				isMenuOpen: !state.isMenuOpen,
+				isTimerActive: !state.isTimerActive,
+			};
 
 		case 'start game':
 			return {
@@ -59,6 +69,7 @@ function layoutReducer(state, action) {
 				isScoreShown: false,
 				isAboutShown: false,
 				isImageShown: true,
+				isTimerActive: true,
 			};
 
 		case 'show info':
@@ -69,7 +80,6 @@ function layoutReducer(state, action) {
 				isCoverShown: false,
 				isScoreShown: false,
 				isImageShown: false,
-				//also need to reset timer here
 			};
 
 		case 'show scores':
@@ -169,10 +179,11 @@ function layoutReducer(state, action) {
 }
 
 const initialLayoutState = {
+	uid: null,
 	isMenuOpen: false,
 	isTimerActive: false,
 	//set back to true when finished
-	isCoverShown: false,
+	isCoverShown: true,
 	isScoreShown: false,
 	isAboutShown: false,
 	isImageShown: true,
@@ -209,7 +220,7 @@ const initialLayoutState = {
 	},
 };
 
-//TODO - add dragging support for user selection
+//TODO - add dragging support for user selection (maybe)
 
 function App() {
 	const [layoutState, layoutDispatch] = useReducer(
@@ -224,6 +235,24 @@ function App() {
 			setImageDims(observedDims);
 		}
 	}, [observedDims]);
+
+	useEffect(() => {
+		const anonSignIn = () => {
+			firebase
+				.auth()
+				.signInAnonymously()
+				.then((res) =>
+					layoutDispatch({ type: 'save uid', uid: res.user.uid })
+				)
+				.catch((err) => console.log(err));
+		};
+
+		try {
+			anonSignIn();
+		} catch (err) {
+			console.log(err);
+		}
+	}, []);
 
 	const getClickArea = (e) => {
 		e.persist();
