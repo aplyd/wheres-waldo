@@ -7,6 +7,10 @@ export const Spacer = styled.div`
 `;
 
 export const GlobalStyle = createGlobalStyle`
+    * {
+        box-sizing: border-box;
+    }
+
     #root, body {
         background-color: black;
     }

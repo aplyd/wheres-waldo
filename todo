@@ -14,5 +14,6 @@ Add in the ability to time the user from when they first load the page and then 
 (̶(̶2̶)̶)̶ ̶m̶a̶k̶e̶ ̶l̶a̶y̶o̶u̶t̶
 (̶(̶3̶)̶)̶ ̶m̶a̶k̶e̶ ̶d̶r̶o̶p̶d̶o̶w̶n̶
 (̶(̶4̶)̶)̶ ̶m̶o̶v̶e̶ ̶d̶r̶o̶p̶d̶o̶w̶n̶ ̶t̶o̶ ̶o̶t̶h̶e̶r̶s̶i̶d̶e̶ ̶i̶f̶ ̶c̶l̶i̶c̶k̶e̶d̶ ̶n̶e̶a̶r̶ ̶e̶d̶g̶e̶/̶b̶o̶t̶t̶o̶m̶ ̶o̶f̶ ̶s̶c̶r̶e̶e̶n̶
-((5)) reveal if user selection + character is correct
+(̶(̶5̶)̶)̶ ̶r̶e̶v̶e̶a̶l̶ ̶i̶f̶ ̶u̶s̶e̶r̶ ̶s̶e̶l̶e̶c̶t̶i̶o̶n̶ ̶+̶ ̶c̶h̶a̶r̶a̶c̶t̶e̶r̶ ̶i̶s̶ ̶c̶o̶r̶r̶e̶c̶t̶
 ((6)) get timer running 
+((7)) remove incorrect character guesses

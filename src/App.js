@@ -108,7 +108,6 @@ function layoutReducer(state, action) {
 			} else {
 				return {
 					...state,
-					// clicked: [...state.clicked, action.clicked],
 					currentClickCoords: action.currentClickCoords,
 					currentClickPercentage: action.currentClickPercentage,
 					isSelectCharacterShown: true,

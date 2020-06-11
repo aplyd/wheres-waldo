@@ -68,13 +68,23 @@ export default function CharacterDropdown({
 		},
 	];
 
+	const charactersRemaining = Object.values(layoutState.imageOne).filter(
+		(char) => {
+			return !char.found && char;
+		}
+	);
+
 	//off sets the dropdown to remain within the window/image
 	const getOffset = () => {
 		const obj = {};
+		//when a character is found, it is removed from dropdown, this ensures placement
+		const charOffset = charactersRemaining.length * 43;
 		const offsets = {
 			right: `calc(${dropdownPosition && dropdownPosition.x}% + 48px)`,
 			left: `calc(${dropdownPosition && dropdownPosition.x}% - 96px)`,
-			up: `calc(${dropdownPosition && dropdownPosition.y}% - 218px)`,
+			up: `calc(${
+				dropdownPosition && dropdownPosition.y
+			}% - ${charOffset}px)`,
 			down: `calc(${dropdownPosition && dropdownPosition.y}%)`,
 		};
 
@@ -97,20 +107,18 @@ export default function CharacterDropdown({
 			y={dropdownPosition && dropdownPosition.y}
 			offsets={getOffset()}
 		>
-			{Object.values(layoutState.imageOne).map((char, index) => {
-				if (!char.found) {
-					return (
-						<SelectionItem
-							onClick={(e) => {
-								e.stopPropagation();
-								addClick(char.name);
-							}}
-							key={index}
-						>
-							<h2>{char.name}</h2>
-						</SelectionItem>
-					);
-				}
+			{charactersRemaining.map((char, index) => {
+				return (
+					<SelectionItem
+						onClick={(e) => {
+							e.stopPropagation();
+							addClick(char.name);
+						}}
+						key={index}
+					>
+						<h2>{char.name}</h2>
+					</SelectionItem>
+				);
 			})}
 			<CloseDropdown
 				onClick={(e) => {
