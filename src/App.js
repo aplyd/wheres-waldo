@@ -170,7 +170,7 @@ function layoutReducer(state, action) {
 
 const initialLayoutState = {
 	isMenuOpen: false,
-	timer: 0,
+	isTimerActive: false,
 	//set back to true when finished
 	isCoverShown: false,
 	isScoreShown: false,
@@ -295,7 +295,10 @@ function App() {
 			<GlobalStyle />
 			{layoutState.isMenuOpen && <Menu layoutDispatch={layoutDispatch} />}
 			<Container>
-				<Nav layoutDispatch={layoutDispatch} />
+				<Nav
+					layoutDispatch={layoutDispatch}
+					isTimerActive={layoutState.isTimerActive}
+				/>
 				{/* image and container */}
 				<ImageContainer
 					onClick={(e) => {
