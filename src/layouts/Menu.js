@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
 import { Spacer } from '../GlobalStyle';
+import Timer from '../components/Timer';
 
 const Container = styled.div`
 	position: fixed;
@@ -41,7 +42,28 @@ const MenuItem = styled.div`
 	}
 `;
 
-export default function Menu({ layoutDispatch }) {
+const CharacterPreviews = styled.div`
+	display: flex;
+	flex-direction: row;
+`;
+
+const Character = styled.div`
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	&& > h2 {
+		text-transform: capitalize;
+	}
+	&& > img {
+		background-color: white;
+		border-radius: 8px;
+		border: 2px solid black;
+		width: 80px;
+		height: 80px;
+	}
+`;
+
+export default function Menu({ layoutDispatch, layoutState, timer }) {
 	const resume = {
 		title: 'Resume',
 		action: () => layoutDispatch({ type: 'resume' }),
@@ -68,8 +90,20 @@ export default function Menu({ layoutDispatch }) {
 				<CloseIcon as={MdClose} />
 			</div>
 
+			<Timer timer={timer} />
+
 			<MenuItemsContainer>
 				<Spacer height={'24px'} />
+				<CharacterPreviews>
+					{Object.values(layoutState.imageOne).map((char, index) => {
+						return (
+							<Character key={index}>
+								<h2>{char.name}</h2>
+								<img src={char.image} alt="" />
+							</Character>
+						);
+					})}
+				</CharacterPreviews>
 				{[resume, info, newGame, scoreboard].map((item, index) => {
 					return (
 						<React.Fragment key={index}>

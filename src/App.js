@@ -18,7 +18,6 @@ import Menu from './layouts/Menu';
 import About from './layouts/About';
 import Scoreboard from './layouts/Scoreboard';
 import ImageElements from './components/ImageElements';
-import DisplayCharacters from './components/DisplayCharacters';
 
 const Container = styled.div`
 	width: 100%;
@@ -212,18 +211,18 @@ const initialLayoutState = {
 		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
 	},
 	imageTwo: {
-		waldo: { name: 'waldo', x: 42, y: 18, found: false },
-		wizard: { name: 'wizard', x: 0, y: 0, found: false },
-		odlaw: { name: 'odlaw', x: 0, y: 0, found: false },
-		woof: { name: 'woof', x: 0, y: 0, found: false },
-		wendy: { name: 'wendy', x: 0, y: 0, found: false },
+		waldo: { name: 'waldo', x: 42, y: 18, found: false, image: waldoImg },
+		wizard: { name: 'wizard', x: 0, y: 0, found: false, image: wizardImg },
+		odlaw: { name: 'odlaw', x: 0, y: 0, found: false, image: odlawImg },
+		woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
+		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
 	},
 	imageThree: {
-		waldo: { name: 'waldo', x: 42, y: 18, found: false },
-		wizard: { name: 'wizard', x: 0, y: 0, found: false },
-		odlaw: { name: 'odlaw', x: 0, y: 0, found: false },
-		woof: { name: 'woof', x: 0, y: 0, found: false },
-		wendy: { name: 'wendy', x: 0, y: 0, found: false },
+		waldo: { name: 'waldo', x: 42, y: 18, found: false, image: waldoImg },
+		wizard: { name: 'wizard', x: 0, y: 0, found: false, image: wizardImg },
+		odlaw: { name: 'odlaw', x: 0, y: 0, found: false, image: odlawImg },
+		woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
+		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
 	},
 };
 
@@ -236,6 +235,7 @@ function App() {
 	);
 	const [imageDims, setImageDims] = useState({ height: 0, width: 0 });
 	const [imageRef, observedDims] = useImageDims();
+	const [timer, setTimer] = useState(0);
 
 	useEffect(() => {
 		if (observedDims) {
@@ -317,7 +317,6 @@ function App() {
 		//TODO - change this function to accept any character, not just waldo
 		const waldoY = layoutState.imageOne.waldo.y;
 		const waldoX = layoutState.imageOne.waldo.x;
-		console.log(waldoX);
 
 		//adding the percentage the selection container is offset by
 		const clickY =
@@ -353,11 +352,19 @@ function App() {
 	return (
 		<React.Fragment>
 			<GlobalStyle />
-			{layoutState.isMenuOpen && <Menu layoutDispatch={layoutDispatch} />}
+			{layoutState.isMenuOpen && (
+				<Menu
+					layoutDispatch={layoutDispatch}
+					layoutState={layoutState}
+					timer={timer}
+				/>
+			)}
 			<Container>
 				<Nav
 					layoutDispatch={layoutDispatch}
 					isTimerActive={layoutState.isTimerActive}
+					timer={timer}
+					setTimer={setTimer}
 				/>
 				{/* image and container */}
 				<ImageContainer
@@ -392,9 +399,6 @@ function App() {
 				</ImageContainer>
 			</Container>
 			{/* need to pass current image instead of imageOne */}
-			<DisplayCharacters
-				characters={layoutState.imageOne}
-			></DisplayCharacters>
 			{/* these are the different "pages" */}
 			{layoutState.isCoverShown && (
 				<Cover layoutDispatch={layoutDispatch} />
