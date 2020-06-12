@@ -36,6 +36,7 @@ const MenuItemsContainer = styled.div`
 
 const MenuItem = styled.div`
 	cursor: pointer;
+	padding-top: 96px;
 	&& > h2 {
 		color: white;
 		font-size: 24px;
@@ -45,12 +46,14 @@ const MenuItem = styled.div`
 const CharacterPreviews = styled.div`
 	display: flex;
 	flex-direction: row;
+	padding-top: 94px;
 `;
 
 const Character = styled.div`
 	display: flex;
 	flex-direction: column;
 	text-align: center;
+	padding: 0 4px;
 	&& > h2 {
 		text-transform: capitalize;
 	}
@@ -64,25 +67,24 @@ const Character = styled.div`
 `;
 
 export default function Menu({ layoutDispatch, layoutState, timer }) {
-	const resume = {
-		title: 'Resume',
-		action: () => layoutDispatch({ type: 'resume' }),
-	};
-
-	const info = {
-		title: 'Info',
-		action: () => layoutDispatch({ type: 'show info' }),
-	};
-
-	const newGame = {
-		title: 'New Game',
-		action: () => layoutDispatch({ type: 'start game' }),
-	};
-
-	const scoreboard = {
-		title: 'Scoreboard',
-		action: () => layoutDispatch({ type: 'show scores' }),
-	};
+	const menuItems = [
+		{
+			title: 'Resume',
+			action: () => layoutDispatch({ type: 'resume' }),
+		},
+		{
+			title: 'New Game',
+			action: () => layoutDispatch({ type: 'start game' }),
+		},
+		{
+			title: 'Scoreboard',
+			action: () => layoutDispatch({ type: 'show scores' }),
+		},
+		{
+			title: 'Info',
+			action: () => layoutDispatch({ type: 'show info' }),
+		},
+	];
 
 	return (
 		<Container>
@@ -93,27 +95,27 @@ export default function Menu({ layoutDispatch, layoutState, timer }) {
 			<Timer timer={timer} />
 
 			<MenuItemsContainer>
-				<Spacer height={'24px'} />
-				<CharacterPreviews>
-					{Object.values(layoutState.imageOne).map((char, index) => {
-						return (
-							<Character key={index}>
-								<h2>{char.name}</h2>
-								<img src={char.image} alt="" />
-							</Character>
-						);
-					})}
-				</CharacterPreviews>
-				{[resume, info, newGame, scoreboard].map((item, index) => {
+				<Spacer height={'96px'} />
+
+				{menuItems.map((item, index) => {
 					return (
 						<React.Fragment key={index}>
-							<Spacer height={'24px'} />
 							<MenuItem onClick={item.action}>
 								<h2>{item.title}</h2>
 							</MenuItem>
 						</React.Fragment>
 					);
 				})}
+				<CharacterPreviews>
+					{Object.values(layoutState.imageOne).map((char, index) => {
+						return (
+							<Character key={index}>
+								<img src={char.image} alt="" />
+								<h2>{char.name}</h2>
+							</Character>
+						);
+					})}
+				</CharacterPreviews>
 			</MenuItemsContainer>
 		</Container>
 	);

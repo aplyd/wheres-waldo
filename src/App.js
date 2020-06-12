@@ -40,17 +40,6 @@ const Image = styled.img`
 		width: auto;
 		overflow-x: scroll;
 	}
-	/* cursor: none; */
-`;
-
-const UserSelection = styled.div`
-	width: 40px;
-	height: 40px;
-	position: absolute;
-	top: ${(props) => props.y};
-	left: ${(props) => props.x};
-	border: solid 4px black;
-	border-radius: 8px;
 `;
 
 function layoutReducer(state, action) {
@@ -243,47 +232,48 @@ function App() {
 		}
 	}, [observedDims]);
 
-	// useEffect(() => {
-	// 	const anonSignIn = async () => {
-	// 		let status = null;
-	// 		console.log('sign in attempt');
-	// 		await firebase
-	// 			.auth()
-	// 			.signInAnonymously()
-	// 			.then((res) => {
-	// 				layoutDispatch({ type: 'save uid', uid: res.user.uid });
-	// 				status = true;
-	// 				console.log('authenticated');
-	// 			})
-	// 			.catch((err) => console.log(err));
-	// 		return status;
-	// 	};
+	useEffect(() => {
+		let uid = null;
+		const anonSignIn = async () => {
+			let status = null;
+			console.log('sign in attempt');
+			await firebase
+				.auth()
+				.signInAnonymously()
+				.then((res) => {
+					uid = res.user.uid;
+					console.log('authenticated');
+				})
+				.catch((err) => console.log(err));
+			return status;
+		};
 
-	// 	const createUser = () => {
-	// 		console.log('creating user');
-	// 		firebase
-	// 			.firestore()
-	// 			.collection('users')
-	// 			.doc(layoutState.uid)
-	// 			.set({ uid: layoutState.uid, name: '' })
-	// 			.then(() => console.log('user created'))
-	// 			.catch((err) => console.log(err));
-	// 	};
+		const createUser = () => {
+			console.log('creating user');
+			firebase
+				.firestore()
+				.collection('users')
+				.doc(uid)
+				.set({ uid, name: '' })
+				.then(() => {
+					console.log('user created');
+					layoutDispatch({ type: 'save uid', uid });
+				})
+				.catch((err) => console.log(err));
+		};
 
-	// 	try {
-	// 		if (!layoutState.uid) {
-	// 			(async () => {
-	// 				await anonSignIn();
-	// 				if (layoutState.uid) {
-	// 					// createUser();
-	// 					console.log(layoutState.uid);
-	// 				}
-	// 			})();
-	// 		}
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
-	// }, [layoutState.uid]);
+		try {
+			(async () => {
+				await anonSignIn();
+				if (uid) {
+					createUser();
+					console.log('can create user:', uid);
+				}
+			})();
+		} catch (err) {
+			console.log(err);
+		}
+	}, []);
 
 	const getClickArea = (e) => {
 		e.persist();
@@ -383,19 +373,7 @@ function App() {
 						src={layoutState.currentImage}
 						alt=""
 						ref={imageRef}
-						// onMouseMove={(e) =>
-						// 	layoutDispatch({
-						// 		type: 'toggle selection container',
-						// 		coords: { x: e.clientX, y: e.clientY },
-						// 	})
-						// }
 					></Image>
-					{/* {layoutState.selectionContainer && (
-						<UserSelection
-							x={layoutState.selectionContainer.coords.x}
-							y={layoutState.selectionContainer.coords.y}
-						/>
-					)} */}
 				</ImageContainer>
 			</Container>
 			{/* need to pass current image instead of imageOne */}
