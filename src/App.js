@@ -4,6 +4,12 @@ import { GlobalStyle, Spacer } from './GlobalStyle';
 import imageOne from './images/OTfytjA.jpg';
 import firebase from './firebase';
 
+import waldoImg from './images/waldo.jpg';
+import wendyImg from './images/wendy.jpg';
+import wizardImg from './images/wizard.jpg';
+import woofImg from './images/woof.png';
+import odlawImg from './images/odlaw.jpg';
+
 import { useImageDims } from './hooks/useImageDims';
 
 import Cover from './layouts/Cover';
@@ -12,6 +18,7 @@ import Menu from './layouts/Menu';
 import About from './layouts/About';
 import Scoreboard from './layouts/Scoreboard';
 import ImageElements from './components/ImageElements';
+import DisplayCharacters from './components/DisplayCharacters';
 
 const Container = styled.div`
 	width: 100%;
@@ -183,7 +190,7 @@ const initialLayoutState = {
 	isMenuOpen: false,
 	isTimerActive: false,
 	//set back to true when finished
-	isCoverShown: true,
+	isCoverShown: false,
 	isScoreShown: false,
 	isAboutShown: false,
 	isImageShown: true,
@@ -198,11 +205,11 @@ const initialLayoutState = {
 	//current click coords
 	currentClickCoords: null,
 	imageOne: {
-		waldo: { name: 'waldo', x: 42, y: 18, found: false },
-		wizard: { name: 'wizard', x: 0, y: 0, found: false },
-		odlaw: { name: 'odlaw', x: 0, y: 0, found: false },
-		woof: { name: 'woof', x: 0, y: 0, found: false },
-		wendy: { name: 'wendy', x: 0, y: 0, found: false },
+		waldo: { name: 'waldo', x: 42, y: 18, found: false, image: waldoImg },
+		wizard: { name: 'wizard', x: 0, y: 0, found: false, image: wizardImg },
+		odlaw: { name: 'odlaw', x: 0, y: 0, found: false, image: odlawImg },
+		woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
+		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
 	},
 	imageTwo: {
 		waldo: { name: 'waldo', x: 42, y: 18, found: false },
@@ -236,23 +243,47 @@ function App() {
 		}
 	}, [observedDims]);
 
-	useEffect(() => {
-		const anonSignIn = () => {
-			firebase
-				.auth()
-				.signInAnonymously()
-				.then((res) =>
-					layoutDispatch({ type: 'save uid', uid: res.user.uid })
-				)
-				.catch((err) => console.log(err));
-		};
+	// useEffect(() => {
+	// 	const anonSignIn = async () => {
+	// 		let status = null;
+	// 		console.log('sign in attempt');
+	// 		await firebase
+	// 			.auth()
+	// 			.signInAnonymously()
+	// 			.then((res) => {
+	// 				layoutDispatch({ type: 'save uid', uid: res.user.uid });
+	// 				status = true;
+	// 				console.log('authenticated');
+	// 			})
+	// 			.catch((err) => console.log(err));
+	// 		return status;
+	// 	};
 
-		try {
-			anonSignIn();
-		} catch (err) {
-			console.log(err);
-		}
-	}, []);
+	// 	const createUser = () => {
+	// 		console.log('creating user');
+	// 		firebase
+	// 			.firestore()
+	// 			.collection('users')
+	// 			.doc(layoutState.uid)
+	// 			.set({ uid: layoutState.uid, name: '' })
+	// 			.then(() => console.log('user created'))
+	// 			.catch((err) => console.log(err));
+	// 	};
+
+	// 	try {
+	// 		if (!layoutState.uid) {
+	// 			(async () => {
+	// 				await anonSignIn();
+	// 				if (layoutState.uid) {
+	// 					// createUser();
+	// 					console.log(layoutState.uid);
+	// 				}
+	// 			})();
+	// 		}
+	// 	} catch (err) {
+	// 		console.log(err);
+	// 	}
+	// }, [layoutState.uid]);
 
 	const getClickArea = (e) => {
 		e.persist();
@@ -360,6 +391,10 @@ function App() {
 					)} */}
 				</ImageContainer>
 			</Container>
+			{/* need to pass current image instead of imageOne */}
+			<DisplayCharacters
+				characters={layoutState.imageOne}
+			></DisplayCharacters>
 			{/* these are the different "pages" */}
 			{layoutState.isCoverShown && (
 				<Cover layoutDispatch={layoutDispatch} />
