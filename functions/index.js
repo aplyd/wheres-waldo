@@ -3,33 +3,39 @@ const admin = require('firebase-admin');
 
 admin.initializeApp();
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
+// Create and Deploy Your First Cloud Functions
+// https://firebase.google.com/docs/functions/write-firebase-functions
+
 // exports.helloWorld = functions.https.onRequest((request, response) => {
 // 	response.send('Hello from Firebase!');
 // });
 
+//add timestamps
 exports.addTimestamp = functions.https.onCall((data, context) => {
 	const uid = context.auth.uid;
-
 	const timestamp = Date.now();
-	//need to pass whether we're updating start or finish
-	if (data.where === 'start') {
-		const obj = { start: timestamp };
-	}
 
-	return (
-		admin
+	console.log(data.timeslot);
+	console.log({ uid });
+	console.log({ timestamp });
+
+	try {
+		return admin
 			.firestore()
 			.collection('users')
 			.doc(uid)
-			//need to pass current image
-			.update({})
-	);
+			.update({
+				[data.timeslot]: timestamp,
+			})
+			.then(() => console.log('success in firestore update'))
+			.catch((err) => console.log(err));
+	} catch (err) {
+		console.log(err);
+		throw new functions.https.HttpsError();
+	}
 });
 
-//create user on auth
+// create user on auth
 exports.createUser = functions.auth.user().onCreate((user) => {
 	console.log('creating user doc on auth');
 	return admin
@@ -41,5 +47,8 @@ exports.createUser = functions.auth.user().onCreate((user) => {
 			imageOne: { start: null, finish: null },
 			imageTwo: { start: null, finish: null },
 			imageThree: { start: null, finish: null },
+		})
+		.catch((err) => {
+			console.log(err);
 		});
 });

@@ -42,6 +42,8 @@ const Image = styled.img`
 	}
 `;
 
+const addTimestamp = firebase.functions().httpsCallable('addTimestamp');
+
 function layoutReducer(state, action) {
 	switch (action.type) {
 		case 'save uid':
@@ -56,7 +58,9 @@ function layoutReducer(state, action) {
 			};
 
 		case 'start game':
-			//TODO - add timestamp to user object
+			addTimestamp({ timeslot: 'imageOne.start' })
+				.then(() => console.log('success'))
+				.catch((err) => console.log(err));
 			return {
 				...state,
 				isMenuOpen: false,
