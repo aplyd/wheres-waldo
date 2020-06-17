@@ -53,10 +53,10 @@ function layoutReducer(state, action) {
 			return {
 				...state,
 				isMenuOpen: !state.isMenuOpen,
-				isTimerActive: !state.isTimerActive,
 			};
 
 		case 'start game':
+			//TODO - add timestamp to user object
 			return {
 				...state,
 				isMenuOpen: false,
@@ -178,7 +178,7 @@ const initialLayoutState = {
 	isMenuOpen: false,
 	isTimerActive: false,
 	//set back to true when finished
-	isCoverShown: false,
+	isCoverShown: true,
 	isScoreShown: false,
 	isAboutShown: false,
 	isImageShown: true,
