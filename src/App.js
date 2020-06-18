@@ -58,9 +58,9 @@ function layoutReducer(state, action) {
 			};
 
 		case 'start game':
-			addTimestamp({ timeslot: 'imageOne.start' })
-				.then(() => console.log('success'))
-				.catch((err) => console.log(err));
+			addTimestamp({ timeslot: `imageOne.start` }).catch((err) =>
+				console.log(err)
+			);
 			return {
 				...state,
 				isMenuOpen: false,
@@ -139,6 +139,17 @@ function layoutReducer(state, action) {
 			//TODO - need to update this so that it handles any image
 			updateState.imageOne.waldo.found = true;
 
+			//check if all characters have been found
+			const allCharsFound = Object.values(updateState.imageOne).every(
+				(char) => char.found
+			);
+
+			if (allCharsFound) {
+				addTimestamp({ timeslot: 'imageOne.finish' }).catch((err) =>
+					console.log(err)
+				);
+				updateState.imageOne.allCharsFound = true;
+			}
 			return updateState;
 
 		case 'character not found':
@@ -198,10 +209,10 @@ const initialLayoutState = {
 	currentClickCoords: null,
 	imageOne: {
 		waldo: { name: 'waldo', x: 42, y: 18, found: false, image: waldoImg },
-		wizard: { name: 'wizard', x: 0, y: 0, found: false, image: wizardImg },
-		odlaw: { name: 'odlaw', x: 0, y: 0, found: false, image: odlawImg },
-		woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
-		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
+		// wizard: { name: 'wizard', x: 0, y: 0, found: false, image: wizardImg },
+		// odlaw: { name: 'odlaw', x: 0, y: 0, found: false, image: odlawImg },
+		// woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
+		// wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
 	},
 	imageTwo: {
 		waldo: { name: 'waldo', x: 42, y: 18, found: false, image: waldoImg },
@@ -209,6 +220,7 @@ const initialLayoutState = {
 		odlaw: { name: 'odlaw', x: 0, y: 0, found: false, image: odlawImg },
 		woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
 		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
+		allCharsFound: false,
 	},
 	imageThree: {
 		waldo: { name: 'waldo', x: 42, y: 18, found: false, image: waldoImg },
@@ -216,6 +228,7 @@ const initialLayoutState = {
 		odlaw: { name: 'odlaw', x: 0, y: 0, found: false, image: odlawImg },
 		woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
 		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
+		allCharsFound: false,
 	},
 };
 
