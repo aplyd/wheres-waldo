@@ -2,6 +2,8 @@ import React, { useReducer, useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GlobalStyle, Spacer } from './GlobalStyle';
 import imageOne from './images/OTfytjA.jpg';
+import imageTwo from './images/btsRJjC.jpg';
+import imageThree from './images/nf6oSGR.jpg';
 import firebase from './firebase';
 
 import waldoImg from './images/waldo.jpg';
@@ -136,19 +138,30 @@ function layoutReducer(state, action) {
 				isSelectCharacterShown: false,
 			};
 
-			//TODO - need to update this so that it handles any image
-			updateState.imageOne[action.character].found = true;
+			updateState[state.images[state.currentImageIndex].string][
+				action.character
+			].found = true;
 
 			//check if all characters have been found
-			const allCharsFound = Object.values(updateState.imageOne).every(
-				(char) => char.found
-			);
+			const allCharsFound = Object.values(
+				updateState[state.images[state.currentImageIndex].string]
+			).every((char) => char.found);
 
 			if (allCharsFound) {
-				addTimestamp({ timeslot: 'imageOne.finish' }).catch((err) =>
-					console.log(err)
-				);
-				updateState.imageOne.allCharsFound = true;
+				addTimestamp({
+					timeslot: `${
+						state.images[state.currentImageIndex].string
+					}.finish`,
+				}).catch((err) => console.log(err));
+
+				//TODO - check to see if already on last image
+				updateState.clicksArray = [];
+				updateState.currentImageIndex = state.currentImageIndex + 1;
+				addTimestamp({
+					timeslot: `${
+						state.images[updateState.currentImageIndex].string
+					}.start`,
+				}).catch((err) => console.log(err));
 			}
 			return updateState;
 
@@ -193,11 +206,17 @@ const initialLayoutState = {
 	isMenuOpen: false,
 	isTimerActive: false,
 	//set back to true when finished
-	isCoverShown: false,
+	isCoverShown: true,
 	isScoreShown: false,
 	isAboutShown: false,
 	isImageShown: true,
-	currentImage: imageOne,
+	//TODO - having object property and global variable same name may be issue
+	images: [
+		{ src: imageOne, string: 'imageOne' },
+		{ src: imageTwo, string: 'imageTwo' },
+		{ src: imageThree, string: 'imageThree' },
+	],
+	currentImageIndex: 0,
 	selectionContainer: null,
 	//the selection container & dropdown
 	isSelectCharacterShown: false,
@@ -236,7 +255,6 @@ const initialLayoutState = {
 		odlaw: { name: 'odlaw', x: 0, y: 0, found: false, image: odlawImg },
 		woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
 		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
-		allCharsFound: false,
 	},
 	imageThree: {
 		waldo: { name: 'waldo', x: 42, y: 18, found: false, image: waldoImg },
@@ -244,7 +262,6 @@ const initialLayoutState = {
 		odlaw: { name: 'odlaw', x: 0, y: 0, found: false, image: odlawImg },
 		woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
 		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
-		allCharsFound: false,
 	},
 };
 
@@ -304,9 +321,15 @@ function App() {
 		const selectionWidthInPercentage = ((40 / imageDims.width) * 100) / 2;
 		const selectionHeightInPercentage = ((40 / imageDims.height) * 100) / 2;
 
-		//TODO - change this function to accept any character, not just waldo
-		const charY = layoutState.imageOne[character].y;
-		const charX = layoutState.imageOne[character].x;
+		//TODO - make sure this targeting works
+		const charY =
+			layoutState[
+				layoutState.images[layoutState.currentImageIndex].string
+			][character].y;
+		const charX =
+			layoutState[
+				layoutState.images[layoutState.currentImageIndex].string
+			][character].x;
 
 		//adding the percentage the selection container is offset by
 		const clickY =
@@ -370,7 +393,10 @@ function App() {
 						addClick={addClick}
 					/>
 					<Image
-						src={layoutState.currentImage}
+						src={
+							layoutState.images[layoutState.currentImageIndex]
+								.src
+						}
 						alt=""
 						ref={imageRef}
 					></Image>

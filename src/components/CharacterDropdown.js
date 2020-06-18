@@ -48,11 +48,11 @@ export default function CharacterDropdown({
 	addClick,
 	layoutState,
 }) {
-	const charactersRemaining = Object.values(layoutState.imageOne).filter(
-		(char) => {
-			return !char.found && char;
-		}
-	);
+	const charactersRemaining = Object.values(
+		layoutState[layoutState.images[layoutState.currentImageIndex].string]
+	).filter((char) => {
+		return !char.found && char;
+	});
 
 	//off sets the dropdown to remain within the window/image
 	const getOffset = () => {

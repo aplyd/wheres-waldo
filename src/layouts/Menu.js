@@ -107,7 +107,12 @@ export default function Menu({ layoutDispatch, layoutState, timer }) {
 					);
 				})}
 				<CharacterPreviews>
-					{Object.values(layoutState.imageOne).map((char, index) => {
+					{Object.values(
+						layoutState[
+							layoutState.images[layoutState.currentImageIndex]
+								.string
+						]
+					).map((char, index) => {
 						return (
 							<Character key={index}>
 								<img src={char.image} alt="" />
