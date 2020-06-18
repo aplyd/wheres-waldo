@@ -215,7 +215,6 @@ const initialLayoutState = {
 			found: false,
 			image: waldoImg,
 		},
-		wizard: { name: 'wizard', x: 0, y: 0, found: false, image: wizardImg },
 		odlaw: {
 			name: 'odlaw',
 			x: 19.7,
@@ -223,7 +222,6 @@ const initialLayoutState = {
 			found: false,
 			image: odlawImg,
 		},
-		woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
 		wendy: {
 			name: 'wendy',
 			x: 29.8,
