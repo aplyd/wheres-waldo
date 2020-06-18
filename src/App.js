@@ -156,12 +156,20 @@ function layoutReducer(state, action) {
 
 				//TODO - check to see if already on last image
 				updateState.clicksArray = [];
-				updateState.currentImageIndex = state.currentImageIndex + 1;
-				addTimestamp({
-					timeslot: `${
-						state.images[updateState.currentImageIndex].string
-					}.start`,
-				}).catch((err) => console.log(err));
+
+				console.log(state.images.length);
+				console.log(state.currentImageIndex + 1);
+
+				if (state.currentImageIndex + 1 !== state.images.length) {
+					updateState.currentImageIndex = state.currentImageIndex + 1;
+					addTimestamp({
+						timeslot: `${
+							state.images[updateState.currentImageIndex].string
+						}.start`,
+					}).catch((err) => console.log(err));
+				} else {
+					//TODO - handle game over
+				}
 			}
 			return updateState;
 
@@ -175,6 +183,7 @@ function layoutReducer(state, action) {
 				state.clicksArray.length > 0
 					? [...state.clicksArray, wrongClick]
 					: [wrongClick];
+
 			return {
 				...state,
 				isSelectCharacterShown: false,
@@ -264,8 +273,6 @@ const initialLayoutState = {
 		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
 	},
 };
-
-//TODO - add dragging support for user selection (maybe)
 
 function App() {
 	const [layoutState, layoutDispatch] = useReducer(
