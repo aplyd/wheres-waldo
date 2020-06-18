@@ -137,7 +137,7 @@ function layoutReducer(state, action) {
 			};
 
 			//TODO - need to update this so that it handles any image
-			updateState.imageOne.waldo.found = true;
+			updateState.imageOne[action.character].found = true;
 
 			//check if all characters have been found
 			const allCharsFound = Object.values(updateState.imageOne).every(
@@ -193,7 +193,7 @@ const initialLayoutState = {
 	isMenuOpen: false,
 	isTimerActive: false,
 	//set back to true when finished
-	isCoverShown: true,
+	isCoverShown: false,
 	isScoreShown: false,
 	isAboutShown: false,
 	isImageShown: true,
@@ -208,11 +208,29 @@ const initialLayoutState = {
 	//current click coords
 	currentClickCoords: null,
 	imageOne: {
-		waldo: { name: 'waldo', x: 42, y: 18, found: false, image: waldoImg },
+		waldo: {
+			name: 'waldo',
+			x: 42,
+			y: 18,
+			found: false,
+			image: waldoImg,
+		},
 		wizard: { name: 'wizard', x: 0, y: 0, found: false, image: wizardImg },
-		odlaw: { name: 'odlaw', x: 0, y: 0, found: false, image: odlawImg },
+		odlaw: {
+			name: 'odlaw',
+			x: 19.7,
+			y: 73.3,
+			found: false,
+			image: odlawImg,
+		},
 		woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
-		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
+		wendy: {
+			name: 'wendy',
+			x: 29.8,
+			y: 74.2,
+			found: false,
+			image: wendyImg,
+		},
 	},
 	imageTwo: {
 		waldo: { name: 'waldo', x: 42, y: 18, found: false, image: waldoImg },
@@ -258,6 +276,9 @@ function App() {
 
 	const getClickArea = (e) => {
 		e.persist();
+		console.log({ clickX: e.clientX, clickY: e.clientY });
+		console.log({ imgHeight: imageDims.height, imgWidth: imageDims.width });
+
 		const x = e.clientX - 20;
 		const y = e.clientY - 72;
 
@@ -286,8 +307,8 @@ function App() {
 		const selectionHeightInPercentage = ((40 / imageDims.height) * 100) / 2;
 
 		//TODO - change this function to accept any character, not just waldo
-		const waldoY = layoutState.imageOne.waldo.y;
-		const waldoX = layoutState.imageOne.waldo.x;
+		const charY = layoutState.imageOne[character].y;
+		const charX = layoutState.imageOne[character].x;
 
 		//adding the percentage the selection container is offset by
 		const clickY =
@@ -298,10 +319,10 @@ function App() {
 
 		//if the target character is within the user selected area
 		if (
-			clickX + selectionWidthInPercentage > waldoX &&
-			clickX - selectionWidthInPercentage < waldoX &&
-			clickY + selectionHeightInPercentage > waldoY &&
-			clickY - selectionHeightInPercentage < waldoY
+			clickX + selectionWidthInPercentage > charX &&
+			clickX - selectionWidthInPercentage < charX &&
+			clickY + selectionHeightInPercentage > charY &&
+			clickY - selectionHeightInPercentage < charY
 		) {
 			return true;
 		}
