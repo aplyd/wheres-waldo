@@ -209,10 +209,10 @@ const initialLayoutState = {
 	currentClickCoords: null,
 	imageOne: {
 		waldo: { name: 'waldo', x: 42, y: 18, found: false, image: waldoImg },
-		// wizard: { name: 'wizard', x: 0, y: 0, found: false, image: wizardImg },
-		// odlaw: { name: 'odlaw', x: 0, y: 0, found: false, image: odlawImg },
-		// woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
-		// wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
+		wizard: { name: 'wizard', x: 0, y: 0, found: false, image: wizardImg },
+		odlaw: { name: 'odlaw', x: 0, y: 0, found: false, image: odlawImg },
+		woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
+		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
 	},
 	imageTwo: {
 		waldo: { name: 'waldo', x: 42, y: 18, found: false, image: waldoImg },
@@ -250,46 +250,10 @@ function App() {
 	}, [observedDims]);
 
 	useEffect(() => {
-		let uid = null;
-		const anonSignIn = async () => {
-			let status = null;
-			console.log('sign in attempt');
-			await firebase
-				.auth()
-				.signInAnonymously()
-				.then((res) => {
-					uid = res.user.uid;
-					console.log('authenticated');
-				})
-				.catch((err) => console.log(err));
-			return status;
-		};
-
-		const createUser = () => {
-			console.log('creating user');
-			firebase
-				.firestore()
-				.collection('users')
-				.doc(uid)
-				.set({ uid, name: '' })
-				.then(() => {
-					console.log('user created');
-					layoutDispatch({ type: 'save uid', uid });
-				})
-				.catch((err) => console.log(err));
-		};
-
-		try {
-			(async () => {
-				await anonSignIn();
-				if (uid) {
-					createUser();
-					console.log('can create user:', uid);
-				}
-			})();
-		} catch (err) {
-			console.log(err);
-		}
+		firebase
+			.auth()
+			.signInAnonymously()
+			.catch((err) => console.log(err));
 	}, []);
 
 	const getClickArea = (e) => {
