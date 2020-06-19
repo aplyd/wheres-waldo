@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Spacer } from '../GlobalStyle';
-import bgImage from '../images/btsRJjC.jpg';
+import bgImage from '../images/imageTwo.jpg';
 
 const Background = styled.div`
 	background-image: url(${bgImage});

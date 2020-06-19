@@ -1,9 +1,9 @@
 import React, { useReducer, useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GlobalStyle, Spacer } from './GlobalStyle';
-import imageOne from './images/OTfytjA.jpg';
-import imageTwo from './images/btsRJjC.jpg';
-import imageThree from './images/nf6oSGR.jpg';
+import imageOne from './images/imageOne.jpg';
+import imageTwo from './images/imageTwo.jpg';
+import imageThree from './images/imageThree.jpg';
 import firebase from './firebase';
 
 import waldoImg from './images/waldo.jpg';
