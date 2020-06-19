@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Container = styled.div`
 	position: absolute;
 	left: ${(props) => props.offsets.left};
-	top: ${(props) => `calc(${props.offsets.top} + ${window.scrollY}px)`};
+	top: ${(props) => `calc(${props.offsets.top} + ${props.windowScrollY}px)`};
 	background-color: white;
 	border-radius: 8px;
 	&& > div:first-child {
@@ -85,6 +85,8 @@ export default function CharacterDropdown({
 		<Container
 			x={dropdownPosition && dropdownPosition.x}
 			y={dropdownPosition && dropdownPosition.y}
+			windowScrollX={layoutState.currentClickPercentage.windowScrollX}
+			windowScrollY={layoutState.currentClickPercentage.windowScrollY}
 			offsets={getOffset()}
 		>
 			{charactersRemaining.map((char, index) => {

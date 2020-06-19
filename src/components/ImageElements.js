@@ -8,11 +8,12 @@ const UserSelection = styled.div`
 	width: 40px;
 	height: 40px;
 	position: absolute;
-	top: ${(props) => props.y && `calc(${props.y}% + ${window.scrollY}px)`};
+	top: ${(props) =>
+		props.y && `calc(${props.y}% + ${props.windowScrollY}px)`};
 	left: ${(props) => props.x && props.x + '%'};
 	border: solid 4px black;
 	border-radius: 8px;
-	${console.log(window.po)}
+	${(props) => console.log(props.windowScrollY)}
 `;
 
 export default function ImageElements({
@@ -32,6 +33,12 @@ export default function ImageElements({
 							x={result.x}
 							y={result.y}
 							found={result.characterFound}
+							windowScrollX={
+								layoutState.currentClickPercentage.windowScrollX
+							}
+							windowScrollY={
+								layoutState.currentClickPercentage.windowScrollY
+							}
 						/>
 					);
 				})}
@@ -45,6 +52,12 @@ export default function ImageElements({
 						imageHeight={imageDims.height}
 						addClick={addClick}
 						layoutState={layoutState}
+						windowScrollX={
+							layoutState.currentClickPercentage.windowScrollX
+						}
+						windowScrollY={
+							layoutState.currentClickPercentage.windowScrollY
+						}
 					/>
 					<UserSelection
 						x={
@@ -54,6 +67,12 @@ export default function ImageElements({
 						y={
 							layoutState.currentClickPercentage &&
 							layoutState.currentClickPercentage.y
+						}
+						windowScrollX={
+							layoutState.currentClickPercentage.windowScrollX
+						}
+						windowScrollY={
+							layoutState.currentClickPercentage.windowScrollY
 						}
 					/>
 				</>

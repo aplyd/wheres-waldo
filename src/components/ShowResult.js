@@ -10,7 +10,7 @@ const Container = styled.div`
 	color: white;
 	border-radius: 8px;
 	position: absolute;
-	top: ${(props) => `calc(${props.y}% + 7px)`};
+	top: ${(props) => `calc(${props.y}% + 7px + ${props.windowScrollY}px)`};
 	left: ${(props) => `calc(${props.x}% + 7px)`};
 	display: flex;
 	justify-content: center;
@@ -87,15 +87,31 @@ const Icon = styled.svg`
 	font-size: 24px;
 `;
 
-export default function ShowResult({ x, y, found }) {
+export default function ShowResult({
+	x,
+	y,
+	found,
+	windowScrollX,
+	windowScrollY,
+}) {
 	return (
 		<>
 			{found ? (
-				<CorrectContainer x={x} y={y}>
+				<CorrectContainer
+					x={x}
+					y={y}
+					windowScrollX={windowScrollX}
+					windowScrollY={windowScrollY}
+				>
 					<Icon as={MdCheck} />
 				</CorrectContainer>
 			) : (
-				<WrongContainer x={x} y={y}>
+				<WrongContainer
+					x={x}
+					y={y}
+					windowScrollX={windowScrollX}
+					windowScrollY={windowScrollY}
+				>
 					<Icon as={MdClose} />
 				</WrongContainer>
 			)}

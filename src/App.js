@@ -311,11 +311,15 @@ function App() {
 			currentClickPercentage: {
 				x: (x / imageDims.width) * 100,
 				y: (y / imageDims.height) * 100,
+				windowScrollY: window.scrollY,
+				windowScrollX: window.scrollX,
 			},
 			//in coordinates
 			currentClickCoords: {
 				x: e.clientX,
 				y: e.clientY,
+				windowScrollY: window.scrollY,
+				windowScrollX: window.scrollX,
 			},
 		});
 	};
@@ -341,9 +345,12 @@ function App() {
 		//adding the percentage the selection container is offset by
 		const clickY =
 			layoutState.currentClickPercentage.y +
+			// layoutState.currentClickPercentage.windowScrollY + TODO - this line needs to be a percentage
 			(20 / imageDims.height) * 100;
 		const clickX =
-			layoutState.currentClickPercentage.x + (20 / imageDims.width) * 100;
+			layoutState.currentClickPercentage.x +
+			// layoutState.currentClickPercentage.windowScrollX + TODO - this line needs to be a percentage
+			(20 / imageDims.width) * 100;
 
 		//if the target character is within the user selected area
 		if (
