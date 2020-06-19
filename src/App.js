@@ -332,15 +332,16 @@ function App() {
 		const selectionWidthInPercentage = ((40 / imageDims.width) * 100) / 2;
 		const selectionHeightInPercentage = ((40 / imageDims.height) * 100) / 2;
 
-		//TODO - make sure this targeting works
 		const charY =
 			layoutState[
 				layoutState.images[layoutState.currentImageIndex].string
 			][character].y;
+		//need to locate character - scroll position here
 		const charX =
 			layoutState[
 				layoutState.images[layoutState.currentImageIndex].string
 			][character].x;
+		//need to locate character - scroll position here
 
 		//adding the percentage the selection container is offset by
 		const clickY =
