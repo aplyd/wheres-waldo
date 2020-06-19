@@ -1,4 +1,4 @@
-import React, { useReducer, useRef, useEffect, useState } from 'react';
+import React, { useReducer, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GlobalStyle, Spacer } from './GlobalStyle';
 import imageOne from './images/imageOne.jpg';

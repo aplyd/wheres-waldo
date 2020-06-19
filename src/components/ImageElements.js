@@ -3,14 +3,16 @@ import styled from 'styled-components';
 import ShowResult from './ShowResult';
 import CharacterDropdown from './CharacterDropdown';
 
+//TODO - probably need to add window.scrollX to left position
 const UserSelection = styled.div`
 	width: 40px;
 	height: 40px;
 	position: absolute;
-	top: ${(props) => props.y && props.y + '%'};
+	top: ${(props) => props.y && `calc(${props.y}% + ${window.scrollY}px)`};
 	left: ${(props) => props.x && props.x + '%'};
 	border: solid 4px black;
 	border-radius: 8px;
+	${console.log(window.po)}
 `;
 
 export default function ImageElements({
@@ -21,7 +23,7 @@ export default function ImageElements({
 }) {
 	return (
 		<>
-			{/* clicked - previous clicked spaces, correct state, incorrect fadeout */}
+			{/* clicked - previous clicked spaces, correct stay, incorrect fadeout */}
 			{layoutState.clicksArray.length > 0 &&
 				layoutState.clicksArray.map((result, index) => {
 					return (
