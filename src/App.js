@@ -129,6 +129,8 @@ function layoutReducer(state, action) {
 			const correctClick = {
 				x: state.currentClickPercentage.x,
 				y: state.currentClickPercentage.y,
+				windowScrollX: state.windowScrollX,
+				windowScrollY: state.windowScrollY,
 				characterFound: true,
 			};
 
@@ -177,6 +179,8 @@ function layoutReducer(state, action) {
 			const wrongClick = {
 				x: state.currentClickPercentage.x,
 				y: state.currentClickPercentage.y,
+				windowScrollX: state.windowScrollX,
+				windowScrollY: state.windowScrollY,
 				characterFound: false,
 			};
 			const allClicks =
@@ -215,7 +219,7 @@ const initialLayoutState = {
 	isMenuOpen: false,
 	isTimerActive: false,
 	//set back to true when finished
-	isCoverShown: true,
+	isCoverShown: false,
 	isScoreShown: false,
 	isAboutShown: false,
 	isImageShown: true,
@@ -336,12 +340,13 @@ function App() {
 			layoutState[
 				layoutState.images[layoutState.currentImageIndex].string
 			][character].y;
-		//need to locate character - scroll position here
+
 		const charX =
 			layoutState[
 				layoutState.images[layoutState.currentImageIndex].string
 			][character].x;
-		//need to locate character - scroll position here
+
+		console.log({ charX, charY });
 
 		//adding the percentage the selection container is offset by
 		const clickY =

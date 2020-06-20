@@ -33,12 +33,8 @@ export default function ImageElements({
 							x={result.x}
 							y={result.y}
 							found={result.characterFound}
-							windowScrollX={
-								layoutState.currentClickPercentage.windowScrollX
-							}
-							windowScrollY={
-								layoutState.currentClickPercentage.windowScrollY
-							}
+							windowScrollX={result.windowScrollX}
+							windowScrollY={result.windowScrollY}
 						/>
 					);
 				})}
