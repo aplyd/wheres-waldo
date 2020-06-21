@@ -308,7 +308,7 @@ function App() {
 
 		//changed from user
 		layoutDispatch({
-			type: 'clicked',
+			type: constants.CLICKED,
 			//in percentages
 			currentClickPercentage: {
 				x: (x / imageDims.width) * 100,
@@ -368,12 +368,12 @@ function App() {
 	const addClick = (character) => {
 		if (checkUserSelection(character)) {
 			layoutDispatch({
-				type: 'character found',
+				type: constants.CHARACTER_FOUND,
 				character,
 			});
 		} else {
 			layoutDispatch({
-				type: 'character not found',
+				type: constants.CHARACTER_NOT_FOUND,
 			});
 		}
 	};

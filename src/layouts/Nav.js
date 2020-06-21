@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { RiMenuLine } from 'react-icons/ri';
 import { Spacer } from '../GlobalStyle';
+import * as constants from '../constants';
 
 import Timer from '../components/Timer';
 
@@ -52,7 +53,11 @@ export default function Nav({
 	return (
 		<>
 			<Container>
-				<div onClick={() => layoutDispatch({ type: 'toggle menu' })}>
+				<div
+					onClick={() =>
+						layoutDispatch({ type: constants.TOGGLE_MENU })
+					}
+				>
 					<MenuIcon as={RiMenuLine} />
 				</div>
 				<div>

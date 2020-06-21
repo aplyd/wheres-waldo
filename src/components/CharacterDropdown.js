@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import * as constants from '../constants';
 
 const Container = styled.div`
 	position: absolute;
@@ -105,7 +106,7 @@ export default function CharacterDropdown({
 			<CloseDropdown
 				onClick={(e) => {
 					e.stopPropagation();
-					layoutDispatch({ type: 'clicked' });
+					layoutDispatch({ type: constants.CLICKED });
 				}}
 			>
 				<h2>X</h2>

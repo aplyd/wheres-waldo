@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Spacer } from '../GlobalStyle';
 import bgImage from '../images/imageTwo.jpg';
+import * as constants from '../constants';
 
 const Background = styled.div`
 	background-image: url(${bgImage});
@@ -53,7 +54,9 @@ export default function Cover({ layoutDispatch }) {
 				<Title>Where's Waldo?</Title>
 				<Spacer height={'62px'} />
 				<StartGameBtn
-					onClick={() => layoutDispatch({ type: 'start game' })}
+					onClick={() =>
+						layoutDispatch({ type: constants.START_GAME })
+					}
 				>
 					Start
 				</StartGameBtn>
