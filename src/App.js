@@ -20,6 +20,7 @@ import Menu from './layouts/Menu';
 import About from './layouts/About';
 import Scoreboard from './layouts/Scoreboard';
 import ImageElements from './components/ImageElements';
+import * as constants from './constants';
 
 const Container = styled.div`
 	width: 100%;
@@ -48,18 +49,18 @@ const addTimestamp = firebase.functions().httpsCallable('addTimestamp');
 
 function layoutReducer(state, action) {
 	switch (action.type) {
-		case 'save uid':
+		case constants.SAVE_UI:
 			return {
 				...state,
 				uid: action.uid,
 			};
-		case 'toggle menu':
+		case constants.TOGGLE_MENU:
 			return {
 				...state,
 				isMenuOpen: !state.isMenuOpen,
 			};
 
-		case 'start game':
+		case constants.START_GAME:
 			addTimestamp({ timeslot: `imageOne.start` }).catch((err) =>
 				console.log(err)
 			);
@@ -73,7 +74,7 @@ function layoutReducer(state, action) {
 				isTimerActive: true,
 			};
 
-		case 'show info':
+		case constants.SHOW_INFO:
 			return {
 				...state,
 				isAboutShown: true,
@@ -83,7 +84,7 @@ function layoutReducer(state, action) {
 				isImageShown: false,
 			};
 
-		case 'show scores':
+		case constants.SHOW_SCORES:
 			return {
 				...state,
 				isMenuOpen: false,
@@ -93,7 +94,7 @@ function layoutReducer(state, action) {
 				isImageShown: false,
 			};
 
-		case 'resume':
+		case constants.RESUME:
 			return {
 				...state,
 				isMenuOpen: false,
@@ -103,20 +104,21 @@ function layoutReducer(state, action) {
 				isImageShown: true,
 			};
 
-		case 'image resize':
+		case constants.IMAGE_RESIZE:
 			return {
 				...state,
 				currentImageHeight: action.height,
 			};
 
-		case 'clicked':
-			//if the dropdown and selection are already displayed, close them
+		case constants.CLICKED:
+			// if the dropdown and selection are already displayed, close them
 			if (state.isSelectCharacterShown) {
 				return {
 					...state,
 					isSelectCharacterShown: false,
 				};
 			} else {
+				// else display character dropdown
 				return {
 					...state,
 					currentClickCoords: action.currentClickCoords,
@@ -125,7 +127,7 @@ function layoutReducer(state, action) {
 				};
 			}
 
-		case 'character found':
+		case constants.CHARACTER_FOUND:
 			const correctClick = {
 				x: state.currentClickPercentage.x,
 				y: state.currentClickPercentage.y,
@@ -171,7 +173,7 @@ function layoutReducer(state, action) {
 			}
 			return updateState;
 
-		case 'character not found':
+		case constants.CHARACTER_NOT_FOUND:
 			const wrongClick = {
 				x: state.currentClickPercentage.x,
 				y: state.currentClickPercentage.y,
@@ -189,7 +191,7 @@ function layoutReducer(state, action) {
 				isSelectCharacterShown: false,
 				clicksArray: allClicks,
 			};
-		case 'toggle selection container':
+		case constants.TOGGLE_SELECTION_CONTAINER:
 			if (action.coords) {
 				return {
 					selectionContainer: {
