@@ -18,8 +18,10 @@ import Cover from './layouts/Cover';
 import Nav from './layouts/Nav';
 import Menu from './layouts/Menu';
 import About from './layouts/About';
+import Result from './layouts/Result';
 import Scoreboard from './layouts/Scoreboard';
 import ImageElements from './components/ImageElements';
+
 import * as consts from './constants';
 
 const Container = styled.div`
@@ -59,7 +61,11 @@ function layoutReducer(state, action) {
 				...state,
 				isMenuOpen: !state.isMenuOpen,
 			};
-
+		case consts.SAVE_USERNAME:
+			return {
+				...state,
+				username: action.username,
+			};
 		case consts.START_GAME:
 			addTimestamp({ timeslot: `imageOne.start` }).catch((err) =>
 				console.log(err)
@@ -102,6 +108,17 @@ function layoutReducer(state, action) {
 				isScoreShown: false,
 				isAboutShown: false,
 				isImageShown: true,
+			};
+
+		case consts.SHOW_RESULT:
+			return {
+				...state,
+				isMenuOpen: false,
+				isCoverShown: false,
+				isScoreShown: false,
+				isAboutShown: false,
+				isImageShown: false,
+				isResultShown: true,
 			};
 
 		case consts.IMAGE_RESIZE:
@@ -214,6 +231,7 @@ function layoutReducer(state, action) {
 
 const initialLayoutState = {
 	uid: null,
+	username: '',
 	isMenuOpen: false,
 	isTimerActive: false,
 	//set back to true when finished
@@ -221,6 +239,7 @@ const initialLayoutState = {
 	isScoreShown: false,
 	isAboutShown: false,
 	isImageShown: true,
+	isResultShown: true,
 	//TODO - having object property and global variable same name may be issue
 	images: [
 		{ src: imageOne, string: 'imageOne' },
@@ -276,6 +295,7 @@ const initialLayoutState = {
 	},
 };
 
+//TODO - fix scroll issue (when selecting character)
 function App() {
 	const [layoutState, layoutDispatch] = useReducer(
 		layoutReducer,
@@ -291,12 +311,12 @@ function App() {
 		}
 	}, [observedDims]);
 
-	useEffect(() => {
-		firebase
-			.auth()
-			.signInAnonymously()
-			.catch((err) => console.log(err));
-	}, []);
+	// useEffect(() => {
+	// 	firebase
+	// 		.auth()
+	// 		.signInAnonymously()
+	// 		.catch((err) => console.log(err));
+	// }, []);
 
 	const getClickArea = (e) => {
 		e.persist();
@@ -425,6 +445,12 @@ function App() {
 			)}
 			{layoutState.isScoreShown && <Scoreboard />}
 			{layoutState.isAboutShown && <About />}
+			{layoutState.isResultShown && (
+				<Result
+					username={layoutState.username}
+					layoutDispatch={layoutDispatch}
+				/>
+			)}
 
 			<Spacer height={'48px'} />
 		</React.Fragment>
