@@ -131,8 +131,8 @@ function layoutReducer(state, action) {
 			const correctClick = {
 				x: state.currentClickPercentage.x,
 				y: state.currentClickPercentage.y,
-				windowScrollX: state.windowScrollX,
-				windowScrollY: state.windowScrollY,
+				windowScrollX: state.currentClickPercentage.windowScrollX,
+				windowScrollY: state.currentClickPercentage.windowScrollY,
 				characterFound: true,
 			};
 
@@ -177,8 +177,8 @@ function layoutReducer(state, action) {
 			const wrongClick = {
 				x: state.currentClickPercentage.x,
 				y: state.currentClickPercentage.y,
-				windowScrollX: state.windowScrollX,
-				windowScrollY: state.windowScrollY,
+				windowScrollX: state.currentClickPercentage.windowScrollX,
+				windowScrollY: state.currentClickPercentage.windowScrollY,
 				characterFound: false,
 			};
 			const allClicks =
