@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
 import { Spacer } from '../GlobalStyle';
 import Timer from '../components/Timer';
-import * as constants from '../constants';
+import * as consts from '../constants';
 
 const Container = styled.div`
 	position: fixed;
@@ -71,27 +71,25 @@ export default function Menu({ layoutDispatch, layoutState, timer }) {
 	const menuItems = [
 		{
 			title: 'Resume',
-			action: () => layoutDispatch({ type: constants.RESUME }),
+			action: () => layoutDispatch({ type: consts.RESUME }),
 		},
 		{
 			title: 'New Game',
-			action: () => layoutDispatch({ type: constants.START_GAME }),
+			action: () => layoutDispatch({ type: consts.START_GAME }),
 		},
 		{
 			title: 'Scoreboard',
-			action: () => layoutDispatch({ type: constants.SHOW_SCORES }),
+			action: () => layoutDispatch({ type: consts.SHOW_SCORES }),
 		},
 		{
 			title: 'Info',
-			action: () => layoutDispatch({ type: constants.SHOW_INFO }),
+			action: () => layoutDispatch({ type: consts.SHOW_INFO }),
 		},
 	];
 
 	return (
 		<Container>
-			<div
-				onClick={() => layoutDispatch({ type: constants.TOGGLE_MENU })}
-			>
+			<div onClick={() => layoutDispatch({ type: consts.TOGGLE_MENU })}>
 				<CloseIcon as={MdClose} />
 			</div>
 
