@@ -25,7 +25,6 @@ exports.addTimestamp = functions.https.onCall((data, context) => {
 
 // create user on auth
 exports.createUser = functions.auth.user().onCreate((user) => {
-	console.log('creating user doc on auth');
 	return admin
 		.firestore()
 		.collection('users')

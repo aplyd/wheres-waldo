@@ -156,11 +156,7 @@ function layoutReducer(state, action) {
 					}.finish`,
 				}).catch((err) => console.log(err));
 
-				//TODO - check to see if already on last image
 				updateState.clicksArray = [];
-
-				console.log(state.images.length);
-				console.log(state.currentImageIndex + 1);
 
 				if (state.currentImageIndex + 1 !== state.images.length) {
 					updateState.currentImageIndex = state.currentImageIndex + 1;
@@ -302,8 +298,8 @@ function App() {
 
 	const getClickArea = (e) => {
 		e.persist();
-		console.log({ clickX: e.clientX, clickY: e.clientY });
-		console.log({ imgHeight: imageDims.height, imgWidth: imageDims.width });
+		// console.log({ clickX: e.clientX, clickY: e.clientY });
+		// console.log({ imgHeight: imageDims.height, imgWidth: imageDims.width });
 
 		const x = e.clientX - 20;
 		const y = e.clientY - 72;
@@ -345,8 +341,6 @@ function App() {
 			layoutState[
 				layoutState.images[layoutState.currentImageIndex].string
 			][character].x;
-
-		console.log({ charX, charY });
 
 		//adding the percentage the selection container is offset by
 		const clickY =

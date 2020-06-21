@@ -13,7 +13,6 @@ const UserSelection = styled.div`
 	left: ${(props) => props.x && props.x + '%'};
 	border: solid 4px black;
 	border-radius: 8px;
-	${(props) => console.log(props.windowScrollY)}
 `;
 
 export default function ImageElements({
