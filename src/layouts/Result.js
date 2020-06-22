@@ -81,7 +81,7 @@ const NextBtn = styled.button`
 `;
 
 const AllScoresContainer = styled.div`
-	padding-top: 52px;
+	padding: 52px 0 48px 0;
 	width: 50%;
 	display: flex;
 	flex-direction: column;
@@ -92,9 +92,10 @@ const AllScoresContainer = styled.div`
 	}
 
 	&& table {
-		margin: 0 auto;
+		margin: 32px auto 0 auto;
 		padding-top: 16px;
 		border-collapse: collapse;
+		z-index: 1000;
 	}
 
 	&& thead,
@@ -116,9 +117,10 @@ const ScoresBackground = styled.div`
 	margin: 0 auto;
 	background-color: white;
 	border-radius: 8px;
-	min-height: 50%;
+	min-height: 350px;
 	width: 50%;
 	min-width: 250px;
+	position: relative;
 `;
 
 export default function Result({ username, layoutDispatch }) {
@@ -176,6 +178,7 @@ export default function Result({ username, layoutDispatch }) {
 					<h1>High Scores</h1>
 					<Spacer height={'36px'} />
 					<ScoresBackground>
+						<div></div>
 						<table>
 							<thead>
 								<tr>
@@ -187,7 +190,7 @@ export default function Result({ username, layoutDispatch }) {
 							<tbody>
 								{tempNames.map((score) => {
 									return (
-										<tr>
+										<tr key={`${score.name}${score.time}`}>
 											<td>{score.place}</td>
 											<td>{score.name}</td>
 											<td>{score.time}</td>

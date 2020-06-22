@@ -5,6 +5,7 @@ import imageOne from './images/imageOne.jpg';
 import imageTwo from './images/imageTwo.jpg';
 import imageThree from './images/imageThree.jpg';
 import firebase from './firebase';
+import { AiOutlineLoading } from 'react-icons/ai';
 
 import waldoImg from './images/waldo.jpg';
 import wendyImg from './images/wendy.jpg';
@@ -44,6 +45,24 @@ const Image = styled.img`
 		height: 100vh;
 		width: auto;
 		overflow-x: scroll;
+	}
+`;
+
+const LoadingIcon = styled.svg`
+	position: fixed;
+	z-index: 9999;
+	font-size: 80px;
+	top: calc(50% - 40px);
+	left: calc(50% - 40px);
+	color: black;
+	animation: spin 1s linear infinite;
+	@keyframes spin {
+		from {
+			transform: rotate(0deg);
+		}
+		to {
+			transform: rotate(360deg);
+		}
 	}
 `;
 
@@ -163,7 +182,7 @@ function layoutReducer(state, action) {
 				action.character
 			].found = true;
 
-			//check if all characters have been found
+			// check if all characters have been found
 			const allCharsFound = Object.values(
 				updateState[state.images[state.currentImageIndex].string]
 			).every((char) => char.found);
@@ -175,17 +194,21 @@ function layoutReducer(state, action) {
 					}.finish`,
 				}).catch((err) => console.log(err));
 
+				// remove previous clicks from screen
 				updateState.clicksArray = [];
 
+				// check if on the last image
 				if (state.currentImageIndex + 1 !== state.images.length) {
-					updateState.currentImageIndex = state.currentImageIndex + 1;
+					// updateState.currentImageIndex = state.currentImageIndex + 1; TODO - move this to after result is shown
 					addTimestamp({
 						timeslot: `${
 							state.images[updateState.currentImageIndex].string
 						}.start`,
 					}).catch((err) => console.log(err));
+					updateState.isResultShown = true;
+					updateState.isTimerActive = false;
 				} else {
-					//TODO - handle game over
+					// handle game over
 				}
 			}
 			return updateState;
@@ -235,11 +258,12 @@ const initialLayoutState = {
 	isMenuOpen: false,
 	isTimerActive: false,
 	//set back to true when finished
-	isCoverShown: false,
+	isCoverShown: true,
 	isScoreShown: false,
 	isAboutShown: false,
-	isImageShown: true,
-	isResultShown: true,
+	isImageShown: false,
+	isResultShown: false,
+	isLoadingResult: false,
 	//TODO - having object property and global variable same name may be issue
 	images: [
 		{ src: imageOne, string: 'imageOne' },
@@ -311,12 +335,12 @@ function App() {
 		}
 	}, [observedDims]);
 
-	// useEffect(() => {
-	// 	firebase
-	// 		.auth()
-	// 		.signInAnonymously()
-	// 		.catch((err) => console.log(err));
-	// }, []);
+	useEffect(() => {
+		firebase
+			.auth()
+			.signInAnonymously()
+			.catch((err) => console.log(err));
+	}, []);
 
 	const getClickArea = (e) => {
 		e.persist();
@@ -408,6 +432,9 @@ function App() {
 					timer={timer}
 				/>
 			)}
+			{layoutState.isLoadingResult && (
+				<LoadingIcon as={AiOutlineLoading} />
+			)}
 			<Container>
 				<Nav
 					layoutDispatch={layoutDispatch}
@@ -440,6 +467,7 @@ function App() {
 			</Container>
 			{/* need to pass current image instead of imageOne */}
 			{/* these are the different "pages" */}
+
 			{layoutState.isCoverShown && (
 				<Cover layoutDispatch={layoutDispatch} />
 			)}
