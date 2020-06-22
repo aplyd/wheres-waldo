@@ -10,6 +10,7 @@ export const GlobalStyle = createGlobalStyle`
 
     #root, body {
         background-color: black;
+        
     }
 
     button {

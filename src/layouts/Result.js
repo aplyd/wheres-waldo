@@ -20,19 +20,28 @@ const Background = styled.div`
 `;
 
 const Container = styled.div`
-	position: fixed;
+	position: absolute;
 	top: 0;
 	left: 0;
-	right: 0;
-	bottom: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+	@media screen and (max-width: 800px) {
+		flex-direction: column;
+	}
 `;
 
 const ContentContainer = styled.div`
-	padding-top: 52px;
+	padding-top: 116px;
+	width: 50%;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	@media screen and (max-width: 800px) {
+		width: 100%;
+	}
 `;
 
 const Title = styled.h1`
@@ -55,14 +64,14 @@ const Prompt = styled.p`
 
 const NameInput = styled.input`
 	border-radius: 8px;
-	padding: 8px 16px;
+	padding: 16px 32px;
 	font-size: 16px;
 	border: none;
 	outline: none;
 `;
 
 const NextBtn = styled.button`
-	border-radius: 4px;
+	border-radius: 8px;
 	background-color: black;
 	color: white;
 	font-size: 18px;
@@ -70,14 +79,79 @@ const NextBtn = styled.button`
 	box-shadow: none;
 	border: none;
 `;
+
+const AllScoresContainer = styled.div`
+	padding-top: 52px;
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	&& > h1 {
+		font-size: 48px;
+		font-weight: bold;
+	}
+
+	&& table {
+		margin: 0 auto;
+		padding-top: 16px;
+		border-collapse: collapse;
+	}
+
+	&& thead,
+	th {
+		background-color: black;
+		color: white;
+		height: 32px;
+	}
+
+	&& td {
+		padding: 4px 24px;
+	}
+	@media screen and (max-width: 800px) {
+		width: 100%;
+	}
+`;
+
+const ScoresBackground = styled.div`
+	margin: 0 auto;
+	background-color: white;
+	border-radius: 8px;
+	min-height: 50%;
+	width: 50%;
+	min-width: 250px;
+`;
+
 export default function Result({ username, layoutDispatch }) {
+	const tempNames = [
+		{
+			place: 1,
+			name: 'Austin',
+			time: 0.45,
+		},
+		{
+			place: 2,
+			name: 'George',
+			time: 1.12,
+		},
+		{
+			place: 3,
+			name: 'Sam',
+			time: 2.34,
+		},
+		{
+			place: 4,
+			name: 'Jeff',
+			time: 3.15,
+		},
+	];
+
 	return (
 		<>
 			<Background />
 			<Container>
-				<Spacer height={'64px'} />
 				<ContentContainer>
-					<Title>Nice!</Title>
+					<Spacer height={'24px'} />
+					<Title>Good job!</Title>
 					<Spacer height={'24px'} />
 					<SubTitle>your time</SubTitle> <Time>0:40</Time>
 					<Spacer height={'48px'} />
@@ -97,6 +171,33 @@ export default function Result({ username, layoutDispatch }) {
 					<Spacer height={'48px'} />
 					<NextBtn type="button">Next Round</NextBtn>
 				</ContentContainer>
+				<AllScoresContainer>
+					<Spacer height={'82px'} />
+					<h1>High Scores</h1>
+					<Spacer height={'36px'} />
+					<ScoresBackground>
+						<table>
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Name</th>
+									<th>Time</th>
+								</tr>
+							</thead>
+							<tbody>
+								{tempNames.map((score) => {
+									return (
+										<tr>
+											<td>{score.place}</td>
+											<td>{score.name}</td>
+											<td>{score.time}</td>
+										</tr>
+									);
+								})}
+							</tbody>
+						</table>
+					</ScoresBackground>
+				</AllScoresContainer>
 			</Container>
 		</>
 	);
