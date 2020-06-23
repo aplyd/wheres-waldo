@@ -199,12 +199,13 @@ function layoutReducer(state, action) {
 
 				// check if on the last image
 				if (state.currentImageIndex + 1 !== state.images.length) {
-					// updateState.currentImageIndex = state.currentImageIndex + 1; TODO - move this to after result is shown
-					addTimestamp({
-						timeslot: `${
-							state.images[updateState.currentImageIndex].string
-						}.start`,
-					}).catch((err) => console.log(err));
+					// TODO - move this to after result is shown
+					// updateState.currentImageIndex = state.currentImageIndex + 1;
+					// addTimestamp({
+					// 	timeslot: `${
+					// 		state.images[updateState.currentImageIndex].string
+					// 	}.start`,
+					// }).catch((err) => console.log(err));
 					updateState.isResultShown = true;
 					updateState.isTimerActive = false;
 				} else {
@@ -378,25 +379,32 @@ function App() {
 		const selectionWidthInPercentage = ((40 / imageDims.width) * 100) / 2;
 		const selectionHeightInPercentage = ((40 / imageDims.height) * 100) / 2;
 
+		// position of the characters y coordinate in percentage
+		// minus scrollY in precentage
 		const charY =
 			layoutState[
 				layoutState.images[layoutState.currentImageIndex].string
-			][character].y;
+			][character].y -
+			(layoutState.currentClickPercentage.windowScrollY /
+				imageDims.height) *
+				100;
 
+		// position of the characters x coordinate in percentage
+		// minus scrollX in precentage
 		const charX =
 			layoutState[
 				layoutState.images[layoutState.currentImageIndex].string
-			][character].x;
+			][character].x -
+			(layoutState.currentClickPercentage.windowScrollX /
+				imageDims.width) *
+				100;
 
 		//adding the percentage the selection container is offset by
 		const clickY =
 			layoutState.currentClickPercentage.y +
-			// layoutState.currentClickPercentage.windowScrollY + TODO - this line needs to be a percentage
 			(20 / imageDims.height) * 100;
 		const clickX =
-			layoutState.currentClickPercentage.x +
-			// layoutState.currentClickPercentage.windowScrollX + TODO - this line needs to be a percentage
-			(20 / imageDims.width) * 100;
+			layoutState.currentClickPercentage.x + (20 / imageDims.width) * 100;
 
 		//if the target character is within the user selected area
 		if (
@@ -477,6 +485,7 @@ function App() {
 				<Result
 					username={layoutState.username}
 					layoutDispatch={layoutDispatch}
+					timer={timer}
 				/>
 			)}
 

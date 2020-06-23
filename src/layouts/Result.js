@@ -123,7 +123,7 @@ const ScoresBackground = styled.div`
 	position: relative;
 `;
 
-export default function Result({ username, layoutDispatch }) {
+export default function Result({ username, layoutDispatch, timer }) {
 	const tempNames = [
 		{
 			place: 1,
@@ -155,7 +155,11 @@ export default function Result({ username, layoutDispatch }) {
 					<Spacer height={'24px'} />
 					<Title>Good job!</Title>
 					<Spacer height={'24px'} />
-					<SubTitle>your time</SubTitle> <Time>0:40</Time>
+					<SubTitle>your time</SubTitle>{' '}
+					<Time>
+						{(timer / 60).toString().split('.')[0]}:
+						{(timer % 60).toString().padStart(2, '0')}
+					</Time>
 					<Spacer height={'48px'} />
 					<Prompt>Add your name to the scoreboard?</Prompt>
 					<Spacer height={'24px'} />
