@@ -93,8 +93,6 @@ export default function Menu({ layoutDispatch, layoutState, timer }) {
 				<CloseIcon as={MdClose} />
 			</div>
 
-			<Timer timer={timer} />
-
 			<MenuItemsContainer>
 				<Spacer height={'96px'} />
 

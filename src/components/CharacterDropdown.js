@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 import * as consts from '../constants';
@@ -114,3 +115,25 @@ export default function CharacterDropdown({
 		</Container>
 	);
 }
+
+CharacterDropdown.propTypes = {
+	addClick: PropTypes.func,
+	dropdownPosition: PropTypes.shape({
+		x: PropTypes.any,
+		y: PropTypes.any,
+	}),
+	imageHeight: PropTypes.any,
+	layoutDispatch: PropTypes.func,
+	layoutState: PropTypes.shape({
+		currentClickCoords: PropTypes.shape({
+			x: PropTypes.number,
+			y: PropTypes.number,
+		}),
+		currentClickPercentage: PropTypes.shape({
+			windowScrollX: PropTypes.any,
+			windowScrollY: PropTypes.any,
+		}),
+		currentImageIndex: PropTypes.any,
+		images: PropTypes.any,
+	}),
+};

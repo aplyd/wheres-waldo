@@ -24,7 +24,7 @@ const Container = styled.div`
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 100%;
+	height: calc(100% - 52px);
 	display: flex;
 	flex-direction: row;
 	@media screen and (max-width: 800px) {
@@ -35,7 +35,7 @@ const Container = styled.div`
 const ContentContainer = styled.div`
 	padding-top: 116px;
 	width: 50%;
-	height: 100%;
+	height: calc(100% - 52px);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -106,7 +106,7 @@ const AllScoresContainer = styled.div`
 	}
 
 	&& td {
-		padding: 4px 24px;
+		padding: 8px 24px;
 	}
 	@media screen and (max-width: 800px) {
 		width: 100%;

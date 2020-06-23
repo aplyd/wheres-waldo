@@ -263,7 +263,7 @@ const initialLayoutState = {
 	isScoreShown: false,
 	isAboutShown: false,
 	isImageShown: false,
-	isResultShown: false,
+	isResultShown: true,
 	isLoadingResult: false,
 	//TODO - having object property and global variable same name may be issue
 	images: [

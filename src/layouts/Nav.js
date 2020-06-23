@@ -61,9 +61,7 @@ export default function Nav({
 				<div>
 					{window.innerWidth > 475 && <Title>Where's Waldo?</Title>}
 				</div>
-				<div>
-					<Timer timer={timer} />
-				</div>
+				<div></div>
 			</Container>
 			<Spacer height={'52px'} />
 		</>
