@@ -1,4 +1,4 @@
-export const SAVE_UI = 'save ui';
+export const SAVE_UID = 'save uid';
 export const TOGGLE_MENU = 'toggle menu';
 export const START_GAME = 'start game';
 export const SHOW_INFO = 'show info';

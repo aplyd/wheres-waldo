@@ -70,7 +70,7 @@ const addTimestamp = firebase.functions().httpsCallable('addTimestamp');
 
 function layoutReducer(state, action) {
 	switch (action.type) {
-		case consts.SAVE_UI:
+		case consts.SAVE_UID:
 			return {
 				...state,
 				uid: action.uid,
@@ -192,7 +192,18 @@ function layoutReducer(state, action) {
 					timeslot: `${
 						state.images[state.currentImageIndex].string
 					}.finish`,
-				}).catch((err) => console.log(err));
+				})
+					.then(() =>
+						firebase
+							.firestore()
+							.collection('users')
+							.doc(state.uid)
+							.get()
+							.then((doc) => {
+								console.log(doc.data());
+							})
+					)
+					.catch((err) => console.log(err));
 
 				// remove previous clicks from screen
 				updateState.clicksArray = [];
@@ -263,7 +274,7 @@ const initialLayoutState = {
 	isScoreShown: false,
 	isAboutShown: false,
 	isImageShown: false,
-	isResultShown: true,
+	isResultShown: false,
 	isLoadingResult: false,
 	//TODO - having object property and global variable same name may be issue
 	images: [
@@ -340,6 +351,12 @@ function App() {
 		firebase
 			.auth()
 			.signInAnonymously()
+			.then((data) => {
+				layoutDispatch({
+					type: consts.SAVE_UID,
+					uid: data.user.uid,
+				});
+			})
 			.catch((err) => console.log(err));
 	}, []);
 
