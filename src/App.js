@@ -66,7 +66,9 @@ const LoadingIcon = styled.svg`
 	}
 `;
 
-const addTimestamp = firebase.functions().httpsCallable('addTimestamp');
+const addStartTimestamp = firebase
+	.functions()
+	.httpsCallable('addStartTimestamp');
 
 function layoutReducer(state, action) {
 	switch (action.type) {
@@ -86,9 +88,9 @@ function layoutReducer(state, action) {
 				username: action.username,
 			};
 		case consts.START_GAME:
-			addTimestamp({ timeslot: `imageOne.start` }).catch((err) =>
-				console.log(err)
-			);
+			addStartTimestamp({
+				image: state.images[state.currentImageIndex].string,
+			}).catch((err) => console.log(err));
 			return {
 				...state,
 				isMenuOpen: false,
@@ -188,22 +190,11 @@ function layoutReducer(state, action) {
 			).every((char) => char.found);
 
 			if (allCharsFound) {
-				addTimestamp({
-					timeslot: `${
-						state.images[state.currentImageIndex].string
-					}.finish`,
-				})
-					// .then(() =>
-					// 	firebase
-					// 		.firestore()
-					// 		.collection('users')
-					// 		.doc(state.uid)
-					// 		.get()
-					// 		.then((doc) => {
-					// 			console.log(doc.data());
-					// 		})
-					// )
-					.catch((err) => console.log(err));
+				// addFinishTimestamp({
+				// 	timeslot: `${
+				// 		state.images[state.currentImageIndex].string
+				// 	}.finish`,
+				// })
 
 				// remove previous clicks from screen
 				updateState.clicksArray = [];

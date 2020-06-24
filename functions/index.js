@@ -1,76 +1,78 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const { AiFillCaretRight } = require('react-icons/ai');
 
 admin.initializeApp();
 
 //add timestamps
-exports.addTimestamp = functions.https.onCall((data, context) => {
+exports.addStartTimestamp = functions.https.onCall((data, context) => {
 	const uid = context.auth.uid;
 	const timestamp = Date.now();
 
-	const updated = { [data.timeslot]: timestamp };
-
-	if (data.timeslot === 'finish') {
-		//todo - fetch start time
-
-		const calculatedTime = 'calculate here';
-		updated.total = calculatedTime;
-	}
-
-	try {
-		return admin
-			.firestore()
-			.collection('users')
-			.doc(uid)
-			.update(updated)
-			.catch((err) => console.log(err));
-	} catch (err) {
-		console.log(err);
-		throw new functions.https.HttpsError();
-	}
-});
-
-// create user on auth
-exports.createUser = functions.auth.user().onCreate((user) => {
 	return admin
 		.firestore()
-		.collection('users')
-		.doc(user.uid)
+		.collection('scores')
+		.doc('all')
 		.set(
 			{
-				uid: user.uid,
-				imageOne: { start: null, finish: null },
-				imageTwo: { start: null, finish: null },
-				imageThree: { start: null, finish: null },
+				[uid]: {
+					[data.image]: {
+						start: timestamp,
+					},
+				},
 			},
 			{ merge: true }
 		)
 		.catch((err) => {
 			console.log(err);
+			throw new functions.https.HttpsError();
 		});
 });
 
-// listens for image.finish to be updated - commented out because probably maybe not needed
-// exports.listenForImageFinish = functions.firestore
-// 	.document('users/{uid}')
-// 	.onUpdate((change, context) => {
-// 		const after = change.after.data();
-// 		const before = change.before.data();
+// exports.addFinishTimestampAndCalculateTotal = functions.https.onCall(
+// 	(data, context) => {
+// 		const uid = context.auth.uid;
+// 		const timestamp = Date.now();
+//
+//		// first, gets start time
+// 		return admin
+// 			.firestore()
+// 			.collection('users')
+// 			.doc(uid)
+// 			.get()
+// 			.then((res) => {
+//				// second, calculates the difference between start and current timestamp and adds to firestore
+// 				return admin
+// 					.firestore()
+// 					.collection('users')
+// 					.doc(uid)
+// 					.update({ [data.timeslot]: timestamp });
+//					.then(() => {
+//					// then returns returns the value
+//					})
+// 			});
+// 	}
+// );
 
-// 		if (after.imageOne.finish !== before.imageOne.finish) {
-// 			conosle.log('finish image one')
-// 		}
-
-// 		if (after.imageTwo.finish !== before.imageTwo.finish) {
-// 			console.log('finish image two')
-// 		}
-
-// 		if (after.imageThree.finish !== before.imageThree.finish) {
-// 			console.log('finish image three')
-// 		}
-
-// 		console.log({ finishTime });
-
-// 		return null;
-// 	});
+// create user on auth
+exports.createUser = functions.auth.user().onCreate((user) => {
+	return admin
+		.firestore()
+		.collection('scores')
+		.doc('all')
+		.set(
+			{
+				[user.uid]: {
+					imageOne: { start: null, total: null },
+					imageTwo: { start: null, total: null },
+					imageThree: { start: null, total: null },
+					name: '',
+					uid: user.uid,
+				},
+			},
+			{ merge: true }
+		)
+		.catch((err) => {
+			console.log(err);
+			throw new functions.https.HttpsError();
+		});
+});
