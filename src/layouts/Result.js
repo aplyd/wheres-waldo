@@ -179,7 +179,7 @@ export default function Result({ username, layoutDispatch, timer }) {
 				</ContentContainer>
 				<AllScoresContainer>
 					<Spacer height={'82px'} />
-					<h1>High Scores</h1>
+					<h1>Scores</h1>
 					<Spacer height={'36px'} />
 					<ScoresBackground>
 						<div></div>

@@ -42,3 +42,12 @@ exports.createUser = functions.auth.user().onCreate((user) => {
 			console.log(err);
 		});
 });
+
+// listens for image.finish to be updated
+exports.listenForImageFinish = functions.firestore
+	.document('users/{uid}/{image}/finish')
+	.onUpdate((change, context) => {
+		const finishTime = change.after.data();
+		console.log({ finishTime });
+		console.log(context.uid.image);
+	});

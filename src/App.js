@@ -193,16 +193,16 @@ function layoutReducer(state, action) {
 						state.images[state.currentImageIndex].string
 					}.finish`,
 				})
-					.then(() =>
-						firebase
-							.firestore()
-							.collection('users')
-							.doc(state.uid)
-							.get()
-							.then((doc) => {
-								console.log(doc.data());
-							})
-					)
+					// .then(() =>
+					// 	firebase
+					// 		.firestore()
+					// 		.collection('users')
+					// 		.doc(state.uid)
+					// 		.get()
+					// 		.then((doc) => {
+					// 			console.log(doc.data());
+					// 		})
+					// )
 					.catch((err) => console.log(err));
 
 				// remove previous clicks from screen
@@ -210,7 +210,7 @@ function layoutReducer(state, action) {
 
 				// check if on the last image
 				if (state.currentImageIndex + 1 !== state.images.length) {
-					// TODO - move this to after result is shown
+					// TODO - move this to after "next round" is clicked
 					// updateState.currentImageIndex = state.currentImageIndex + 1;
 					// addTimestamp({
 					// 	timeslot: `${
@@ -480,14 +480,17 @@ function App() {
 						imageDims={imageDims}
 						addClick={addClick}
 					/>
-					<Image
-						src={
-							layoutState.images[layoutState.currentImageIndex]
-								.src
-						}
-						alt=""
-						ref={imageRef}
-					></Image>
+					{layoutState.isImageShown && (
+						<Image
+							src={
+								layoutState.images[
+									layoutState.currentImageIndex
+								].src
+							}
+							alt=""
+							ref={imageRef}
+						></Image>
+					)}
 				</ImageContainer>
 			</Container>
 			{/* need to pass current image instead of imageOne */}
