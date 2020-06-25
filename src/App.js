@@ -194,16 +194,16 @@ function layoutReducer(state, action) {
 			).every((char) => char.found);
 
 			if (allCharsFound) {
-				const totalReadableTime = (async () => {
-					let time = await addFinishTimestampAndCalculateTotal({
-						image: `${
-							state.images[state.currentImageIndex].string
-						}`,
-					});
+				// const totalReadableTime = (async () => {
+				// 	let time = await addFinishTimestampAndCalculateTotal({
+				// 		image: `${
+				// 			state.images[state.currentImageIndex].string
+				// 		}`,
+				// 	});
 
-					return time;
-				})();
-				totalReadableTime.then((res) => console.log(res));
+				// 	return time;
+				// })();
+				// totalReadableTime.then((res) => console.log(res));
 
 				// remove previous clicks from screen
 				updateState.clicksArray = [];
@@ -341,12 +341,26 @@ function App() {
 	const [imageRef, observedDims] = useImageDims();
 	const [timer, setTimer] = useState(0);
 
+	// detect when all characters in an image have been found to calc results
+	useEffect(() => {
+		const allCharsFound = Object.values(
+			layoutState[
+				layoutState.images[layoutState.currentImageIndex].string
+			]
+		).every((char) => char.found);
+		if (allCharsFound) {
+			console.log('all found');
+		}
+	}, [layoutState]);
+
+	// store image dims in state
 	useEffect(() => {
 		if (observedDims) {
 			setImageDims(observedDims);
 		}
 	}, [observedDims]);
 
+	// sign in to firebase anonymously
 	useEffect(() => {
 		firebase
 			.auth()
