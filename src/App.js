@@ -48,24 +48,6 @@ const Image = styled.img`
 	}
 `;
 
-const LoadingIcon = styled.svg`
-	position: fixed;
-	z-index: 9999;
-	font-size: 80px;
-	top: calc(50% - 40px);
-	left: calc(50% - 40px);
-	color: black;
-	animation: spin 1s linear infinite;
-	@keyframes spin {
-		from {
-			transform: rotate(0deg);
-		}
-		to {
-			transform: rotate(360deg);
-		}
-	}
-`;
-
 const addStartTimestamp = firebase
 	.functions()
 	.httpsCallable('addStartTimestamp');
@@ -135,17 +117,6 @@ function layoutReducer(state, action) {
 				isImageShown: true,
 			};
 
-		case consts.SHOW_RESULT:
-			return {
-				...state,
-				isMenuOpen: false,
-				isCoverShown: false,
-				isScoreShown: false,
-				isAboutShown: false,
-				isImageShown: false,
-				isResultShown: true,
-			};
-
 		case consts.IMAGE_RESIZE:
 			return {
 				...state,
@@ -170,7 +141,7 @@ function layoutReducer(state, action) {
 			}
 
 		case consts.CHARACTER_FOUND:
-			const correctClick = {
+			const characterFoundClick = {
 				x: state.currentClickPercentage.x,
 				y: state.currentClickPercentage.y,
 				windowScrollX: state.currentClickPercentage.windowScrollX,
@@ -178,52 +149,17 @@ function layoutReducer(state, action) {
 				characterFound: true,
 			};
 
-			const updateState = {
+			const characterFoundState = {
 				...state,
-				clicksArray: [...state.clicksArray, correctClick],
+				clicksArray: [...state.clicksArray, characterFoundClick],
 				isSelectCharacterShown: false,
 			};
 
-			updateState[state.images[state.currentImageIndex].string][
+			characterFoundState[state.images[state.currentImageIndex].string][
 				action.character
 			].found = true;
 
-			// check if all characters have been found
-			const allCharsFound = Object.values(
-				updateState[state.images[state.currentImageIndex].string]
-			).every((char) => char.found);
-
-			if (allCharsFound) {
-				// const totalReadableTime = (async () => {
-				// 	let time = await addFinishTimestampAndCalculateTotal({
-				// 		image: `${
-				// 			state.images[state.currentImageIndex].string
-				// 		}`,
-				// 	});
-
-				// 	return time;
-				// })();
-				// totalReadableTime.then((res) => console.log(res));
-
-				// remove previous clicks from screen
-				updateState.clicksArray = [];
-
-				// check if on the last image
-				if (state.currentImageIndex + 1 !== state.images.length) {
-					// TODO - move this to after "next round" is clicked
-					// updateState.currentImageIndex = state.currentImageIndex + 1;
-					// addTimestamp({
-					// 	timeslot: `${
-					// 		state.images[updateState.currentImageIndex].string
-					// 	}.start`,
-					// }).catch((err) => console.log(err));
-					updateState.isResultShown = true;
-					updateState.isTimerActive = false;
-				} else {
-					// handle game over
-				}
-			}
-			return updateState;
+			return characterFoundState;
 
 		case consts.CHARACTER_NOT_FOUND:
 			const wrongClick = {
@@ -258,6 +194,31 @@ function layoutReducer(state, action) {
 					...state,
 				};
 			}
+		case consts.LOADING_RESULTS:
+			const loadingState = { ...state };
+			loadingState.clicksArray = [];
+			loadingState.isResultShown = true;
+			loadingState.isLoadingResult = true;
+			loadingState.isTimerActive = false;
+			return loadingState;
+
+		case consts.SHOW_RESULTS:
+			const resultsState = { ...state };
+			resultsState.isLoadingResult = false;
+			resultsState[state.images[state.currentImageIndex].string] =
+				action.res;
+			return resultsState;
+
+		case consts.NEXT_ROUND:
+			// TODO - move this to after "next round" is clicked
+			// nextRoundState.currentImageIndex = state.currentImageIndex + 1;
+			// addTimestamp({
+			// 	timeslot: `${
+			// 		state.images[nextRoundState.currentImageIndex].string
+			// 	}.start`,
+			// }).catch((err) => console.log(err));
+			console.log('go to next round');
+			return state;
 
 		default:
 			return state;
@@ -282,6 +243,11 @@ const initialLayoutState = {
 		{ src: imageTwo, string: 'imageTwo' },
 		{ src: imageThree, string: 'imageThree' },
 	],
+	userTimes: {
+		imageOne: null,
+		imageTwo: null,
+		imageThree: null,
+	},
 	currentImageIndex: 0,
 	selectionContainer: null,
 	//the selection container & dropdown
@@ -340,6 +306,7 @@ function App() {
 	const [imageDims, setImageDims] = useState({ height: 0, width: 0 });
 	const [imageRef, observedDims] = useImageDims();
 	const [timer, setTimer] = useState(0);
+	const [stopUseEffectLoop, setStopUseEffectLoop] = useState(false);
 
 	// detect when all characters in an image have been found to calc results
 	useEffect(() => {
@@ -348,8 +315,46 @@ function App() {
 				layoutState.images[layoutState.currentImageIndex].string
 			]
 		).every((char) => char.found);
-		if (allCharsFound) {
-			console.log('all found');
+
+		if (allCharsFound && !stopUseEffectLoop) {
+			// display results page with loading icon
+			layoutDispatch({ type: consts.LOADING_RESULTS });
+			setStopUseEffectLoop(true);
+			console.log('loop');
+
+			//calculate total time, store in firebase and return time
+			addFinishTimestampAndCalculateTotal({
+				image: `${
+					layoutState.images[layoutState.currentImageIndex].string
+				}`,
+			}).then((res) => {
+				layoutDispatch({
+					type: consts.SHOW_RESULTS,
+					result: res.data(), // TODO FIX res.data() is not a func
+				});
+			});
+
+			// USE ^^^^
+			// saving this in case above code doesn't work
+			// const totalReadableTime = (async () => {
+			// 	let time = await addFinishTimestampAndCalculateTotal({
+			// 		image: `${
+			// 			layoutState.images[layoutState.currentImageIndex].string
+			// 		}`,
+			// 	});
+
+			// 	return time;
+			// })();
+			// totalReadableTime.then((res) => console.log(res));
+
+			if (
+				layoutState.currentImageIndex + 1 !==
+				layoutState.images.length
+			) {
+				//handle all characters found but not on last image
+			} else {
+				// handle gameover
+			}
 		}
 	}, [layoutState]);
 
@@ -471,9 +476,6 @@ function App() {
 					timer={timer}
 				/>
 			)}
-			{layoutState.isLoadingResult && (
-				<LoadingIcon as={AiOutlineLoading} />
-			)}
 			<Container>
 				<Nav
 					layoutDispatch={layoutDispatch}
@@ -517,9 +519,9 @@ function App() {
 			{layoutState.isAboutShown && <About />}
 			{layoutState.isResultShown && (
 				<Result
-					username={layoutState.username}
 					layoutDispatch={layoutDispatch}
 					timer={timer}
+					layoutState={layoutState}
 				/>
 			)}
 

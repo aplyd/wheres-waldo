@@ -123,7 +123,30 @@ const ScoresBackground = styled.div`
 	position: relative;
 `;
 
-export default function Result({ username, layoutDispatch, timer }) {
+const LoadingIcon = styled.svg`
+	position: fixed;
+	z-index: 9999;
+	font-size: 80px;
+	top: calc(50% - 40px);
+	left: calc(50% - 40px);
+	color: black;
+	animation: spin 1s linear infinite;
+	@keyframes spin {
+		from {
+			transform: rotate(0deg);
+		}
+		to {
+			transform: rotate(360deg);
+		}
+	}
+`;
+
+export default function Result({
+	username,
+	layoutDispatch,
+	timer,
+	layoutState,
+}) {
 	const tempNames = [
 		{
 			place: 1,
@@ -152,30 +175,36 @@ export default function Result({ username, layoutDispatch, timer }) {
 			<Background />
 			<Container>
 				<ContentContainer>
-					<Spacer height={'24px'} />
-					<Title>Good job!</Title>
-					<Spacer height={'24px'} />
-					<SubTitle>your time</SubTitle>{' '}
-					<Time>
-						{(timer / 60).toString().split('.')[0]}:
-						{(timer % 60).toString().padStart(2, '0')}
-					</Time>
-					<Spacer height={'48px'} />
-					<Prompt>Add your name to the scoreboard?</Prompt>
-					<Spacer height={'24px'} />
-					<NameInput
-						placeholder="Name"
-						autoFocus
-						onChange={(e) =>
-							layoutDispatch({
-								type: consts.SAVE_USERNAME,
-								username: e.target.value,
-							})
-						}
-						value={username}
-					/>
-					<Spacer height={'48px'} />
-					<NextBtn type="button">Next Round</NextBtn>
+					{layoutState.isLoadingResult ? (
+						<LoadingIcon />
+					) : (
+						<>
+							<Spacer height={'24px'} />
+							<Title>Good job!</Title>
+							<Spacer height={'24px'} />
+							<SubTitle>your time</SubTitle>{' '}
+							<Time>
+								{(timer / 60).toString().split('.')[0]}:
+								{(timer % 60).toString().padStart(2, '0')}
+							</Time>
+							<Spacer height={'48px'} />
+							<Prompt>Add your name to the scoreboard?</Prompt>
+							<Spacer height={'24px'} />
+							<NameInput
+								placeholder="Name"
+								autoFocus
+								onChange={(e) =>
+									layoutDispatch({
+										type: consts.SAVE_USERNAME,
+										username: e.target.value,
+									})
+								}
+								value={username}
+							/>
+							<Spacer height={'48px'} />
+							<NextBtn type="button">Next Round</NextBtn>
+						</>
+					)}
 				</ContentContainer>
 				<AllScoresContainer>
 					<Spacer height={'82px'} />
