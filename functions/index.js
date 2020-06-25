@@ -29,48 +29,52 @@ exports.addStartTimestamp = functions.https.onCall((data, context) => {
 exports.addFinishTimestampAndCalculateTotal = functions.https.onCall(
 	(data, context) => {
 		const uid = context.auth.uid;
+		const calculateTimeDifference = (newerTime, olderTime) => {
+			const difference = newerTime - olderTime;
+			const minutes = Math.floor(difference / 60000);
+			const seconds = ((difference % 60000) / 1000).toFixed(0);
+			return seconds === 60
+				? minutes + 1 + ':00'
+				: minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+		};
+
 		// get start time from firestore
 		return admin
 			.firestore()
-			.collection('users')
+			.collection('scores')
 			.doc(uid)
 			.get()
 			.then((res) => {
 				// calculate the difference between start and current timestamp
-				// destructuring computed property below
-				const { [data.image]: currentImage } = res.data();
-				const calculateTimeDifference = (newerTime, olderTime) => {
-					const difference = newerTime - olderTime;
-					const minutes = Math.floor(difference / 60000);
-					const seconds = ((difference % 60000) / 1000).toFixed(0);
-					return seconds === 60
-						? minutes + 1 + ':00'
-						: minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-				};
+				const userData = res.data();
 				const totalReadableTime = calculateTimeDifference(
 					Date.now(),
-					currentImage.start
+					userData[data.image].start
 				);
-				// save total time in firestore in a readable format (minutes and seconds)
+
+				//save total time in firestore in a readable format (minutes and seconds)
 				return admin
 					.firestore()
-					.collection('users')
-					.doc(uid)
-					.update({
-						[data.image]: {
-							total: totalReadableTime,
+					.collection('scores')
+					.doc('all')
+					.update(
+						{
+							[uid]: {
+								[data.image]: totalReadableTime,
+							},
 						},
-					})
+						{ merge: true }
+					)
 					.then(() => {
 						// return time to client
 						return {
 							totalReadableTime,
 						};
-					})
-					.catch((err) => {
-						console.log(err);
-						throw new functions.https.HttpsError();
 					});
+			})
+			.catch((err) => {
+				console.log(err);
+				throw new functions.https.HttpsError();
 			});
 	}
 );

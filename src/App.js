@@ -196,14 +196,14 @@ function layoutReducer(state, action) {
 			if (allCharsFound) {
 				const totalReadableTime = (async () => {
 					let time = await addFinishTimestampAndCalculateTotal({
-						timeslot: `${
+						image: `${
 							state.images[state.currentImageIndex].string
-						}.finish`,
+						}`,
 					});
-					console.log(time);
+
 					return time;
 				})();
-				console.log(totalReadableTime);
+				totalReadableTime.then((res) => console.log(res));
 
 				// remove previous clicks from screen
 				updateState.clicksArray = [];
