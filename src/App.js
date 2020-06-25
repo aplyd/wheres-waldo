@@ -70,6 +70,10 @@ const addStartTimestamp = firebase
 	.functions()
 	.httpsCallable('addStartTimestamp');
 
+const addFinishTimestampAndCalculateTotal = firebase
+	.functions()
+	.httpsCallable('addFinishTimestampAndCalculateTotal');
+
 function layoutReducer(state, action) {
 	switch (action.type) {
 		case consts.SAVE_UID:
@@ -190,11 +194,16 @@ function layoutReducer(state, action) {
 			).every((char) => char.found);
 
 			if (allCharsFound) {
-				// addFinishTimestamp({
-				// 	timeslot: `${
-				// 		state.images[state.currentImageIndex].string
-				// 	}.finish`,
-				// })
+				const totalReadableTime = (async () => {
+					let time = await addFinishTimestampAndCalculateTotal({
+						timeslot: `${
+							state.images[state.currentImageIndex].string
+						}.finish`,
+					});
+					console.log(time);
+					return time;
+				})();
+				console.log(totalReadableTime);
 
 				// remove previous clicks from screen
 				updateState.clicksArray = [];

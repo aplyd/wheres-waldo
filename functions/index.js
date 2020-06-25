@@ -11,13 +11,11 @@ exports.addStartTimestamp = functions.https.onCall((data, context) => {
 	return admin
 		.firestore()
 		.collection('scores')
-		.doc('all')
+		.doc(uid)
 		.set(
 			{
-				[uid]: {
-					[data.image]: {
-						start: timestamp,
-					},
+				[data.image]: {
+					start: timestamp,
 				},
 			},
 			{ merge: true }
@@ -28,46 +26,68 @@ exports.addStartTimestamp = functions.https.onCall((data, context) => {
 		});
 });
 
-// exports.addFinishTimestampAndCalculateTotal = functions.https.onCall(
-// 	(data, context) => {
-// 		const uid = context.auth.uid;
-// 		const timestamp = Date.now();
-//
-//		// first, gets start time
-// 		return admin
-// 			.firestore()
-// 			.collection('users')
-// 			.doc(uid)
-// 			.get()
-// 			.then((res) => {
-//				// second, calculates the difference between start and current timestamp and adds to firestore
-// 				return admin
-// 					.firestore()
-// 					.collection('users')
-// 					.doc(uid)
-// 					.update({ [data.timeslot]: timestamp });
-//					.then(() => {
-//					// then returns returns the value
-//					})
-// 			});
-// 	}
-// );
+exports.addFinishTimestampAndCalculateTotal = functions.https.onCall(
+	(data, context) => {
+		const uid = context.auth.uid;
+		// get start time from firestore
+		return admin
+			.firestore()
+			.collection('users')
+			.doc(uid)
+			.get()
+			.then((res) => {
+				// calculate the difference between start and current timestamp
+				// destructuring computed property below
+				const { [data.image]: currentImage } = res.data();
+				const calculateTimeDifference = (newerTime, olderTime) => {
+					const difference = newerTime - olderTime;
+					const minutes = Math.floor(difference / 60000);
+					const seconds = ((difference % 60000) / 1000).toFixed(0);
+					return seconds === 60
+						? minutes + 1 + ':00'
+						: minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+				};
+				const totalReadableTime = calculateTimeDifference(
+					Date.now(),
+					currentImage.start
+				);
+				// save total time in firestore in a readable format (minutes and seconds)
+				return admin
+					.firestore()
+					.collection('users')
+					.doc(uid)
+					.update({
+						[data.image]: {
+							total: totalReadableTime,
+						},
+					})
+					.then(() => {
+						// return time to client
+						return {
+							totalReadableTime,
+						};
+					})
+					.catch((err) => {
+						console.log(err);
+						throw new functions.https.HttpsError();
+					});
+			});
+	}
+);
 
-// create user on auth
+// Create user document on user authentication.
 exports.createUser = functions.auth.user().onCreate((user) => {
 	return admin
 		.firestore()
 		.collection('scores')
-		.doc('all')
+		.doc(user.uid)
 		.set(
 			{
-				[user.uid]: {
-					imageOne: { start: null, total: null },
-					imageTwo: { start: null, total: null },
-					imageThree: { start: null, total: null },
-					name: '',
-					uid: user.uid,
-				},
+				imageOne: { start: null, total: null },
+				imageTwo: { start: null, total: null },
+				imageThree: { start: null, total: null },
+				name: '',
+				uid: user.uid,
 			},
 			{ merge: true }
 		)
