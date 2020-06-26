@@ -154,28 +154,17 @@ export default function Result({
 	timer,
 	layoutState,
 }) {
-	const tempNames = [
-		{
-			place: 1,
-			name: 'Austin',
-			time: 0.45,
-		},
-		{
-			place: 2,
-			name: 'George',
-			time: 1.12,
-		},
-		{
-			place: 3,
-			name: 'Sam',
-			time: 2.34,
-		},
-		{
-			place: 4,
-			name: 'Jeff',
-			time: 3.15,
-		},
-	];
+	//TODO - need to fix this sort function and test it
+	const compareTimes = (a, b) =>
+		a[layoutState.images[layoutState.currentImageIndex]] <=
+		b[layoutState.images[layoutState.currentImageIndex]]
+			? -1
+			: 1;
+
+	const sortedScores =
+		layoutState.allScores &&
+		Object.values(layoutState.allScores).sort(compareTimes);
+	console.log(sortedScores && sortedScores);
 
 	return (
 		<>
@@ -192,7 +181,7 @@ export default function Result({
 							<SubTitle>your time</SubTitle>{' '}
 							<Time>
 								{
-									layoutState.userTimes[
+									layoutState.allScores.userScores[
 										layoutState.images[
 											layoutState.currentImageIndex
 										].string
@@ -212,6 +201,7 @@ export default function Result({
 									})
 								}
 								value={username}
+								maxLength="10"
 							/>
 							<Spacer height={'48px'} />
 							<NextBtn
@@ -238,12 +228,22 @@ export default function Result({
 								</tr>
 							</thead>
 							<tbody>
-								{tempNames.map((score) => {
+								{/* TODO - need to display all scores */}
+								{sortedScores.map((user, index) => {
 									return (
-										<tr key={`${score.name}${score.time}`}>
-											<td>{score.place}</td>
-											<td>{score.name}</td>
-											<td>{score.time}</td>
+										<tr key={`${index}${user.imageOne}`}>
+											<td>{index + 1}</td>
+											<td>{user.name}</td>
+											<td>
+												{
+													user[
+														layoutState.images[
+															layoutState
+																.currentImageIndex
+														].string
+													]
+												}
+											</td>
 										</tr>
 									);
 								})}

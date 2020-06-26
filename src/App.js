@@ -71,7 +71,17 @@ function layoutReducer(state, action) {
 		case consts.SAVE_USERNAME:
 			return {
 				...state,
-				username: action.username,
+				allScores: {
+					...state.allScores,
+					userScores: {
+						name: action.username,
+					},
+				},
+			};
+		case consts.SAVE_ALL_SCORES:
+			return {
+				...state,
+				allScores: { ...state.allScores, ...action.allScores },
 			};
 		case consts.START_GAME:
 			addStartTimestamp({
@@ -206,7 +216,7 @@ function layoutReducer(state, action) {
 		case consts.SHOW_RESULTS:
 			const resultsState = { ...state };
 			resultsState.isLoadingResult = false;
-			resultsState.userTimes[
+			resultsState.allScores.userScores[
 				state.images[state.currentImageIndex].string
 			] = action.result;
 			return resultsState;
@@ -219,6 +229,8 @@ function layoutReducer(state, action) {
 			// 		state.images[nextRoundState.currentImageIndex].string
 			// 	}.start`,
 			// }).catch((err) => console.log(err));
+
+			// TODO -  check if username value is not empty string, then update name in firestore
 			const nextRoundState = { ...state };
 			nextRoundState.hasResultBeenCalculated = false;
 			console.log('go to next round');
@@ -230,6 +242,14 @@ function layoutReducer(state, action) {
 }
 
 const initialLayoutState = {
+	allScores: {
+		userScores: {
+			imageOne: null,
+			imageTwo: null,
+			imageThree: null,
+			name: '',
+		},
+	},
 	uid: null,
 	username: '',
 	isMenuOpen: false,
@@ -247,11 +267,7 @@ const initialLayoutState = {
 		{ src: imageTwo, string: 'imageTwo' },
 		{ src: imageThree, string: 'imageThree' },
 	],
-	userTimes: {
-		imageOne: null,
-		imageTwo: null,
-		imageThree: null,
-	},
+
 	currentImageIndex: 0,
 	selectionContainer: null,
 	//the selection container & dropdown
@@ -367,6 +383,18 @@ function App() {
 				});
 			})
 			.catch((err) => console.log(err));
+
+		firebase
+			.firestore()
+			.collection('scores')
+			.doc('all')
+			.get()
+			.then((res) => {
+				layoutDispatch({
+					type: consts.SAVE_ALL_SCORES,
+					allScores: res.data(),
+				});
+			});
 	}, []);
 
 	const getClickArea = (e) => {

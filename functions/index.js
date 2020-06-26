@@ -61,6 +61,8 @@ exports.addFinishTimestampAndCalculateTotal = functions.https.onCall(
 						{
 							[uid]: {
 								[data.image]: totalReadableTime,
+								uid,
+								name: '',
 							},
 						},
 						{ merge: true }
