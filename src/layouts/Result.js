@@ -191,11 +191,16 @@ export default function Result({
 							<Spacer height={'24px'} />
 							<SubTitle>your time</SubTitle>{' '}
 							<Time>
-								{(timer / 60).toString().split('.')[0]}:
-								{(timer % 60).toString().padStart(2, '0')}
+								{
+									layoutState.userTimes[
+										layoutState.images[
+											layoutState.currentImageIndex
+										].string
+									]
+								}
 							</Time>
 							<Spacer height={'48px'} />
-							<Prompt>Add your name to the scoreboard?</Prompt>
+							<Prompt>Add your score to the leaderboard?</Prompt>
 							<Spacer height={'24px'} />
 							<NameInput
 								placeholder="Name"
@@ -209,13 +214,18 @@ export default function Result({
 								value={username}
 							/>
 							<Spacer height={'48px'} />
-							<NextBtn type="button">Next Round</NextBtn>
+							<NextBtn
+								type="button"
+								onClick={() => console.log('next round')}
+							>
+								Next Round
+							</NextBtn>
 						</>
 					)}
 				</ContentContainer>
 				<AllScoresContainer>
 					<Spacer height={'82px'} />
-					<h1>Scores</h1>
+					<h1>Leaderboard</h1>
 					<Spacer height={'36px'} />
 					<ScoresBackground>
 						<div></div>

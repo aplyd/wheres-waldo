@@ -55,6 +55,7 @@ const addFinishTimestampAndCalculateTotal = firebase
 	.functions()
 	.httpsCallable('addFinishTimestampAndCalculateTotal');
 
+// TODO - refactor to return statements to: return { ...state, option: value}
 function layoutReducer(state, action) {
 	switch (action.type) {
 		case consts.SAVE_UID:
@@ -205,8 +206,9 @@ function layoutReducer(state, action) {
 		case consts.SHOW_RESULTS:
 			const resultsState = { ...state };
 			resultsState.isLoadingResult = false;
-			resultsState[state.images[state.currentImageIndex].string] =
-				action.res;
+			resultsState.userTimes[
+				state.images[state.currentImageIndex].string
+			] = action.result;
 			return resultsState;
 
 		case consts.NEXT_ROUND:
@@ -217,6 +219,8 @@ function layoutReducer(state, action) {
 			// 		state.images[nextRoundState.currentImageIndex].string
 			// 	}.start`,
 			// }).catch((err) => console.log(err));
+			const nextRoundState = { ...state };
+			nextRoundState.hasResultBeenCalculated = false;
 			console.log('go to next round');
 			return state;
 
@@ -320,19 +324,18 @@ function App() {
 			// display results page with loading icon
 			layoutDispatch({ type: consts.LOADING_RESULTS });
 
-			console.log('loop');
-
 			//calculate total time, store in firebase and return time
-			// addFinishTimestampAndCalculateTotal({
-			// 	image: `${
-			// 		layoutState.images[layoutState.currentImageIndex].string
-			// 	}`,
-			// }).then((res) => {
-			// 	layoutDispatch({
-			// 		type: consts.SHOW_RESULTS,
-			// 		result: res.data(), // TODO FIX res.data() is not a func
-			// 	});
-			// });
+			addFinishTimestampAndCalculateTotal({
+				image: `${
+					layoutState.images[layoutState.currentImageIndex].string
+				}`,
+			}).then((res) => {
+				console.log(res);
+				layoutDispatch({
+					type: consts.SHOW_RESULTS,
+					result: res.data.totalReadableTime,
+				});
+			});
 
 			if (
 				layoutState.currentImageIndex + 1 !==
