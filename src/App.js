@@ -23,6 +23,7 @@ import Scoreboard from './layouts/Scoreboard';
 import ImageElements from './components/ImageElements';
 
 import * as consts from './constants';
+import { AiFillPauseCircle } from 'react-icons/ai';
 
 const Container = styled.div`
 	width: 100%;
@@ -74,6 +75,7 @@ function layoutReducer(state, action) {
 				allScores: {
 					...state.allScores,
 					userScores: {
+						...state.allScores.userScores,
 						name: action.username,
 					},
 				},
@@ -205,21 +207,36 @@ function layoutReducer(state, action) {
 				};
 			}
 		case consts.LOADING_RESULTS:
-			const loadingState = { ...state };
-			loadingState.clicksArray = [];
-			loadingState.isResultShown = true;
-			loadingState.isLoadingResult = true;
-			loadingState.isTimerActive = false;
-			loadingState.hasResultBeenCalculated = true;
-			return loadingState;
+			return {
+				...state,
+				clicksArray: [],
+				isResultShown: true,
+				isLoadingResult: true,
+				isTimerActive: false,
+				hasResultBeenCalculated: true,
+			};
 
 		case consts.SHOW_RESULTS:
-			const resultsState = { ...state };
-			resultsState.isLoadingResult = false;
-			resultsState.allScores.userScores[
-				state.images[state.currentImageIndex].string
-			] = action.result;
-			return resultsState;
+			// const resultsState = { ...state };
+			// resultsState.isLoadingResult = false;
+			// resultsState.allScores.userScores[
+			// 	state.images[state.currentImageIndex].string
+			// ] = action.result;
+
+			// return resultsState;
+
+			return {
+				...state,
+				isLoadingResult: false,
+				allScores: {
+					...state.allScores,
+					userScores: {
+						...state.allScores.userScores,
+						[state.images[state.currentImageIndex].string]:
+							action.result,
+					},
+				},
+			};
 
 		case consts.NEXT_ROUND:
 			// TODO - move this to after "next round" is clicked

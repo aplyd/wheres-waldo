@@ -148,6 +148,8 @@ const LoadingIcon = styled.svg`
 	}
 `;
 
+// TODO - refactor to modal
+
 export default function Result({
 	username,
 	layoutDispatch,
