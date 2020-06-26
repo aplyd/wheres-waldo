@@ -5,6 +5,7 @@ import bgImage1 from '../images/imageOne.jpg';
 import bgImage2 from '../images/imageTwo.jpg';
 import bgImage3 from '../images/imageThree.jpg';
 import * as consts from '../constants';
+import { AiOutlineLoading } from 'react-icons/ai';
 
 const Background = styled.div`
 	position: fixed;
@@ -36,8 +37,10 @@ const ContentContainer = styled.div`
 	padding-top: 116px;
 	width: 50%;
 	height: calc(100% - 52px);
+	min-height: 600px;
 	display: flex;
 	flex-direction: column;
+	position: relative;
 	align-items: center;
 	@media screen and (max-width: 800px) {
 		width: 100%;
@@ -123,13 +126,17 @@ const ScoresBackground = styled.div`
 	position: relative;
 `;
 
+// const LoadingIconContainer = styled.div`
+// 	background-color: pink
+// `
+
 const LoadingIcon = styled.svg`
-	position: fixed;
+	position: absolute;
 	z-index: 9999;
 	font-size: 80px;
-	top: calc(50% - 40px);
+	top: 50vh;
 	left: calc(50% - 40px);
-	color: black;
+	color: black !important;
 	animation: spin 1s linear infinite;
 	@keyframes spin {
 		from {
@@ -176,7 +183,7 @@ export default function Result({
 			<Container>
 				<ContentContainer>
 					{layoutState.isLoadingResult ? (
-						<LoadingIcon />
+						<LoadingIcon as={AiOutlineLoading} />
 					) : (
 						<>
 							<Spacer height={'24px'} />

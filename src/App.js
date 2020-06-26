@@ -5,7 +5,6 @@ import imageOne from './images/imageOne.jpg';
 import imageTwo from './images/imageTwo.jpg';
 import imageThree from './images/imageThree.jpg';
 import firebase from './firebase';
-import { AiOutlineLoading } from 'react-icons/ai';
 
 import waldoImg from './images/waldo.jpg';
 import wendyImg from './images/wendy.jpg';
@@ -200,6 +199,7 @@ function layoutReducer(state, action) {
 			loadingState.isResultShown = true;
 			loadingState.isLoadingResult = true;
 			loadingState.isTimerActive = false;
+			loadingState.hasResultBeenCalculated = true;
 			return loadingState;
 
 		case consts.SHOW_RESULTS:
@@ -295,6 +295,7 @@ const initialLayoutState = {
 		woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
 		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
 	},
+	hasResultBeenCalculated: false,
 };
 
 //TODO - fix scroll issue (when selecting character)
@@ -306,7 +307,6 @@ function App() {
 	const [imageDims, setImageDims] = useState({ height: 0, width: 0 });
 	const [imageRef, observedDims] = useImageDims();
 	const [timer, setTimer] = useState(0);
-	const [stopUseEffectLoop, setStopUseEffectLoop] = useState(false);
 
 	// detect when all characters in an image have been found to calc results
 	useEffect(() => {
@@ -316,36 +316,23 @@ function App() {
 			]
 		).every((char) => char.found);
 
-		if (allCharsFound && !stopUseEffectLoop) {
+		if (allCharsFound && !layoutState.hasResultBeenCalculated) {
 			// display results page with loading icon
 			layoutDispatch({ type: consts.LOADING_RESULTS });
-			setStopUseEffectLoop(true);
+
 			console.log('loop');
 
 			//calculate total time, store in firebase and return time
-			addFinishTimestampAndCalculateTotal({
-				image: `${
-					layoutState.images[layoutState.currentImageIndex].string
-				}`,
-			}).then((res) => {
-				layoutDispatch({
-					type: consts.SHOW_RESULTS,
-					result: res.data(), // TODO FIX res.data() is not a func
-				});
-			});
-
-			// USE ^^^^
-			// saving this in case above code doesn't work
-			// const totalReadableTime = (async () => {
-			// 	let time = await addFinishTimestampAndCalculateTotal({
-			// 		image: `${
-			// 			layoutState.images[layoutState.currentImageIndex].string
-			// 		}`,
+			// addFinishTimestampAndCalculateTotal({
+			// 	image: `${
+			// 		layoutState.images[layoutState.currentImageIndex].string
+			// 	}`,
+			// }).then((res) => {
+			// 	layoutDispatch({
+			// 		type: consts.SHOW_RESULTS,
+			// 		result: res.data(), // TODO FIX res.data() is not a func
 			// 	});
-
-			// 	return time;
-			// })();
-			// totalReadableTime.then((res) => console.log(res));
+			// });
 
 			if (
 				layoutState.currentImageIndex + 1 !==
