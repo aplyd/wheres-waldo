@@ -55,7 +55,6 @@ const addFinishTimestampAndCalculateTotal = firebase
 	.functions()
 	.httpsCallable('addFinishTimestampAndCalculateTotal');
 
-// TODO - refactor to return statements to: return { ...state, option: value}
 function layoutReducer(state, action) {
 	switch (action.type) {
 		case consts.SAVE_UID:
@@ -68,6 +67,7 @@ function layoutReducer(state, action) {
 				...state,
 				isMenuOpen: !state.isMenuOpen,
 			};
+		// TODO - fix this because the structure has changed
 		case consts.SAVE_USERNAME:
 			return {
 				...state,
@@ -216,26 +216,13 @@ function layoutReducer(state, action) {
 			};
 
 		case consts.SHOW_RESULTS:
-			// const resultsState = { ...state };
-			// resultsState.isLoadingResult = false;
-			// resultsState.allScores.userScores[
-			// 	state.images[state.currentImageIndex].string
-			// ] = action.result;
+			const resultsState = { ...state };
+			resultsState.isLoadingResult = false;
+			resultsState.allScores.userScores[
+				state.images[state.currentImageIndex].string
+			][consts.USER_VISIT_ID] = action.result;
 
-			// return resultsState;
-
-			return {
-				...state,
-				isLoadingResult: false,
-				allScores: {
-					...state.allScores,
-					userScores: {
-						...state.allScores.userScores,
-						[state.images[state.currentImageIndex].string]:
-							action.result,
-					},
-				},
-			};
+			return resultsState;
 
 		case consts.NEXT_ROUND:
 			// TODO - move this to after "next round" is clicked
@@ -260,9 +247,9 @@ function layoutReducer(state, action) {
 const initialLayoutState = {
 	allScores: {
 		userScores: {
-			imageOne: null,
-			imageTwo: null,
-			imageThree: null,
+			imageOne: {},
+			imageTwo: {},
+			imageThree: {},
 			name: '',
 		},
 	},
@@ -361,6 +348,7 @@ function App() {
 				image: `${
 					layoutState.images[layoutState.currentImageIndex].string
 				}`,
+				userVisitId: consts.USER_VISIT_ID,
 			}).then((res) => {
 				console.log(res);
 				layoutDispatch({
@@ -410,7 +398,8 @@ function App() {
 					type: consts.SAVE_ALL_SCORES,
 					allScores: res.data(),
 				});
-			});
+			})
+			.catch((err) => console.log(err));
 	}, []);
 
 	const getClickArea = (e) => {

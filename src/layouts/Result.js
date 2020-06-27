@@ -149,17 +149,7 @@ const LoadingIcon = styled.svg`
 	}
 `;
 
-// TODO - refactor to modal
-
 export default function Result({ username, layoutDispatch, layoutState }) {
-	// const sortedScores =
-	// 	layoutState.allScores &&
-	// 	Object.values(layoutState.allScores).sort(
-	// 		(a, b) =>
-	// 			a[layoutState.images[layoutState.currentImageIndex].string] -
-	// 			b[layoutState.images[layoutState.currentImageIndex].string]
-	// 	);
-
 	return (
 		<>
 			<Background />
@@ -179,7 +169,7 @@ export default function Result({ username, layoutDispatch, layoutState }) {
 										layoutState.images[
 											layoutState.currentImageIndex
 										].string
-									]
+									][consts.USER_VISIT_ID]
 								)}
 							</Time>
 							<Spacer height={'48px'} />
@@ -222,25 +212,16 @@ export default function Result({ username, layoutDispatch, layoutState }) {
 								</tr>
 							</thead>
 							<tbody>
-								{/* TODO - need to display all scores */}
 								{layoutState.allScores &&
 									sortLeaderboard(layoutState).map(
 										(user, index) => {
 											return (
-												<tr
-													key={`${index}${user.imageOne}`}
-												>
+												<tr key={`${index}${user.uid}`}>
 													<td>{index + 1}</td>
 													<td>{user.name}</td>
 													<td>
 														{getMinutesFromMillis(
-															user[
-																layoutState
-																	.images[
-																	layoutState
-																		.currentImageIndex
-																].string
-															]
+															user.time
 														)}
 													</td>
 												</tr>

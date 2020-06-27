@@ -7,9 +7,21 @@ export const getMinutesFromMillis = (totalTimeInMillis) => {
 };
 
 export const sortLeaderboard = (layoutState) => {
-	return Object.values(layoutState.allScores).sort(
-		(a, b) =>
-			a[layoutState.images[layoutState.currentImageIndex].string] -
-			b[layoutState.images[layoutState.currentImageIndex].string]
-	);
+	const scores = [];
+
+	for (let i in layoutState.allScores) {
+		const user = Object.entries(
+			layoutState.allScores[i][
+				layoutState.images[layoutState.currentImageIndex].string
+			]
+		);
+		for (let j = 0; j < user.length; j++) {
+			scores.push({
+				name: layoutState.allScores[i].name,
+				time: user[j][1],
+			});
+		}
+	}
+
+	return scores.sort((a, b) => a.time - b.time);
 };

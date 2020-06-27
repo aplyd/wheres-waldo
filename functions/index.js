@@ -50,9 +50,10 @@ exports.addFinishTimestampAndCalculateTotal = functions.https.onCall(
 					.update(
 						{
 							[uid]: {
-								[data.image]: totalTimeInMillis,
 								uid,
-								name: '',
+								[data.image]: {
+									[data.userVisitId]: totalTimeInMillis,
+								},
 							},
 						},
 						{ merge: true }
