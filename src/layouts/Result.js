@@ -6,6 +6,7 @@ import bgImage2 from '../images/imageTwo.jpg';
 import bgImage3 from '../images/imageThree.jpg';
 import * as consts from '../constants';
 import { AiOutlineLoading } from 'react-icons/ai';
+import { getMinutesFromMillis, sortLeaderboard } from '../utils';
 
 const Background = styled.div`
 	position: fixed;
@@ -150,23 +151,14 @@ const LoadingIcon = styled.svg`
 
 // TODO - refactor to modal
 
-export default function Result({
-	username,
-	layoutDispatch,
-	timer,
-	layoutState,
-}) {
-	//TODO - need to fix this sort function and test it
-	const compareTimes = (a, b) =>
-		a[layoutState.images[layoutState.currentImageIndex]] <=
-		b[layoutState.images[layoutState.currentImageIndex]]
-			? -1
-			: 1;
-
-	const sortedScores =
-		layoutState.allScores &&
-		Object.values(layoutState.allScores).sort(compareTimes);
-	console.log(sortedScores && sortedScores);
+export default function Result({ username, layoutDispatch, layoutState }) {
+	// const sortedScores =
+	// 	layoutState.allScores &&
+	// 	Object.values(layoutState.allScores).sort(
+	// 		(a, b) =>
+	// 			a[layoutState.images[layoutState.currentImageIndex].string] -
+	// 			b[layoutState.images[layoutState.currentImageIndex].string]
+	// 	);
 
 	return (
 		<>
@@ -182,16 +174,16 @@ export default function Result({
 							<Spacer height={'24px'} />
 							<SubTitle>your time</SubTitle>{' '}
 							<Time>
-								{
+								{getMinutesFromMillis(
 									layoutState.allScores.userScores[
 										layoutState.images[
 											layoutState.currentImageIndex
 										].string
 									]
-								}
+								)}
 							</Time>
 							<Spacer height={'48px'} />
-							<Prompt>Add your score to the leaderboard?</Prompt>
+							<Prompt>Add your name to the leaderboard?</Prompt>
 							<Spacer height={'24px'} />
 							<NameInput
 								placeholder="Name"
@@ -231,24 +223,30 @@ export default function Result({
 							</thead>
 							<tbody>
 								{/* TODO - need to display all scores */}
-								{sortedScores.map((user, index) => {
-									return (
-										<tr key={`${index}${user.imageOne}`}>
-											<td>{index + 1}</td>
-											<td>{user.name}</td>
-											<td>
-												{
-													user[
-														layoutState.images[
-															layoutState
-																.currentImageIndex
-														].string
-													]
-												}
-											</td>
-										</tr>
-									);
-								})}
+								{layoutState.allScores &&
+									sortLeaderboard(layoutState).map(
+										(user, index) => {
+											return (
+												<tr
+													key={`${index}${user.imageOne}`}
+												>
+													<td>{index + 1}</td>
+													<td>{user.name}</td>
+													<td>
+														{getMinutesFromMillis(
+															user[
+																layoutState
+																	.images[
+																	layoutState
+																		.currentImageIndex
+																].string
+															]
+														)}
+													</td>
+												</tr>
+											);
+										}
+									)}
 							</tbody>
 						</table>
 					</ScoresBackground>

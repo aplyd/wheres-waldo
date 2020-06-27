@@ -29,14 +29,6 @@ exports.addStartTimestamp = functions.https.onCall((data, context) => {
 exports.addFinishTimestampAndCalculateTotal = functions.https.onCall(
 	(data, context) => {
 		const uid = context.auth.uid;
-		const calculateTimeDifference = (newerTime, olderTime) => {
-			const difference = newerTime - olderTime;
-			const minutes = Math.floor(difference / 60000);
-			const seconds = ((difference % 60000) / 1000).toFixed(0);
-			return seconds === 60
-				? minutes + 1 + ':00'
-				: minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-		};
 
 		// get start time from firestore
 		return admin
@@ -47,10 +39,8 @@ exports.addFinishTimestampAndCalculateTotal = functions.https.onCall(
 			.then((res) => {
 				// calculate the difference between start and current timestamp
 				const userData = res.data();
-				const totalReadableTime = calculateTimeDifference(
-					Date.now(),
-					userData[data.image].start
-				);
+				const totalTimeInMillis =
+					Date.now() - userData[data.image].start;
 
 				//save total time in firestore in a readable format (minutes and seconds)
 				return admin
@@ -60,7 +50,7 @@ exports.addFinishTimestampAndCalculateTotal = functions.https.onCall(
 					.update(
 						{
 							[uid]: {
-								[data.image]: totalReadableTime,
+								[data.image]: totalTimeInMillis,
 								uid,
 								name: '',
 							},
@@ -70,7 +60,7 @@ exports.addFinishTimestampAndCalculateTotal = functions.https.onCall(
 					.then(() => {
 						// return time to client
 						return {
-							totalReadableTime,
+							totalTimeInMillis,
 						};
 					});
 			})

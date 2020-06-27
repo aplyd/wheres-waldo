@@ -365,7 +365,7 @@ function App() {
 				console.log(res);
 				layoutDispatch({
 					type: consts.SHOW_RESULTS,
-					result: res.data.totalReadableTime,
+					result: res.data.totalTimeInMillis,
 				});
 			});
 
