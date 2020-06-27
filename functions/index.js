@@ -47,7 +47,7 @@ exports.addFinishTimestampAndCalculateTotal = functions.https.onCall(
 					.firestore()
 					.collection('scores')
 					.doc('all')
-					.update(
+					.set(
 						{
 							[uid]: {
 								uid,

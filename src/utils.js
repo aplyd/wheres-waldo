@@ -9,12 +9,14 @@ export const getMinutesFromMillis = (totalTimeInMillis) => {
 export const sortLeaderboard = (layoutState) => {
 	const scores = [];
 
+	// get all score objects
 	for (let i in layoutState.allScores) {
 		const user = Object.entries(
 			layoutState.allScores[i][
 				layoutState.images[layoutState.currentImageIndex].string
 			]
 		);
+		// loop through all attempts of each user
 		for (let j = 0; j < user.length; j++) {
 			scores.push({
 				name: layoutState.allScores[i].name,
@@ -23,5 +25,6 @@ export const sortLeaderboard = (layoutState) => {
 		}
 	}
 
+	// return sorted array by fastest time first
 	return scores.sort((a, b) => a.time - b.time);
 };

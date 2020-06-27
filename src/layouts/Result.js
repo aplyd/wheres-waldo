@@ -35,7 +35,7 @@ const Container = styled.div`
 `;
 
 const ContentContainer = styled.div`
-	padding-top: 116px;
+	padding-top: 104px;
 	width: 50%;
 	height: calc(100% - 52px);
 	min-height: 600px;
@@ -100,6 +100,7 @@ const AllScoresContainer = styled.div`
 		padding-top: 16px;
 		border-collapse: collapse;
 		z-index: 1000;
+		width: 263px;
 	}
 
 	&& thead,
@@ -110,6 +111,7 @@ const AllScoresContainer = styled.div`
 	}
 
 	&& td {
+		max-width: 127px;
 		padding: 8px 24px;
 	}
 	@media screen and (max-width: 800px) {
@@ -121,9 +123,9 @@ const ScoresBackground = styled.div`
 	margin: 0 auto;
 	background-color: white;
 	border-radius: 8px;
-	min-height: 350px;
-	width: 50%;
-	min-width: 250px;
+	height: 370px;
+	overflow-y: scroll;
+	width: 263px;
 	position: relative;
 `;
 
@@ -218,7 +220,11 @@ export default function Result({ username, layoutDispatch, layoutState }) {
 											return (
 												<tr key={`${index}${user.uid}`}>
 													<td>{index + 1}</td>
-													<td>{user.name}</td>
+													<td>
+														{user.name
+															? user.name
+															: 'anonymous'}
+													</td>
 													<td>
 														{getMinutesFromMillis(
 															user.time
