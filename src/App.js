@@ -23,7 +23,6 @@ import Scoreboard from './layouts/Scoreboard';
 import ImageElements from './components/ImageElements';
 
 import * as consts from './constants';
-import { AiFillPauseCircle } from 'react-icons/ai';
 
 const Container = styled.div`
 	width: 100%;
