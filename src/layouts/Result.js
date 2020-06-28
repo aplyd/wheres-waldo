@@ -192,7 +192,9 @@ export default function Result({ username, layoutDispatch, layoutState }) {
 							<Spacer height={'48px'} />
 							<NextBtn
 								type="button"
-								onClick={() => console.log('next round')}
+								onClick={() =>
+									layoutDispatch({ type: consts.NEXT_ROUND })
+								}
 							>
 								Next Round
 							</NextBtn>

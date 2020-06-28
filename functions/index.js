@@ -8,22 +8,58 @@ exports.addStartTimestamp = functions.https.onCall((data, context) => {
 	const uid = context.auth.uid;
 	const timestamp = Date.now();
 
-	return admin
-		.firestore()
-		.collection('scores')
-		.doc(uid)
-		.set(
-			{
-				[data.image]: {
-					start: timestamp,
+	// if the username hasn't already been set, do so
+	// then store the start timestamp
+	if (data.name !== '' && !data.hasNameBeenSet) {
+		return admin
+			.firestore()
+			.collection('scores')
+			.doc(uid)
+			.set(
+				{
+					[data.image]: {
+						start: timestamp,
+					},
 				},
-			},
-			{ merge: true }
-		)
-		.catch((err) => {
-			console.log(err);
-			throw new functions.https.HttpsError();
-		});
+				{ merge: true }
+			)
+			.then(() => {
+				return admin
+					.firestore()
+					.collection('scores')
+					.doc('all')
+					.set(
+						{
+							[uid]: {
+								name: data.name,
+							},
+						},
+						{ merge: true }
+					);
+			})
+			.catch((err) => {
+				console.log(err);
+				throw new functions.https.HttpsError();
+			});
+		// if username has been set, just store the start timestamp
+	} else {
+		return admin
+			.firestore()
+			.collection('scores')
+			.doc(uid)
+			.set(
+				{
+					[data.image]: {
+						start: timestamp,
+					},
+				},
+				{ merge: true }
+			)
+			.catch((err) => {
+				console.log(err);
+				throw new functions.https.HttpsError();
+			});
+	}
 });
 
 exports.addFinishTimestampAndCalculateTotal = functions.https.onCall(

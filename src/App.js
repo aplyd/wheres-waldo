@@ -87,6 +87,8 @@ function layoutReducer(state, action) {
 		case consts.START_GAME:
 			addStartTimestamp({
 				image: state.images[state.currentImageIndex].string,
+				name: state.allScores.userScores.name,
+				hasNameBeenSet: state.hasNameBeenSet,
 			}).catch((err) => console.log(err));
 			return {
 				...state,
@@ -225,19 +227,26 @@ function layoutReducer(state, action) {
 			return resultsState;
 
 		case consts.NEXT_ROUND:
-			// TODO - move this to after "next round" is clicked
-			// nextRoundState.currentImageIndex = state.currentImageIndex + 1;
-			// addTimestamp({
-			// 	timeslot: `${
-			// 		state.images[nextRoundState.currentImageIndex].string
-			// 	}.start`,
-			// }).catch((err) => console.log(err));
-
-			// TODO -  check if username value is not empty string, then update name in firestore
 			const nextRoundState = { ...state };
+			nextRoundState.currentImageIndex = state.currentImageIndex + 1;
+
+			// add start timestamp for next round
+			addStartTimestamp({
+				image: state.images[nextRoundState.currentImageIndex].string,
+				name: state.allScores.userScores.name,
+				hasNameBeenSet: state.hasNameBeenSet,
+			}).catch((err) => console.log(err));
+
+			if (
+				state.allScores.userScores.name !== '' &&
+				!state.hasNameBeenSet
+			) {
+				nextRoundState.allScores.userScores.NameBeenSet = true;
+			}
+
+			nextRoundState.isResultShown = false;
 			nextRoundState.hasResultBeenCalculated = false;
-			console.log('go to next round');
-			return state;
+			return nextRoundState;
 
 		default:
 			return state;
@@ -254,7 +263,7 @@ const initialLayoutState = {
 		},
 	},
 	uid: null,
-	username: '',
+	hasNameBeenSet: false,
 	isMenuOpen: false,
 	isTimerActive: false,
 	//set back to true when finished
