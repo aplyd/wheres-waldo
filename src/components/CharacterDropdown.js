@@ -75,8 +75,8 @@ export default function CharacterDropdown({
 			? (obj.left = offsets.left)
 			: (obj.left = offsets.right);
 
-		//52 is nav height, 262 is dropdown height
-		layoutState.currentClickCoords.y - 52 + 262 < imageHeight
+		//52 is nav height, 262 is dropdown height, add scroll offset amount
+		layoutState.currentClickCoords.y - 52 + 262 < window.innerHeight
 			? (obj.top = offsets.down)
 			: (obj.top = offsets.up);
 

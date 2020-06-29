@@ -79,7 +79,7 @@ const NextBtn = styled.button`
 	background-color: black;
 	color: white;
 	font-size: 18px;
-	padding: 16px 32px;
+	padding: 25px 32px 16px 32px;
 	box-shadow: none;
 	border: none;
 `;
