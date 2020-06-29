@@ -11,17 +11,25 @@ export const sortLeaderboard = (layoutState) => {
 
 	// get all score objects
 	for (let i in layoutState.allScores) {
-		const user = Object.entries(
+		// checking to see if correct image exists on score object
+		// dynamically via computed property name
+		const user =
 			layoutState.allScores[i][
 				layoutState.images[layoutState.currentImageIndex].string
-			]
-		);
+			] &&
+			Object.entries(
+				layoutState.allScores[i][
+					layoutState.images[layoutState.currentImageIndex].string
+				]
+			);
 		// loop through all attempts of each user
-		for (let j = 0; j < user.length; j++) {
-			scores.push({
-				name: layoutState.allScores[i].name,
-				time: user[j][1],
-			});
+		if (user) {
+			for (let j = 0; j < user.length; j++) {
+				scores.push({
+					name: layoutState.allScores[i].name,
+					time: user[j][1],
+				});
+			}
 		}
 	}
 
