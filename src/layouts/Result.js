@@ -96,7 +96,7 @@ const AllScoresContainer = styled.div`
 	}
 
 	&& table {
-		margin: 32px auto 0 auto;
+		margin: 0 auto;
 		padding-top: 16px;
 		border-collapse: collapse;
 		z-index: 1000;
@@ -125,13 +125,10 @@ const ScoresBackground = styled.div`
 	border-radius: 8px;
 	height: 370px;
 	overflow-y: scroll;
+	overflow-x: hidden;
 	width: 263px;
 	position: relative;
 `;
-
-// const LoadingIconContainer = styled.div`
-// 	background-color: pink
-// `
 
 const LoadingIcon = styled.svg`
 	position: absolute;

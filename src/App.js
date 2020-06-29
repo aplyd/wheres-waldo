@@ -218,6 +218,7 @@ function layoutReducer(state, action) {
 			};
 
 		case consts.SHOW_RESULTS:
+			// TODO - check to see if currentUserId matches previous, auto fill in the name input
 			const resultsState = { ...state };
 			resultsState.isLoadingResult = false;
 			resultsState.allScores.userScores[
@@ -314,11 +315,34 @@ const initialLayoutState = {
 		},
 	},
 	imageTwo: {
-		waldo: { name: 'waldo', x: 42, y: 18, found: false, image: waldoImg },
-		wizard: { name: 'wizard', x: 0, y: 0, found: false, image: wizardImg },
-		odlaw: { name: 'odlaw', x: 0, y: 0, found: false, image: odlawImg },
-		woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
-		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
+		waldo: {
+			name: 'waldo',
+			x: 65.7,
+			y: 44.5,
+			found: false,
+			image: waldoImg,
+		},
+		wizard: {
+			name: 'wizard',
+			x: 77.3,
+			y: 42.6,
+			found: false,
+			image: wizardImg,
+		},
+		odlaw: {
+			name: 'odlaw',
+			x: 31.9,
+			y: 46.5,
+			found: false,
+			image: odlawImg,
+		},
+		wendy: {
+			name: 'wendy',
+			x: 52.3,
+			y: 49.5,
+			found: false,
+			image: wendyImg,
+		},
 	},
 	imageThree: {
 		waldo: { name: 'waldo', x: 42, y: 18, found: false, image: waldoImg },
@@ -413,8 +437,8 @@ function App() {
 
 	const getClickArea = (e) => {
 		e.persist();
-		// console.log({ clickX: e.clientX, clickY: e.clientY });
-		// console.log({ imgHeight: imageDims.height, imgWidth: imageDims.width });
+		console.log({ clickX: e.clientX, clickY: e.clientY });
+		console.log({ imgHeight: imageDims.height, imgWidth: imageDims.width });
 
 		const x = e.clientX - 20;
 		const y = e.clientY - 72;
