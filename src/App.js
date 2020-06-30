@@ -254,6 +254,9 @@ function layoutReducer(state, action) {
 	}
 }
 
+// width% = x / imgWidth x 100
+// height% = (y - 52) / imgHeight x 100
+
 const initialLayoutState = {
 	allScores: {
 		userScores: {
@@ -345,11 +348,22 @@ const initialLayoutState = {
 		},
 	},
 	imageThree: {
-		waldo: { name: 'waldo', x: 42, y: 18, found: false, image: waldoImg },
-		wizard: { name: 'wizard', x: 0, y: 0, found: false, image: wizardImg },
-		odlaw: { name: 'odlaw', x: 0, y: 0, found: false, image: odlawImg },
-		woof: { name: 'woof', x: 0, y: 0, found: false, image: woofImg },
-		wendy: { name: 'wendy', x: 0, y: 0, found: false, image: wendyImg },
+		waldo: { name: 'waldo', x: 57, y: 35.3, found: false, image: waldoImg },
+		wizard: {
+			name: 'wizard',
+			x: 85,
+			y: 84.4,
+			found: false,
+			image: wizardImg,
+		},
+		odlaw: {
+			name: 'odlaw',
+			x: 40.2,
+			y: 60.3,
+			found: false,
+			image: odlawImg,
+		},
+		wendy: { name: 'wendy', x: 39, y: 33.2, found: false, image: wendyImg },
 	},
 	hasResultBeenCalculated: false,
 };
@@ -364,7 +378,7 @@ function App() {
 	const [imageRef, observedDims] = useImageDims();
 	const [timer, setTimer] = useState(0);
 
-	// detect when all characters in an image have been found to calc results
+	// detect when all characters in an image have been found and then calculate results
 	useEffect(() => {
 		const allCharsFound = Object.values(
 			layoutState[
@@ -383,21 +397,20 @@ function App() {
 				}`,
 				userVisitId: consts.USER_VISIT_ID,
 			}).then((res) => {
-				console.log(res);
 				layoutDispatch({
 					type: consts.SHOW_RESULTS,
 					result: res.data.totalTimeInMillis,
 				});
 			});
 
-			if (
-				layoutState.currentImageIndex + 1 !==
-				layoutState.images.length
-			) {
-				//handle all characters found but not on last image
-			} else {
-				// handle gameover
-			}
+			// if (
+			// 	layoutState.currentImageIndex + 1 !==
+			// 	layoutState.images.length
+			// ) {
+			// 	//handle all characters found but not on last image
+			// } else {
+			// 	// handle gameover
+			// }
 		}
 	}, [layoutState]);
 
