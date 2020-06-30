@@ -4,14 +4,12 @@ import { RiMenuLine } from 'react-icons/ri';
 import { Spacer } from '../GlobalStyle';
 import * as consts from '../constants';
 
-import Timer from '../components/Timer';
-
 const Container = styled.div`
 	position: fixed;
 	height: 52px;
 	width: 100%;
 	background-color: black;
-	z-index: 1;
+	z-index: 1010;
 	text-align: center;
 `;
 
@@ -30,26 +28,7 @@ const Title = styled.h1`
 	font-size: 33px;
 `;
 
-export default function Nav({
-	layoutDispatch,
-	isTimerActive,
-	timer,
-	setTimer,
-}) {
-	useEffect(() => {
-		let secondsInterval = null;
-		if (isTimerActive) {
-			secondsInterval = setTimeout(() => {
-				setTimer((timer) => timer + 1);
-			}, 1000);
-		} else if (!isTimerActive && timer !== 0) {
-			clearInterval(secondsInterval);
-		}
-		return () => {
-			clearInterval(secondsInterval);
-		};
-	}, [isTimerActive, timer, setTimer]);
-
+export default function Nav({ layoutDispatch }) {
 	return (
 		<>
 			<Container>

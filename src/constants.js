@@ -1,6 +1,7 @@
 export const SAVE_UID = 'save uid';
 export const TOGGLE_MENU = 'toggle menu';
 export const START_GAME = 'start game';
+export const NEW_GAME = 'new game';
 export const SHOW_INFO = 'show info';
 export const SHOW_SCORES = 'show scores';
 export const SHOW_RESULTS = 'show results';

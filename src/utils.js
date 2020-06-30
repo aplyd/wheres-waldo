@@ -6,22 +6,17 @@ export const getMinutesFromMillis = (totalTimeInMillis) => {
 		: minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 };
 
-export const sortLeaderboard = (layoutState) => {
+export const sortLeaderboard = (layoutState, image) => {
 	const scores = [];
 
 	// get all score objects
 	for (let i in layoutState.allScores) {
 		// checking to see if correct image exists on score object
-		// dynamically via computed property name
+		// dynamically via computed property name.
+		// image variable is passed in to specifiy which scores to return
 		const user =
-			layoutState.allScores[i][
-				layoutState.images[layoutState.currentImageIndex].string
-			] &&
-			Object.entries(
-				layoutState.allScores[i][
-					layoutState.images[layoutState.currentImageIndex].string
-				]
-			);
+			layoutState.allScores[i][image] &&
+			Object.entries(layoutState.allScores[i][image]);
 		// loop through all attempts of each user
 		if (user) {
 			for (let j = 0; j < user.length; j++) {

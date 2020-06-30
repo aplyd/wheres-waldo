@@ -213,25 +213,28 @@ export default function Result({ username, layoutDispatch, layoutState }) {
 							</thead>
 							<tbody>
 								{layoutState.allScores &&
-									sortLeaderboard(layoutState).map(
-										(user, index) => {
-											return (
-												<tr key={`${index}${user.uid}`}>
-													<td>{index + 1}</td>
-													<td>
-														{user.name
-															? user.name
-															: 'anonymous'}
-													</td>
-													<td>
-														{getMinutesFromMillis(
-															user.time
-														)}
-													</td>
-												</tr>
-											);
-										}
-									)}
+									sortLeaderboard(
+										layoutState,
+										layoutState.images[
+											layoutState.currentImageIndex
+										].string
+									).map((user, index) => {
+										return (
+											<tr key={`${index}${user.uid}`}>
+												<td>{index + 1}</td>
+												<td>
+													{user.name
+														? user.name
+														: 'anonymous'}
+												</td>
+												<td>
+													{getMinutesFromMillis(
+														user.time
+													)}
+												</td>
+											</tr>
+										);
+									})}
 							</tbody>
 						</table>
 					</ScoresBackground>

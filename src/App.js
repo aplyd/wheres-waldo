@@ -66,6 +66,7 @@ function layoutReducer(state, action) {
 			return {
 				...state,
 				isMenuOpen: !state.isMenuOpen,
+				isScoreShown: false,
 			};
 		// TODO - fix this because the structure has changed
 		case consts.SAVE_USERNAME:
@@ -96,9 +97,11 @@ function layoutReducer(state, action) {
 				isCoverShown: false,
 				isScoreShown: false,
 				isAboutShown: false,
-				isImageShown: true,
 				isTimerActive: true,
 			};
+
+		case consts.NEW_GAME:
+			return initialLayoutState;
 
 		case consts.SHOW_INFO:
 			return {
@@ -107,7 +110,6 @@ function layoutReducer(state, action) {
 				isMenuOpen: false,
 				isCoverShown: false,
 				isScoreShown: false,
-				isImageShown: false,
 			};
 
 		case consts.SHOW_SCORES:
@@ -117,7 +119,6 @@ function layoutReducer(state, action) {
 				isCoverShown: false,
 				isScoreShown: true,
 				isAboutShown: false,
-				isImageShown: false,
 			};
 
 		case consts.RESUME:
@@ -127,7 +128,6 @@ function layoutReducer(state, action) {
 				isCoverShown: false,
 				isScoreShown: false,
 				isAboutShown: false,
-				isImageShown: true,
 			};
 
 		case consts.IMAGE_RESIZE:
@@ -274,7 +274,6 @@ const initialLayoutState = {
 	isCoverShown: true,
 	isScoreShown: false,
 	isAboutShown: false,
-	isImageShown: false,
 	isResultShown: false,
 	isLoadingResult: false,
 	//TODO - having object property and global variable same name may be issue
@@ -388,29 +387,31 @@ function App() {
 
 		if (allCharsFound && !layoutState.hasResultBeenCalculated) {
 			// display results page with loading icon
-			layoutDispatch({ type: consts.LOADING_RESULTS });
 
-			//calculate total time, store in firebase and return time
-			addFinishTimestampAndCalculateTotal({
-				image: `${
-					layoutState.images[layoutState.currentImageIndex].string
-				}`,
-				userVisitId: consts.USER_VISIT_ID,
-			}).then((res) => {
-				layoutDispatch({
-					type: consts.SHOW_RESULTS,
-					result: res.data.totalTimeInMillis,
+			if (
+				layoutState.currentImageIndex + 1 !==
+				layoutState.images.length
+			) {
+				layoutDispatch({ type: consts.LOADING_RESULTS });
+
+				//calculate total time, store in firebase and return time
+				addFinishTimestampAndCalculateTotal({
+					image: `${
+						layoutState.images[layoutState.currentImageIndex].string
+					}`,
+					userVisitId: consts.USER_VISIT_ID,
+				}).then((res) => {
+					layoutDispatch({
+						type: consts.SHOW_RESULTS,
+						result: res.data.totalTimeInMillis,
+					});
 				});
-			});
 
-			// if (
-			// 	layoutState.currentImageIndex + 1 !==
-			// 	layoutState.images.length
-			// ) {
-			// 	//handle all characters found but not on last image
-			// } else {
-			// 	// handle gameover
-			// }
+				//handle all characters found but not on last image
+			} else {
+				// handle gameover
+				console.log('game ovr');
+			}
 		}
 	}, [layoutState]);
 
@@ -450,8 +451,8 @@ function App() {
 
 	const getClickArea = (e) => {
 		e.persist();
-		console.log({ clickX: e.clientX, clickY: e.clientY });
-		console.log({ imgHeight: imageDims.height, imgWidth: imageDims.width });
+		// console.log({ clickX: e.clientX, clickY: e.clientY });
+		// console.log({ imgHeight: imageDims.height, imgWidth: imageDims.width });
 
 		const x = e.clientX - 20;
 		const y = e.clientY - 72;
@@ -565,17 +566,15 @@ function App() {
 						imageDims={imageDims}
 						addClick={addClick}
 					/>
-					{layoutState.isImageShown && (
-						<Image
-							src={
-								layoutState.images[
-									layoutState.currentImageIndex
-								].src
-							}
-							alt=""
-							ref={imageRef}
-						></Image>
-					)}
+
+					<Image
+						src={
+							layoutState.images[layoutState.currentImageIndex]
+								.src
+						}
+						alt=""
+						ref={imageRef}
+					></Image>
 				</ImageContainer>
 			</Container>
 			{/* need to pass current image instead of imageOne */}
@@ -584,7 +583,9 @@ function App() {
 			{layoutState.isCoverShown && (
 				<Cover layoutDispatch={layoutDispatch} />
 			)}
-			{layoutState.isScoreShown && <Scoreboard />}
+			{layoutState.isScoreShown && (
+				<Scoreboard bgImage={imageTwo} layoutState={layoutState} />
+			)}
 			{layoutState.isAboutShown && <About />}
 			{layoutState.isResultShown && (
 				<Result
