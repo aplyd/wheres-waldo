@@ -1,9 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Spacer } from '../GlobalStyle';
-import bgImage1 from '../images/imageOne.jpg';
-import bgImage2 from '../images/imageTwo.jpg';
-import bgImage3 from '../images/imageThree.jpg';
 import * as consts from '../constants';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { getMinutesFromMillis, sortLeaderboard } from '../utils';
@@ -14,7 +11,7 @@ const Background = styled.div`
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-image: url(${bgImage1});
+	background-image: ${(props) => `url(${props.bgImage})`};
 	background-repeat: repeat-y;
 	background-size: cover;
 	filter: blur(4px);
@@ -151,7 +148,9 @@ const LoadingIcon = styled.svg`
 export default function Result({ username, layoutDispatch, layoutState }) {
 	return (
 		<>
-			<Background />
+			<Background
+				bgImage={layoutState.images[layoutState.currentImageIndex].src}
+			/>
 			<Container>
 				<ContentContainer>
 					{layoutState.isLoadingResult ? (

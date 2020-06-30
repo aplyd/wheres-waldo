@@ -15,9 +15,13 @@ Add in the ability to time the user from when they first load the page and then 
 (̶(̶3̶)̶)̶ ̶m̶a̶k̶e̶ ̶d̶r̶o̶p̶d̶o̶w̶n̶
 (̶(̶4̶)̶)̶ ̶m̶o̶v̶e̶ ̶d̶r̶o̶p̶d̶o̶w̶n̶ ̶t̶o̶ ̶o̶t̶h̶e̶r̶s̶i̶d̶e̶ ̶i̶f̶ ̶c̶l̶i̶c̶k̶e̶d̶ ̶n̶e̶a̶r̶ ̶e̶d̶g̶e̶/̶b̶o̶t̶t̶o̶m̶ ̶o̶f̶ ̶s̶c̶r̶e̶e̶n̶
 (̶(̶5̶)̶)̶ ̶r̶e̶v̶e̶a̶l̶ ̶i̶f̶ ̶u̶s̶e̶r̶ ̶s̶e̶l̶e̶c̶t̶i̶o̶n̶ ̶+̶ ̶c̶h̶a̶r̶a̶c̶t̶e̶r̶ ̶i̶s̶ ̶c̶o̶r̶r̶e̶c̶t̶
-((6)) get timer running 
-((7)) remove incorrect character guesses
-
+(̶(̶6̶)̶)̶ ̶g̶e̶t̶ ̶t̶i̶m̶e̶r̶ ̶r̶u̶n̶n̶i̶n̶g̶ ̶
+̶(̶(̶7̶)̶)̶ ̶r̶e̶m̶o̶v̶e̶ ̶i̶n̶c̶o̶r̶r̶e̶c̶t̶ ̶c̶h̶a̶r̶a̶c̶t̶e̶r̶ ̶g̶u̶e̶s̶s̶e̶s̶
+((8)) hook up menu buttons
+((9)) build scoreboard page diplaying all scores
+((10)) after third image, reveal scoreboard page
+((11)) host to github pages
+((12)) fix mobile image positioning
 
 {{{{{{{{{EXTRA}}}}}}}}}
 
