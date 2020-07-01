@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Spacer } from '../GlobalStyle';
 import { sortLeaderboard } from '../utils';
 
 const Background = styled.div`

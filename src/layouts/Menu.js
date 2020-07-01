@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
 import { Spacer } from '../GlobalStyle';
-import Timer from '../components/Timer';
 import * as consts from '../constants';
 
 const Container = styled.div`
