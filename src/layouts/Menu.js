@@ -6,7 +6,7 @@ import * as consts from '../constants';
 
 const Container = styled.div`
 	position: fixed;
-	z-index: 1000;
+	z-index: 1011;
 	width: 100%;
 	height: 100%;
 	background-color: black;
