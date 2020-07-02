@@ -9,7 +9,6 @@ import firebase from './firebase';
 import waldoImg from './images/waldo.jpg';
 import wendyImg from './images/wendy.jpg';
 import wizardImg from './images/wizard.jpg';
-import woofImg from './images/woof.png';
 import odlawImg from './images/odlaw.jpg';
 
 import { useImageDims } from './hooks/useImageDims';
@@ -66,7 +65,7 @@ function layoutReducer(state, action) {
 			return {
 				...state,
 				isMenuOpen: !state.isMenuOpen,
-				isScoreShown: false,
+				areScoresShown: false,
 			};
 		// TODO - fix this because the structure has changed
 		case consts.SAVE_USERNAME:
@@ -95,7 +94,7 @@ function layoutReducer(state, action) {
 				...state,
 				isMenuOpen: false,
 				isCoverShown: false,
-				isScoreShown: false,
+				areScoreShown: false,
 				isAboutShown: false,
 				isTimerActive: true,
 			};
@@ -109,7 +108,7 @@ function layoutReducer(state, action) {
 				isAboutShown: true,
 				isMenuOpen: false,
 				isCoverShown: false,
-				isScoreShown: false,
+				areScoresShown: false,
 			};
 
 		case consts.SHOW_SCORES:
@@ -117,7 +116,7 @@ function layoutReducer(state, action) {
 				...state,
 				isMenuOpen: false,
 				isCoverShown: false,
-				isScoreShown: true,
+				areScoresShown: true,
 				isAboutShown: false,
 			};
 
@@ -126,7 +125,7 @@ function layoutReducer(state, action) {
 				...state,
 				isMenuOpen: false,
 				isCoverShown: false,
-				isScoreShown: false,
+				areScoresShown: false,
 				isAboutShown: false,
 			};
 
@@ -271,8 +270,8 @@ const initialLayoutState = {
 	isMenuOpen: false,
 	isTimerActive: false,
 	//set back to true when finished
-	isCoverShown: true,
-	isScoreShown: false,
+	isCoverShown: false,
+	areScoresShown: true,
 	isAboutShown: false,
 	isResultShown: false,
 	isLoadingResult: false,
@@ -583,7 +582,7 @@ function App() {
 			{layoutState.isCoverShown && (
 				<Cover layoutDispatch={layoutDispatch} />
 			)}
-			{layoutState.isScoreShown && (
+			{layoutState.areScoresShown && (
 				<Scoreboard bgImage={imageTwo} layoutState={layoutState} />
 			)}
 			{layoutState.isAboutShown && <About />}

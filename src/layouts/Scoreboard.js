@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { sortLeaderboard } from '../utils';
+import { getMinutesFromMillis, sortLeaderboard } from '../utils';
 
 const Background = styled.div`
 	background-image: ${(props) => `url(${props.bgImage})`};
@@ -10,12 +10,15 @@ const Background = styled.div`
 	position: absolute;
 	top: 0;
 	left: 0;
-	bottom: 0;
 	right: 0;
+	height: 100%;
+	@media only screen and (max-width: 850px) {
+		height: calc(100% + 1150px);
+	}
 `;
 
 const Container = styled.div`
-	height: calc(100vh - 52px);
+	height: 100%;
 	z-index: 1009;
 	position: absolute;
 	top: 52px;
@@ -30,29 +33,54 @@ const Container = styled.div`
 const ScoresContainer = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
-	@media screen and (max-width: 800px) {
+	grid-template-rows: 1;
+	@media only screen and (max-width: 850px) {
 		grid-template-columns: 1fr;
+		grid-template-rows: 1fr 1fr 1fr;
 	}
 `;
 
 const ScoreCard = styled.div`
 	width: 100%;
 	height: 100%;
-	grid-row: 2;
+	text-align: center;
+	&& > h2 {
+		padding: 48px 0 12px 0;
+	}
+
 	&& > div {
 		border-radius: 8px;
 		overflow-x: hidden;
 		overflow-y: scroll;
 		width: 263px;
-		height: 370px;
+		height: 470px;
 		background-color: white;
-		margin: 140px auto 0 auto;
+		margin: 24px auto 0 auto;
+	}
+
+	&& table {
+		border-collapse: collapse;
+		width: 263px;
+		margin: 0 auto;
+	}
+
+	&& thead,
+	th {
+		background-color: black;
+		color: white;
+		height: 32px;
+	}
+
+	&& td {
+		max-width: 127px;
+		padding: 8px 24px;
 	}
 `;
 
 const TitleContainer = styled.div`
 	text-align: center;
 	&& > h1 {
+		padding-top: 48px;
 		color: black;
 		font-weight: bold;
 		font-size: 48px;
@@ -72,6 +100,7 @@ export default function Scoreboard({ bgImage, layoutState }) {
 						const scores = sortLeaderboard(layoutState, i);
 						return (
 							<ScoreCard key={`${i}${index}`}>
+								<h2>{`Round ${index + 1}`}</h2>
 								<div>
 									<table>
 										<thead>
@@ -89,7 +118,11 @@ export default function Scoreboard({ bgImage, layoutState }) {
 													>
 														<td>{index + 1}</td>
 														<td>{score.name}</td>
-														<td>{score.time}</td>
+														<td>
+															{getMinutesFromMillis(
+																score.time
+															)}
+														</td>
 													</tr>
 												);
 											})}
