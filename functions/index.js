@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 
 admin.initializeApp();
 
-//add timestamps
+// add timestamps
 exports.addStartTimestamp = functions.https.onCall((data, context) => {
 	const uid = context.auth.uid;
 	const timestamp = Date.now();
@@ -78,7 +78,7 @@ exports.addFinishTimestampAndCalculateTotal = functions.https.onCall(
 				const totalTimeInMillis =
 					Date.now() - userData[data.image].start;
 
-				//save total time in firestore in a readable format (minutes and seconds)
+				// save total time in firestore in a readable format (minutes and seconds)
 				return admin
 					.firestore()
 					.collection('scores')

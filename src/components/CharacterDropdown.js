@@ -56,10 +56,10 @@ export default function CharacterDropdown({
 		return !char.found && char;
 	});
 
-	//off sets the dropdown to remain within the window/image
+	// off sets the dropdown to remain within the window/image
 	const getOffset = () => {
 		const obj = {};
-		//when a character is found, it is removed from dropdown, this ensures placement
+		// when a character is found, it is removed from dropdown, this ensures placement
 		const charOffset = charactersRemaining.length * 43;
 		const offsets = {
 			right: `calc(${dropdownPosition && dropdownPosition.x}% + 48px)`,
@@ -70,12 +70,12 @@ export default function CharacterDropdown({
 			down: `calc(${dropdownPosition && dropdownPosition.y}%)`,
 		};
 
-		//108 is width of dropdown + selection square
+		// 108 is width of dropdown + selection square
 		layoutState.currentClickCoords.x + 108 > window.innerWidth
 			? (obj.left = offsets.left)
 			: (obj.left = offsets.right);
 
-		//52 is nav height, 262 is dropdown height, add scroll offset amount
+		// 52 is nav height, 262 is dropdown height, add scroll offset amount
 		layoutState.currentClickCoords.y - 52 + 262 < window.innerHeight
 			? (obj.top = offsets.down)
 			: (obj.top = offsets.up);

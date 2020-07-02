@@ -65,7 +65,7 @@ function layoutReducer(state, action) {
 			return {
 				...state,
 				isMenuOpen: !state.isMenuOpen,
-				areScoresShown: false,
+				// areScoresShown: false,
 			};
 		// TODO - fix this because the structure has changed
 		case consts.SAVE_USERNAME:
@@ -96,17 +96,17 @@ function layoutReducer(state, action) {
 				isCoverShown: false,
 				areScoreShown: false,
 				isAboutShown: false,
+				isImageShown: true,
 			};
 
 		case consts.NEW_GAME:
 			return initialLayoutState;
 
-		case consts.SHOW_INFO:
+		case consts.SHOW_ABOUT:
 			return {
 				...state,
 				isAboutShown: true,
 				isMenuOpen: false,
-				isCoverShown: false,
 				areScoresShown: false,
 			};
 
@@ -116,15 +116,6 @@ function layoutReducer(state, action) {
 				isMenuOpen: false,
 				isCoverShown: false,
 				areScoresShown: true,
-				isAboutShown: false,
-			};
-
-		case consts.RESUME:
-			return {
-				...state,
-				isMenuOpen: false,
-				isCoverShown: false,
-				areScoresShown: false,
 				isAboutShown: false,
 			};
 
@@ -211,7 +202,6 @@ function layoutReducer(state, action) {
 				clicksArray: [],
 				isResultShown: true,
 				isLoadingResult: true,
-
 				hasResultBeenCalculated: true,
 			};
 
@@ -247,10 +237,23 @@ function layoutReducer(state, action) {
 			nextRoundState.hasResultBeenCalculated = false;
 			return nextRoundState;
 
-		case consts.LOADING_FINAL_REULTS:
+		case consts.LOADING_FINAL_RESULTS:
 			return {
 				...state,
+				clicksArray: [],
+				isLoadingResult: true,
+				hasResultBeenCalculated: true,
+				areScoresShown: true,
 			};
+
+		case consts.SHOW_FINAL_RESULTS:
+			const finalResultsState = { ...state };
+			finalResultsState.isLoadingResult = false;
+			finalResultsState.allScores.userScores[
+				state.images[state.currentImageIndex].string
+			][consts.USER_VISIT_ID] = action.result;
+
+			return finalResultsState;
 
 		default:
 			return state;
@@ -272,14 +275,13 @@ const initialLayoutState = {
 	uid: null,
 	hasNameBeenSet: false,
 	isMenuOpen: false,
-
-	//set back to true when finished
+	isImageShown: false,
 	isCoverShown: true,
 	areScoresShown: false,
 	isAboutShown: false,
 	isResultShown: false,
 	isLoadingResult: false,
-	//TODO - having object property and global variable same name may be issue
+	// TODO - having object property and global variable same name may be issue
 	images: [
 		{ src: imageOne, string: 'imageOne' },
 		{ src: imageTwo, string: 'imageTwo' },
@@ -288,13 +290,13 @@ const initialLayoutState = {
 
 	currentImageIndex: 0,
 	selectionContainer: null,
-	//the selection container & dropdown
+	// the selection container & dropdown
 	isSelectCharacterShown: false,
-	//all previous clicks to display on image (incorrect get hidden)
+	// all previous clicks to display on image (incorrect get hidden)
 	clicksArray: [],
-	//current click in percentage
+	// current click in percentage
 	currentClickPercentage: null,
-	//current click coords
+	// current click coords
 	currentClickCoords: null,
 	imageOne: {
 		waldo: {
@@ -370,7 +372,7 @@ const initialLayoutState = {
 	hasResultBeenCalculated: false,
 };
 
-//TODO - fix scroll issue (when selecting character)
+// TODO - fix scroll issue (when selecting character)
 function App() {
 	const [layoutState, layoutDispatch] = useReducer(
 		layoutReducer,
@@ -390,14 +392,15 @@ function App() {
 		if (allCharsFound && !layoutState.hasResultBeenCalculated) {
 			// display results page with loading icon
 
+			// handle all characters found but not on last image
+			// add finish timestamp, calc difference, load results
 			if (
 				layoutState.currentImageIndex + 1 !==
 				layoutState.images.length
 			) {
-				//handle all characters found but not on last image
 				layoutDispatch({ type: consts.LOADING_RESULTS });
 
-				//calculate total time, store in firebase and return time
+				// calculate total time, store in firebase and return time
 				addFinishTimestampAndCalculateTotal({
 					image: `${
 						layoutState.images[layoutState.currentImageIndex].string
@@ -409,8 +412,21 @@ function App() {
 						result: res.data.totalTimeInMillis,
 					});
 				});
+				// handle gameover - store final finish timestamp and reveal all scores
 			} else {
-				// handle gameover
+				layoutDispatch({ type: consts.LOADING_FINAL_RESULTS });
+
+				addFinishTimestampAndCalculateTotal({
+					image: `${
+						layoutState.images[layoutState.currentImageIndex].string
+					}`,
+					userVisitId: consts.USER_VISIT_ID,
+				}).then((res) => {
+					layoutDispatch({
+						type: consts.SHOW_FINAL_RESULTS,
+						result: res.data.totalTimeInMillis,
+					});
+				});
 			}
 		}
 	}, [layoutState]);
@@ -457,17 +473,17 @@ function App() {
 		const x = e.clientX - 20;
 		const y = e.clientY - 72;
 
-		//changed from user
+		// changed from user
 		layoutDispatch({
 			type: consts.CLICKED,
-			//in percentages
+			// in percentages
 			currentClickPercentage: {
 				x: (x / imageDims.width) * 100,
 				y: (y / imageDims.height) * 100,
 				windowScrollY: window.scrollY,
 				windowScrollX: window.scrollX,
 			},
-			//in coordinates
+			// in coordinates
 			currentClickCoords: {
 				x: e.clientX,
 				y: e.clientY,
@@ -478,10 +494,10 @@ function App() {
 	};
 
 	const checkUserSelection = (character) => {
-		//using percentages so the image can be responsive
-		//and are clicked on image will be the same
+		// using percentages so the image can be responsive
+		// and are clicked on image will be the same
 
-		//size waldo can be found within (width of the selection square in %)
+		// size waldo can be found within (width of the selection square in %)
 		const selectionWidthInPercentage = ((40 / imageDims.width) * 100) / 2;
 		const selectionHeightInPercentage = ((40 / imageDims.height) * 100) / 2;
 
@@ -505,14 +521,14 @@ function App() {
 				imageDims.width) *
 				100;
 
-		//adding the percentage the selection container is offset by
+		// adding the percentage the selection container is offset by
 		const clickY =
 			layoutState.currentClickPercentage.y +
 			(20 / imageDims.height) * 100;
 		const clickX =
 			layoutState.currentClickPercentage.x + (20 / imageDims.width) * 100;
 
-		//if the target character is within the user selected area
+		// if the target character is within the user selected area
 		if (
 			clickX + selectionWidthInPercentage > charX &&
 			clickX - selectionWidthInPercentage < charX &&
@@ -545,35 +561,6 @@ function App() {
 					layoutState={layoutState}
 				/>
 			)}
-			<Container>
-				<Nav layoutDispatch={layoutDispatch} />
-				{/* image and container */}
-				<ImageContainer
-					onClick={(e) => {
-						getClickArea(e);
-					}}
-				>
-					{/* consolidated characterDropdown, characterReveal and userSelection into ImageElements */}
-					<ImageElements
-						layoutState={layoutState}
-						layoutDispatch={layoutDispatch}
-						imageDims={imageDims}
-						addClick={addClick}
-					/>
-
-					<Image
-						src={
-							layoutState.images[layoutState.currentImageIndex]
-								.src
-						}
-						alt=""
-						ref={imageRef}
-					></Image>
-				</ImageContainer>
-			</Container>
-			{/* need to pass current image instead of imageOne */}
-			{/* these are the different "pages" */}
-
 			{layoutState.isCoverShown && (
 				<Cover layoutDispatch={layoutDispatch} />
 			)}
@@ -587,6 +574,38 @@ function App() {
 					layoutState={layoutState}
 				/>
 			)}
+
+			<Container>
+				<Nav layoutDispatch={layoutDispatch} />
+				{layoutState.isImageShown && (
+					<ImageContainer
+						onClick={(e) => {
+							getClickArea(e);
+						}}
+					>
+						{/* consolidated characterDropdown, characterReveal and userSelection into ImageElements */}
+						<ImageElements
+							layoutState={layoutState}
+							layoutDispatch={layoutDispatch}
+							imageDims={imageDims}
+							addClick={addClick}
+						/>
+
+						<Image
+							src={
+								layoutState.images[
+									layoutState.currentImageIndex
+								].src
+							}
+							alt=""
+							ref={imageRef}
+						></Image>
+					</ImageContainer>
+				)}
+			</Container>
+
+			{/* need to pass current image instead of imageOne */}
+			{/* these are the different "pages" */}
 
 			<Spacer height={'48px'} />
 		</React.Fragment>

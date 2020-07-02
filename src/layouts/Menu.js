@@ -70,19 +70,19 @@ export default function Menu({ layoutDispatch, layoutState }) {
 	const menuItems = [
 		{
 			title: 'Resume',
-			action: () => layoutDispatch({ type: consts.RESUME }),
+			action: () => layoutDispatch({ type: consts.TOGGLE_MENU }),
 		},
 		{
 			title: 'New Game',
-			action: () => layoutDispatch({ type: consts.START_GAME }),
+			action: () => layoutDispatch({ type: consts.NEW_GAME }),
 		},
 		{
 			title: 'Scoreboard',
 			action: () => layoutDispatch({ type: consts.SHOW_SCORES }),
 		},
 		{
-			title: 'Info',
-			action: () => layoutDispatch({ type: consts.SHOW_INFO }),
+			title: 'About',
+			action: () => layoutDispatch({ type: consts.SHOW_ABOUT }),
 		},
 	];
 
