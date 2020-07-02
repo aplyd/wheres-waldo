@@ -66,7 +66,7 @@ const Character = styled.div`
 	}
 `;
 
-export default function Menu({ layoutDispatch, layoutState, timer }) {
+export default function Menu({ layoutDispatch, layoutState }) {
 	const menuItems = [
 		{
 			title: 'Resume',

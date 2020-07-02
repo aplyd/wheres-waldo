@@ -16,3 +16,4 @@ export const LOADING_RESULTS = 'loading results';
 export const NEXT_ROUND = 'next round';
 export const SAVE_ALL_SCORES = 'save all scores';
 export const USER_VISIT_ID = Date.now();
+export const LOADING_FINAL_REULTS = 'loading final results';

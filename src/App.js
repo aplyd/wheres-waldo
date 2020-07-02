@@ -96,7 +96,6 @@ function layoutReducer(state, action) {
 				isCoverShown: false,
 				areScoreShown: false,
 				isAboutShown: false,
-				isTimerActive: true,
 			};
 
 		case consts.NEW_GAME:
@@ -212,7 +211,7 @@ function layoutReducer(state, action) {
 				clicksArray: [],
 				isResultShown: true,
 				isLoadingResult: true,
-				isTimerActive: false,
+
 				hasResultBeenCalculated: true,
 			};
 
@@ -248,6 +247,11 @@ function layoutReducer(state, action) {
 			nextRoundState.hasResultBeenCalculated = false;
 			return nextRoundState;
 
+		case consts.LOADING_FINAL_REULTS:
+			return {
+				...state,
+			};
+
 		default:
 			return state;
 	}
@@ -268,10 +272,10 @@ const initialLayoutState = {
 	uid: null,
 	hasNameBeenSet: false,
 	isMenuOpen: false,
-	isTimerActive: false,
+
 	//set back to true when finished
-	isCoverShown: false,
-	areScoresShown: true,
+	isCoverShown: true,
+	areScoresShown: false,
 	isAboutShown: false,
 	isResultShown: false,
 	isLoadingResult: false,
@@ -374,7 +378,6 @@ function App() {
 	);
 	const [imageDims, setImageDims] = useState({ height: 0, width: 0 });
 	const [imageRef, observedDims] = useImageDims();
-	const [timer, setTimer] = useState(0);
 
 	// detect when all characters in an image have been found and then calculate results
 	useEffect(() => {
@@ -391,6 +394,7 @@ function App() {
 				layoutState.currentImageIndex + 1 !==
 				layoutState.images.length
 			) {
+				//handle all characters found but not on last image
 				layoutDispatch({ type: consts.LOADING_RESULTS });
 
 				//calculate total time, store in firebase and return time
@@ -405,11 +409,8 @@ function App() {
 						result: res.data.totalTimeInMillis,
 					});
 				});
-
-				//handle all characters found but not on last image
 			} else {
 				// handle gameover
-				console.log('game ovr');
 			}
 		}
 	}, [layoutState]);
@@ -542,16 +543,10 @@ function App() {
 				<Menu
 					layoutDispatch={layoutDispatch}
 					layoutState={layoutState}
-					timer={timer}
 				/>
 			)}
 			<Container>
-				<Nav
-					layoutDispatch={layoutDispatch}
-					isTimerActive={layoutState.isTimerActive}
-					timer={timer}
-					setTimer={setTimer}
-				/>
+				<Nav layoutDispatch={layoutDispatch} />
 				{/* image and container */}
 				<ImageContainer
 					onClick={(e) => {
@@ -589,7 +584,6 @@ function App() {
 			{layoutState.isResultShown && (
 				<Result
 					layoutDispatch={layoutDispatch}
-					timer={timer}
 					layoutState={layoutState}
 				/>
 			)}
