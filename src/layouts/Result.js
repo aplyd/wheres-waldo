@@ -6,7 +6,8 @@ import { AiOutlineLoading } from 'react-icons/ai';
 import { getMinutesFromMillis, sortLeaderboard } from '../utils';
 
 const Background = styled.div`
-	position: fixed;
+	position: absolute;
+	z-index: 1004;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -19,6 +20,7 @@ const Background = styled.div`
 `;
 
 const Container = styled.div`
+	z-index: 1005;
 	position: absolute;
 	top: 0;
 	left: 0;

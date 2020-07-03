@@ -96,7 +96,6 @@ function layoutReducer(state, action) {
 				isCoverShown: false,
 				areScoreShown: false,
 				isAboutShown: false,
-				isImageShown: true,
 			};
 
 		case consts.NEW_GAME:
@@ -275,7 +274,6 @@ const initialLayoutState = {
 	uid: null,
 	hasNameBeenSet: false,
 	isMenuOpen: false,
-	isImageShown: false,
 	isCoverShown: true,
 	areScoresShown: false,
 	isAboutShown: false,
@@ -577,31 +575,29 @@ function App() {
 
 			<Container>
 				<Nav layoutDispatch={layoutDispatch} />
-				{layoutState.isImageShown && (
-					<ImageContainer
-						onClick={(e) => {
-							getClickArea(e);
-						}}
-					>
-						{/* consolidated characterDropdown, characterReveal and userSelection into ImageElements */}
-						<ImageElements
-							layoutState={layoutState}
-							layoutDispatch={layoutDispatch}
-							imageDims={imageDims}
-							addClick={addClick}
-						/>
 
-						<Image
-							src={
-								layoutState.images[
-									layoutState.currentImageIndex
-								].src
-							}
-							alt=""
-							ref={imageRef}
-						></Image>
-					</ImageContainer>
-				)}
+				<ImageContainer
+					onClick={(e) => {
+						getClickArea(e);
+					}}
+				>
+					{/* consolidated characterDropdown, characterReveal and userSelection into ImageElements */}
+					<ImageElements
+						layoutState={layoutState}
+						layoutDispatch={layoutDispatch}
+						imageDims={imageDims}
+						addClick={addClick}
+					/>
+
+					<Image
+						src={
+							layoutState.images[layoutState.currentImageIndex]
+								.src
+						}
+						alt=""
+						ref={imageRef}
+					></Image>
+				</ImageContainer>
 			</Container>
 
 			{/* need to pass current image instead of imageOne */}

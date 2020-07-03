@@ -18,12 +18,13 @@ Add in the ability to time the user from when they first load the page and then 
 (̶(̶6̶)̶)̶ ̶g̶e̶t̶ ̶t̶i̶m̶e̶r̶ ̶r̶u̶n̶n̶i̶n̶g̶ ̶
 ̶(̶(̶7̶)̶)̶ ̶r̶e̶m̶o̶v̶e̶ ̶i̶n̶c̶o̶r̶r̶e̶c̶t̶ ̶c̶h̶a̶r̶a̶c̶t̶e̶r̶ ̶g̶u̶e̶s̶s̶e̶s̶
 (̶(̶)̶)̶ ̶c̶l̶i̶c̶k̶i̶n̶g̶ ̶m̶e̶n̶u̶ ̶w̶h̶e̶n̶ ̶c̶o̶v̶e̶r̶ ̶i̶s̶ ̶s̶h̶o̶w̶n̶ ̶s̶h̶o̶u̶l̶d̶ ̶r̶e̶v̶e̶a̶l̶ ̶m̶e̶n̶u̶
-((8)) hook up menu buttons
+(̶(̶8̶)̶)̶ ̶h̶o̶o̶k̶ ̶u̶p̶ ̶m̶e̶n̶u̶ ̶b̶u̶t̶t̶o̶n̶s̶
 ((8b)) highlight current scores
 (̶(̶9̶)̶)̶ ̶b̶u̶i̶l̶d̶ ̶s̶c̶o̶r̶e̶b̶o̶a̶r̶d̶ ̶p̶a̶g̶e̶ ̶d̶i̶p̶l̶a̶y̶i̶n̶g̶ ̶a̶l̶l̶ ̶s̶c̶o̶r̶e̶s̶
-((10)) after third image, reveal scoreboard page
+(̶(̶1̶0̶)̶)̶ ̶a̶f̶t̶e̶r̶ ̶t̶h̶i̶r̶d̶ ̶i̶m̶a̶g̶e̶,̶ ̶r̶e̶v̶e̶a̶l̶ ̶s̶c̶o̶r̶e̶b̶o̶a̶r̶d̶ ̶p̶a̶g̶e̶
 ((11)) host to github pages
 ((12)) fix mobile image positioning
+(()) auto-populate the name input field when name was previously entered
 
 {{{{{{{{{EXTRA}}}}}}}}}
 
