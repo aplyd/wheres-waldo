@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import ShowResult from './ShowResult';
 import CharacterDropdown from './CharacterDropdown';
 
-// TODO - probably need to add window.scrollX to left position
 const UserSelection = styled.div`
 	width: 40px;
 	height: 40px;

@@ -278,7 +278,6 @@ const initialLayoutState = {
 	isAboutShown: false,
 	isResultShown: false,
 	isLoadingResult: false,
-	// TODO - having object property and global variable same name may be issue
 	images: [
 		{ src: imageOne, string: 'imageOne' },
 		{ src: imageTwo, string: 'imageTwo' },
@@ -369,7 +368,6 @@ const initialLayoutState = {
 	hasResultBeenCalculated: false,
 };
 
-// TODO - fix scroll issue (when selecting character)
 function App() {
 	const [layoutState, layoutDispatch] = useReducer(
 		layoutReducer,
@@ -464,8 +462,6 @@ function App() {
 
 	const getClickArea = (e) => {
 		e.persist();
-		// console.log({ clickX: e.clientX, clickY: e.clientY });
-		// console.log({ imgHeight: imageDims.height, imgWidth: imageDims.width });
 
 		const x = e.clientX - 20;
 		const y = e.clientY - 72;
