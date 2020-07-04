@@ -81,6 +81,7 @@ const NextBtn = styled.button`
 	padding: 25px 32px 16px 32px;
 	box-shadow: none;
 	border: none;
+	margin-left: 35px;
 `;
 
 const AllScoresContainer = styled.div`
@@ -116,6 +117,10 @@ const AllScoresContainer = styled.div`
 	@media screen and (max-width: 800px) {
 		width: 100%;
 	}
+`;
+
+const TR = styled.tr`
+	background-color: ${(props) => (props.currentVisit ? 'yellow' : null)};
 `;
 
 const ScoresBackground = styled.div`
@@ -191,7 +196,9 @@ export default function Result({ username, layoutDispatch, layoutState }) {
 							<NextBtn
 								type="button"
 								onClick={() =>
-									layoutDispatch({ type: consts.NEXT_ROUND })
+									layoutDispatch({
+										type: consts.NEXT_ROUND,
+									})
 								}
 							>
 								Next Round
@@ -219,10 +226,14 @@ export default function Result({ username, layoutDispatch, layoutState }) {
 										layoutState,
 										layoutState.images[
 											layoutState.currentImageIndex
-										].string
+										].string,
+										consts.USER_VISIT_ID
 									).map((user, index) => {
 										return (
-											<tr key={`${index}${user.uid}`}>
+											<TR
+												key={`${index}${user.uid}`}
+												currentVisit={user.currentVisit}
+											>
 												<td>{index + 1}</td>
 												<td>
 													{user.name
@@ -234,7 +245,7 @@ export default function Result({ username, layoutDispatch, layoutState }) {
 														user.time
 													)}
 												</td>
-											</tr>
+											</TR>
 										);
 									})}
 							</tbody>

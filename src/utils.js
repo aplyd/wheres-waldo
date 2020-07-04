@@ -6,7 +6,7 @@ export const getMinutesFromMillis = (totalTimeInMillis) => {
 		: minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 };
 
-export const sortLeaderboard = (layoutState, image) => {
+export const sortLeaderboard = (layoutState, image, currentVisitID) => {
 	const scores = [];
 
 	// get all score objects
@@ -23,6 +23,8 @@ export const sortLeaderboard = (layoutState, image) => {
 				scores.push({
 					name: layoutState.allScores[i].name,
 					time: user[j][1],
+					currentVisit:
+						Number(user[j][0]) === currentVisitID ? true : false,
 				});
 			}
 		}

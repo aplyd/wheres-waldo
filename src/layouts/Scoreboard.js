@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { getMinutesFromMillis, sortLeaderboard } from '../utils';
+import * as consts from '../constants';
 
 const Background = styled.div`
 	background-image: ${(props) => `url(${props.bgImage})`};
@@ -8,6 +9,7 @@ const Background = styled.div`
 	filter: blur(4px);
 	--webkit-filter: blur(4px);
 	position: absolute;
+	z-index: 1003;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -77,6 +79,10 @@ const ScoreCard = styled.div`
 	}
 `;
 
+const TR = styled.tr`
+	background-color: ${(props) => (props.currentVisit ? 'yellow' : null)};
+`;
+
 const TitleContainer = styled.div`
 	text-align: center;
 	&& > h1 {
@@ -97,7 +103,11 @@ export default function Scoreboard({ bgImage, layoutState }) {
 				</TitleContainer>
 				<ScoresContainer>
 					{['imageOne', 'imageTwo', 'imageThree'].map((i, index) => {
-						const scores = sortLeaderboard(layoutState, i);
+						const scores = sortLeaderboard(
+							layoutState,
+							i,
+							consts.USER_VISIT_ID
+						);
 						return (
 							<ScoreCard key={`${i}${index}`}>
 								<h2>{`Round ${index + 1}`}</h2>
@@ -113,8 +123,11 @@ export default function Scoreboard({ bgImage, layoutState }) {
 										<tbody>
 											{scores.map((score, index) => {
 												return (
-													<tr
+													<TR
 														key={`${score.name}${score.time}${index}`}
+														currentVisit={
+															score.currentVisit
+														}
 													>
 														<td>{index + 1}</td>
 														<td>{score.name}</td>
@@ -123,7 +136,7 @@ export default function Scoreboard({ bgImage, layoutState }) {
 																score.time
 															)}
 														</td>
-													</tr>
+													</TR>
 												);
 											})}
 										</tbody>

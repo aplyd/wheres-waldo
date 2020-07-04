@@ -25,6 +25,7 @@ import * as consts from './constants';
 
 const Container = styled.div`
 	width: 100%;
+	/* min-width: to allow for x scrolling on mobile */
 	height: 100%;
 	background-color: black;
 `;
@@ -32,18 +33,17 @@ const Container = styled.div`
 const ImageContainer = styled.div`
 	max-width: 1920px;
 	position: relative;
-	@media screen and (max-width: 800px) {
+	/* @media screen and (max-width: 800px) {
 		height: 100vh;
-		overflow-x: scroll;
-	}
+		
+	} */
 `;
 
 const Image = styled.img`
-	@media screen and (max-width: 800px) {
+	/* @media screen and (max-width: 800px) {
 		height: 100vh;
 		width: auto;
-		overflow-x: scroll;
-	}
+	} */
 `;
 
 const addStartTimestamp = firebase
@@ -286,7 +286,7 @@ const initialLayoutState = {
 		{ src: imageThree, string: 'imageThree' },
 	],
 
-	currentImageIndex: 0,
+	currentImageIndex: 2,
 	selectionContainer: null,
 	// the selection container & dropdown
 	isSelectCharacterShown: false,
@@ -563,7 +563,7 @@ function App() {
 				<Cover layoutDispatch={layoutDispatch} />
 			)}
 			{layoutState.areScoresShown && (
-				<Scoreboard bgImage={imageTwo} layoutState={layoutState} />
+				<Scoreboard bgImage={imageOne} layoutState={layoutState} />
 			)}
 			{layoutState.isAboutShown && <About />}
 			{layoutState.isResultShown && (
