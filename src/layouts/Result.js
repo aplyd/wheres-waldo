@@ -152,7 +152,7 @@ const LoadingIcon = styled.svg`
 	}
 `;
 
-export default function Result({ username, layoutDispatch, layoutState }) {
+export default function Result({ layoutDispatch, layoutState }) {
 	return (
 		<>
 			<Background
@@ -189,7 +189,7 @@ export default function Result({ username, layoutDispatch, layoutState }) {
 										username: e.target.value,
 									})
 								}
-								value={username}
+								value={layoutState.allScores.userScores.name}
 								maxLength="10"
 							/>
 							<Spacer height={'48px'} />

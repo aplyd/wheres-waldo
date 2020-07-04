@@ -130,7 +130,11 @@ export default function Scoreboard({ bgImage, layoutState }) {
 														}
 													>
 														<td>{index + 1}</td>
-														<td>{score.name}</td>
+														<td>
+															{score.name
+																? score.name
+																: 'anonymous'}
+														</td>
 														<td>
 															{getMinutesFromMillis(
 																score.time

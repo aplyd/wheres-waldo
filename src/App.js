@@ -67,7 +67,6 @@ function layoutReducer(state, action) {
 				isMenuOpen: !state.isMenuOpen,
 				// areScoresShown: false,
 			};
-		// TODO - fix this because the structure has changed
 		case consts.SAVE_USERNAME:
 			return {
 				...state,
@@ -78,6 +77,7 @@ function layoutReducer(state, action) {
 						name: action.username,
 					},
 				},
+				hasNameBeenSet: false,
 			};
 		case consts.SAVE_ALL_SCORES:
 			return {
@@ -205,7 +205,6 @@ function layoutReducer(state, action) {
 			};
 
 		case consts.SHOW_RESULTS:
-			// TODO - check to see if currentUserId matches previous, auto fill in the name input
 			const resultsState = { ...state };
 			resultsState.isLoadingResult = false;
 			resultsState.allScores.userScores[
@@ -286,7 +285,7 @@ const initialLayoutState = {
 		{ src: imageThree, string: 'imageThree' },
 	],
 
-	currentImageIndex: 2,
+	currentImageIndex: 0,
 	selectionContainer: null,
 	// the selection container & dropdown
 	isSelectCharacterShown: false,
