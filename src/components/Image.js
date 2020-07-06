@@ -27,15 +27,14 @@ const Img = styled.img`
 	} */
 `;
 
-const Image = ({
-	images,
+export default function Image({
 	currentImage,
 	layoutDispatch,
 	clicksArray,
 	isSelectCharacterShown,
 	currentClickPercentage,
 	currentClickCoords,
-}) => {
+}) {
 	const [imageDims, setImageDims] = useState({ height: 0, width: 0 });
 	const [ref, entry] = useResizeObserver();
 
@@ -145,6 +144,4 @@ const Image = ({
 			</ImageContainer>
 		</Container>
 	);
-};
-
-export default React.memo(Image);
+}

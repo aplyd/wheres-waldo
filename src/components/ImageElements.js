@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import ShowResult from './ShowResult';
 import CharacterDropdown from './CharacterDropdown';

@@ -1,11 +1,6 @@
-import React, { useReducer, useEffect, useState } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { GlobalStyle } from './GlobalStyle';
-import {
-	Route,
-	Switch,
-	BrowserRouter as Router,
-	Redirect,
-} from 'react-router-dom';
+import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
 import imageOne from './images/imageOne.jpg';
 import imageTwo from './images/imageTwo.jpg';
 import imageThree from './images/imageThree.jpg';
@@ -15,7 +10,6 @@ import waldoImg from './images/waldo.jpg';
 import wendyImg from './images/wendy.jpg';
 import wizardImg from './images/wizard.jpg';
 import odlawImg from './images/odlaw.jpg';
-import ImageElements from './components/ImageElements';
 
 import Image from './components/Image';
 import Cover from './layouts/Cover';
@@ -345,6 +339,7 @@ function App() {
 		layoutReducer,
 		initialLayoutState
 	);
+	const history = useHistory();
 
 	// detect when all characters in an image have been found and then calculate results
 	useEffect(() => {
@@ -352,7 +347,9 @@ function App() {
 			layoutState[
 				layoutState.images[layoutState.currentImageIndex].string
 			]
-		).every((char) => char.found);
+		)
+			.filter((char) => char.hasOwnProperty('found'))
+			.every((char) => char.found);
 
 		if (allCharsFound && !layoutState.hasResultBeenCalculated) {
 			// display results page with loading icon
@@ -364,7 +361,7 @@ function App() {
 				layoutState.images.length
 			) {
 				layoutDispatch({ type: consts.LOADING_RESULTS });
-				// history.push('/result');
+				history.push('/result');
 
 				// calculate total time, store in firebase and return time
 				addFinishTimestampAndCalculateTotal({
@@ -381,7 +378,7 @@ function App() {
 				// handle gameover - store final finish timestamp and reveal all scores
 			} else {
 				layoutDispatch({ type: consts.LOADING_FINAL_RESULTS });
-				// history.push('/scoreboard');
+				history.push('/scoreboard');
 
 				addFinishTimestampAndCalculateTotal({
 					image: `${
@@ -426,93 +423,89 @@ function App() {
 	}, []);
 
 	return (
-		<Router>
-			<React.Fragment>
-				<Nav layoutDispatch={layoutDispatch} />
-				<Switch>
-					{!layoutState.hasGameStarted && (
-						<Route
-							exact
-							path="/"
-							component={(props) => <Redirect to="/cover" />}
-						/>
-					)}
+		<React.Fragment>
+			<Nav layoutDispatch={layoutDispatch} />
+			<Switch>
+				{!layoutState.hasGameStarted && (
 					<Route
 						exact
 						path="/"
-						component={(props) => (
-							<Image
-								currentImage={
-									layoutState[
-										layoutState.images[
-											layoutState.currentImageIndex
-										].string
-									]
-								}
-								currentClickPercentage={
-									layoutState.currentClickPercentage
-								}
-								clicksArray={layoutState.clicksArray}
-								isSelectCharacterShown={
-									layoutState.isSelectCharacterShown
-								}
-								currentClickCoords={
-									layoutState.currentClickCoords
-								}
-								layoutDispatch={layoutDispatch}
-							/>
-						)}
+						component={(props) => <Redirect to="/cover" />}
 					/>
-					<Route
-						exact
-						path="/menu"
-						component={(props) => (
-							<Menu
-								{...props}
-								layoutDispatch={layoutDispatch}
-								layoutState={layoutState}
-							/>
-						)}
-					/>
-					<Route
-						exact
-						path="/cover"
-						component={(props) => (
-							<Cover {...props} layoutDispatch={layoutDispatch} />
-						)}
-					/>
+				)}
+				<Route
+					exact
+					path="/"
+					component={(props) => (
+						<Image
+							currentImage={
+								layoutState[
+									layoutState.images[
+										layoutState.currentImageIndex
+									].string
+								]
+							}
+							currentClickPercentage={
+								layoutState.currentClickPercentage
+							}
+							clicksArray={layoutState.clicksArray}
+							isSelectCharacterShown={
+								layoutState.isSelectCharacterShown
+							}
+							currentClickCoords={layoutState.currentClickCoords}
+							layoutDispatch={layoutDispatch}
+						/>
+					)}
+				/>
+				<Route
+					exact
+					path="/menu"
+					component={(props) => (
+						<Menu
+							{...props}
+							layoutDispatch={layoutDispatch}
+							layoutState={layoutState}
+						/>
+					)}
+				/>
+				<Route
+					exact
+					path="/cover"
+					component={(props) => (
+						<Cover {...props} layoutDispatch={layoutDispatch} />
+					)}
+				/>
 
-					<Route
-						exact
-						path="/result"
-						component={(props) => (
-							<Result
-								{...props}
-								layoutDispatch={layoutDispatch}
-								layoutState={layoutState}
-							/>
-						)}
-					/>
-					<Route
-						exact
-						path="/scoreboard"
-						component={(props) => (
-							<Scoreboard
-								{...props}
-								bgImage={imageOne}
-								layoutState={layoutState}
-							/>
-						)}
-					/>
-					<Route
-						exact
-						path="/about"
-						component={(props) => <About {...props} />}
-					/>
-				</Switch>
-				<GlobalStyle />
-			</React.Fragment>
-		</Router>
+				<Route
+					exact
+					path="/result"
+					component={(props) => (
+						<Result
+							{...props}
+							layoutDispatch={layoutDispatch}
+							layoutState={layoutState}
+						/>
+					)}
+				/>
+				<Route
+					exact
+					path="/scoreboard"
+					component={(props) => (
+						<Scoreboard
+							{...props}
+							bgImage={imageOne}
+							layoutState={layoutState}
+						/>
+					)}
+				/>
+				<Route
+					exact
+					path="/about"
+					component={(props) => <About {...props} />}
+				/>
+			</Switch>
+			<GlobalStyle />
+		</React.Fragment>
 	);
 }
 
