@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import ShowResult from './ShowResult';
 import CharacterDropdown from './CharacterDropdown';
@@ -15,16 +15,20 @@ const UserSelection = styled.div`
 `;
 
 export default function ImageElements({
-	layoutState,
+	clicksArray,
+	isSelectCharacterShown,
+	currentClickPercentage,
 	layoutDispatch,
 	imageDims,
 	addClick,
+	currentClickCoords,
+	currentImage,
 }) {
 	return (
 		<>
 			{/* clicked - previous clicked spaces, correct stay, incorrect fadeout */}
-			{layoutState.clicksArray.length > 0 &&
-				layoutState.clicksArray.map((result, index) => {
+			{clicksArray.length > 0 &&
+				clicksArray.map((result, index) => {
 					return (
 						<ShowResult
 							key={index}
@@ -37,37 +41,21 @@ export default function ImageElements({
 					);
 				})}
 			{/* currently clicked and showing dropdown */}
-			{layoutState.isSelectCharacterShown && (
+			{isSelectCharacterShown && (
 				<>
 					<CharacterDropdown
-						dropdownPosition={layoutState.currentClickPercentage}
-						userDispatch={layoutDispatch}
 						layoutDispatch={layoutDispatch}
 						imageHeight={imageDims.height}
 						addClick={addClick}
-						layoutState={layoutState}
-						windowScrollX={
-							layoutState.currentClickPercentage.windowScrollX
-						}
-						windowScrollY={
-							layoutState.currentClickPercentage.windowScrollY
-						}
+						currentClickPercentage={currentClickPercentage}
+						currentClickCoords={currentClickCoords}
+						currentImage={currentImage}
 					/>
 					<UserSelection
-						x={
-							layoutState.currentClickPercentage &&
-							layoutState.currentClickPercentage.x
-						}
-						y={
-							layoutState.currentClickPercentage &&
-							layoutState.currentClickPercentage.y
-						}
-						windowScrollX={
-							layoutState.currentClickPercentage.windowScrollX
-						}
-						windowScrollY={
-							layoutState.currentClickPercentage.windowScrollY
-						}
+						x={currentClickPercentage && currentClickPercentage.x}
+						y={currentClickPercentage && currentClickPercentage.y}
+						windowScrollX={currentClickPercentage.windowScrollX}
+						windowScrollY={currentClickPercentage.windowScrollY}
 					/>
 				</>
 			)}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { Spacer } from '../GlobalStyle';
 import bgImage from '../images/imageTwo.jpg';
@@ -48,13 +49,17 @@ const StartGameBtn = styled.button`
 `;
 
 export default function Cover({ layoutDispatch }) {
+	const history = useHistory();
 	return (
 		<>
 			<Container>
 				<Title>Where's Waldo?</Title>
 				<Spacer height={'62px'} />
 				<StartGameBtn
-					onClick={() => layoutDispatch({ type: consts.START_GAME })}
+					onClick={() => {
+						layoutDispatch({ type: consts.START_GAME });
+						history.push('/');
+					}}
 				>
 					Start
 				</StartGameBtn>

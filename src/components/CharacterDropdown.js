@@ -44,16 +44,16 @@ const CloseDropdown = styled(SelectionItem)`
 `;
 
 export default function CharacterDropdown({
-	dropdownPosition,
+	currentClickPercentage,
 	layoutDispatch,
 	imageHeight,
 	addClick,
-	layoutState,
+	images,
+	currentClickCoords,
+	currentImage,
 }) {
-	const charactersRemaining = Object.values(
-		layoutState[layoutState.images[layoutState.currentImageIndex].string]
-	).filter((char) => {
-		return !char.found && char;
+	const charactersRemaining = Object.values(currentImage).filter((char) => {
+		return char.hasOwnProperty('found') && !char.found && char;
 	});
 
 	// off sets the dropdown to remain within the window/image
@@ -62,21 +62,27 @@ export default function CharacterDropdown({
 		// when a character is found, it is removed from dropdown, this ensures placement
 		const charOffset = charactersRemaining.length * 43;
 		const offsets = {
-			right: `calc(${dropdownPosition && dropdownPosition.x}% + 48px)`,
-			left: `calc(${dropdownPosition && dropdownPosition.x}% - 96px)`,
+			right: `calc(${
+				currentClickPercentage && currentClickPercentage.x
+			}% + 48px)`,
+			left: `calc(${
+				currentClickPercentage && currentClickPercentage.x
+			}% - 96px)`,
 			up: `calc(${
-				dropdownPosition && dropdownPosition.y
+				currentClickPercentage && currentClickPercentage.y
 			}% - ${charOffset}px)`,
-			down: `calc(${dropdownPosition && dropdownPosition.y}%)`,
+			down: `calc(${
+				currentClickPercentage && currentClickPercentage.y
+			}%)`,
 		};
 
 		// 108 is width of dropdown + selection square
-		layoutState.currentClickCoords.x + 108 > window.innerWidth
+		currentClickCoords.x + 108 > window.innerWidth
 			? (obj.left = offsets.left)
 			: (obj.left = offsets.right);
 
 		// 52 is nav height, 262 is dropdown height, add scroll offset amount
-		layoutState.currentClickCoords.y - 52 + 262 < window.innerHeight
+		currentClickCoords.y - 52 + 262 < window.innerHeight
 			? (obj.top = offsets.down)
 			: (obj.top = offsets.up);
 
@@ -85,10 +91,10 @@ export default function CharacterDropdown({
 
 	return (
 		<Container
-			x={dropdownPosition && dropdownPosition.x}
-			y={dropdownPosition && dropdownPosition.y}
-			windowScrollX={layoutState.currentClickPercentage.windowScrollX}
-			windowScrollY={layoutState.currentClickPercentage.windowScrollY}
+			x={currentClickPercentage && currentClickPercentage.x}
+			y={currentClickPercentage && currentClickPercentage.y}
+			windowScrollX={currentClickPercentage.windowScrollX}
+			windowScrollY={currentClickPercentage.windowScrollY}
 			offsets={getOffset()}
 		>
 			{charactersRemaining.map((char, index) => {
@@ -118,7 +124,7 @@ export default function CharacterDropdown({
 
 CharacterDropdown.propTypes = {
 	addClick: PropTypes.func,
-	dropdownPosition: PropTypes.shape({
+	currentClickPercentage: PropTypes.shape({
 		x: PropTypes.any,
 		y: PropTypes.any,
 	}),

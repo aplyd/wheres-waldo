@@ -23,8 +23,12 @@ Add in the ability to time the user from when they first load the page and then 
 (̶(̶9̶)̶)̶ ̶b̶u̶i̶l̶d̶ ̶s̶c̶o̶r̶e̶b̶o̶a̶r̶d̶ ̶p̶a̶g̶e̶ ̶d̶i̶p̶l̶a̶y̶i̶n̶g̶ ̶a̶l̶l̶ ̶s̶c̶o̶r̶e̶s̶
 (̶(̶1̶0̶)̶)̶ ̶a̶f̶t̶e̶r̶ ̶t̶h̶i̶r̶d̶ ̶i̶m̶a̶g̶e̶,̶ ̶r̶e̶v̶e̶a̶l̶ ̶s̶c̶o̶r̶e̶b̶o̶a̶r̶d̶ ̶p̶a̶g̶e̶
 (̶(̶1̶1̶)̶)̶ ̶h̶o̶s̶t̶ ̶t̶o̶ ̶g̶i̶t̶h̶u̶b̶ ̶p̶a̶g̶e̶s̶
+(()) clicking resume game needs to close scoreboard component
+(()) rename results, scoreboard, etc.
+(()) "new game" in menu should hide all other "pages"
+(()) clicking "start" should fetch the image externally, then onload, start the timer
 ((12)) fix mobile image positioning ?? maybe later
-(()) auto-populate the name input field when name was previously entered
+(̶(̶)̶)̶ ̶a̶u̶t̶o̶-̶p̶o̶p̶u̶l̶a̶t̶e̶ ̶t̶h̶e̶ ̶n̶a̶m̶e̶ ̶i̶n̶p̶u̶t̶ ̶f̶i̶e̶l̶d̶ ̶w̶h̶e̶n̶ ̶n̶a̶m̶e̶ ̶w̶a̶s̶ ̶p̶r̶e̶v̶i̶o̶u̶s̶l̶y̶ ̶e̶n̶t̶e̶r̶e̶d̶
 
 {{{{{{{{{EXTRA}}}}}}}}}
 

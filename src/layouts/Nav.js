@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { RiMenuLine } from 'react-icons/ri';
 import { Spacer } from '../GlobalStyle';
@@ -29,6 +29,10 @@ const Title = styled.h1`
 `;
 
 export default function Nav({ layoutDispatch }) {
+	useEffect(() => {
+		console.log('nav rerendered');
+	}, []);
+
 	return (
 		<>
 			<Container>

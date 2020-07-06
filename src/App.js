@@ -1,6 +1,11 @@
 import React, { useReducer, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { GlobalStyle, Spacer } from './GlobalStyle';
+import { GlobalStyle } from './GlobalStyle';
+import {
+	Route,
+	Switch,
+	BrowserRouter as Router,
+	Redirect,
+} from 'react-router-dom';
 import imageOne from './images/imageOne.jpg';
 import imageTwo from './images/imageTwo.jpg';
 import imageThree from './images/imageThree.jpg';
@@ -10,41 +15,16 @@ import waldoImg from './images/waldo.jpg';
 import wendyImg from './images/wendy.jpg';
 import wizardImg from './images/wizard.jpg';
 import odlawImg from './images/odlaw.jpg';
+import ImageElements from './components/ImageElements';
 
-import { useImageDims } from './hooks/useImageDims';
-
+import Image from './components/Image';
 import Cover from './layouts/Cover';
 import Nav from './layouts/Nav';
 import Menu from './layouts/Menu';
 import About from './layouts/About';
 import Result from './layouts/Result';
 import Scoreboard from './layouts/Scoreboard';
-import ImageElements from './components/ImageElements';
-
 import * as consts from './constants';
-
-const Container = styled.div`
-	width: 100%;
-	/* min-width: to allow for x scrolling on mobile */
-	height: 100%;
-	background-color: black;
-`;
-
-const ImageContainer = styled.div`
-	max-width: 1920px;
-	position: relative;
-	/* @media screen and (max-width: 800px) {
-		height: 100vh;
-		
-	} */
-`;
-
-const Image = styled.img`
-	/* @media screen and (max-width: 800px) {
-		height: 100vh;
-		width: auto;
-	} */
-`;
 
 const addStartTimestamp = firebase
 	.functions()
@@ -64,8 +44,7 @@ function layoutReducer(state, action) {
 		case consts.TOGGLE_MENU:
 			return {
 				...state,
-				isMenuOpen: !state.isMenuOpen,
-				// areScoresShown: false,
+				isImageShown: false,
 			};
 		case consts.SAVE_USERNAME:
 			return {
@@ -93,29 +72,23 @@ function layoutReducer(state, action) {
 			return {
 				...state,
 				isMenuOpen: false,
-				isCoverShown: false,
-				areScoreShown: false,
-				isAboutShown: false,
+				isImageShown: true,
+				hasGameStarted: true,
 			};
 
 		case consts.NEW_GAME:
-			return initialLayoutState;
+			return { ...initialLayoutState };
 
 		case consts.SHOW_ABOUT:
 			return {
 				...state,
-				isAboutShown: true,
-				isMenuOpen: false,
-				areScoresShown: false,
+				isImageShown: false,
 			};
 
 		case consts.SHOW_SCORES:
 			return {
 				...state,
-				isMenuOpen: false,
-				isCoverShown: false,
-				areScoresShown: true,
-				isAboutShown: false,
+				isImageShown: false,
 			};
 
 		case consts.IMAGE_RESIZE:
@@ -199,7 +172,6 @@ function layoutReducer(state, action) {
 			return {
 				...state,
 				clicksArray: [],
-				isResultShown: true,
 				isLoadingResult: true,
 				hasResultBeenCalculated: true,
 			};
@@ -241,7 +213,6 @@ function layoutReducer(state, action) {
 				clicksArray: [],
 				isLoadingResult: true,
 				hasResultBeenCalculated: true,
-				areScoresShown: true,
 			};
 
 		case consts.SHOW_FINAL_RESULTS:
@@ -258,6 +229,7 @@ function layoutReducer(state, action) {
 	}
 }
 
+// formula to get character position in percentage
 // width% = x / imgWidth x 100
 // height% = (y - 52) / imgHeight x 100
 
@@ -273,17 +245,14 @@ const initialLayoutState = {
 	uid: null,
 	hasNameBeenSet: false,
 	isMenuOpen: false,
-	isCoverShown: true,
-	areScoresShown: false,
-	isAboutShown: false,
-	isResultShown: false,
+	isImageShown: false,
 	isLoadingResult: false,
+	hasGameStarted: false,
 	images: [
 		{ src: imageOne, string: 'imageOne' },
 		{ src: imageTwo, string: 'imageTwo' },
 		{ src: imageThree, string: 'imageThree' },
 	],
-
 	currentImageIndex: 0,
 	selectionContainer: null,
 	// the selection container & dropdown
@@ -295,6 +264,7 @@ const initialLayoutState = {
 	// current click coords
 	currentClickCoords: null,
 	imageOne: {
+		src: imageOne,
 		waldo: {
 			name: 'waldo',
 			x: 42,
@@ -318,6 +288,7 @@ const initialLayoutState = {
 		},
 	},
 	imageTwo: {
+		src: imageTwo,
 		waldo: {
 			name: 'waldo',
 			x: 65.7,
@@ -348,6 +319,7 @@ const initialLayoutState = {
 		},
 	},
 	imageThree: {
+		src: imageThree,
 		waldo: { name: 'waldo', x: 57, y: 35.3, found: false, image: waldoImg },
 		wizard: {
 			name: 'wizard',
@@ -373,8 +345,6 @@ function App() {
 		layoutReducer,
 		initialLayoutState
 	);
-	const [imageDims, setImageDims] = useState({ height: 0, width: 0 });
-	const [imageRef, observedDims] = useImageDims();
 
 	// detect when all characters in an image have been found and then calculate results
 	useEffect(() => {
@@ -394,6 +364,7 @@ function App() {
 				layoutState.images.length
 			) {
 				layoutDispatch({ type: consts.LOADING_RESULTS });
+				// history.push('/result');
 
 				// calculate total time, store in firebase and return time
 				addFinishTimestampAndCalculateTotal({
@@ -410,6 +381,7 @@ function App() {
 				// handle gameover - store final finish timestamp and reveal all scores
 			} else {
 				layoutDispatch({ type: consts.LOADING_FINAL_RESULTS });
+				// history.push('/scoreboard');
 
 				addFinishTimestampAndCalculateTotal({
 					image: `${
@@ -425,13 +397,6 @@ function App() {
 			}
 		}
 	}, [layoutState]);
-
-	// store image dims in state
-	useEffect(() => {
-		if (observedDims) {
-			setImageDims(observedDims);
-		}
-	}, [observedDims]);
 
 	// sign in to firebase anonymously
 	useEffect(() => {
@@ -460,146 +425,94 @@ function App() {
 			.catch((err) => console.log(err));
 	}, []);
 
-	const getClickArea = (e) => {
-		e.persist();
-
-		const x = e.clientX - 20;
-		const y = e.clientY - 72;
-
-		// changed from user
-		layoutDispatch({
-			type: consts.CLICKED,
-			// in percentages
-			currentClickPercentage: {
-				x: (x / imageDims.width) * 100,
-				y: (y / imageDims.height) * 100,
-				windowScrollY: window.scrollY,
-				windowScrollX: window.scrollX,
-			},
-			// in coordinates
-			currentClickCoords: {
-				x: e.clientX,
-				y: e.clientY,
-				windowScrollY: window.scrollY,
-				windowScrollX: window.scrollX,
-			},
-		});
-	};
-
-	const checkUserSelection = (character) => {
-		// using percentages so the image can be responsive
-		// and are clicked on image will be the same
-
-		// size waldo can be found within (width of the selection square in %)
-		const selectionWidthInPercentage = ((40 / imageDims.width) * 100) / 2;
-		const selectionHeightInPercentage = ((40 / imageDims.height) * 100) / 2;
-
-		// position of the characters y coordinate in percentage
-		// minus scrollY in precentage
-		const charY =
-			layoutState[
-				layoutState.images[layoutState.currentImageIndex].string
-			][character].y -
-			(layoutState.currentClickPercentage.windowScrollY /
-				imageDims.height) *
-				100;
-
-		// position of the characters x coordinate in percentage
-		// minus scrollX in precentage
-		const charX =
-			layoutState[
-				layoutState.images[layoutState.currentImageIndex].string
-			][character].x -
-			(layoutState.currentClickPercentage.windowScrollX /
-				imageDims.width) *
-				100;
-
-		// adding the percentage the selection container is offset by
-		const clickY =
-			layoutState.currentClickPercentage.y +
-			(20 / imageDims.height) * 100;
-		const clickX =
-			layoutState.currentClickPercentage.x + (20 / imageDims.width) * 100;
-
-		// if the target character is within the user selected area
-		if (
-			clickX + selectionWidthInPercentage > charX &&
-			clickX - selectionWidthInPercentage < charX &&
-			clickY + selectionHeightInPercentage > charY &&
-			clickY - selectionHeightInPercentage < charY
-		) {
-			return true;
-		}
-	};
-
-	const addClick = (character) => {
-		if (checkUserSelection(character)) {
-			layoutDispatch({
-				type: consts.CHARACTER_FOUND,
-				character,
-			});
-		} else {
-			layoutDispatch({
-				type: consts.CHARACTER_NOT_FOUND,
-			});
-		}
-	};
-
 	return (
-		<React.Fragment>
-			<GlobalStyle />
-			{layoutState.isMenuOpen && (
-				<Menu
-					layoutDispatch={layoutDispatch}
-					layoutState={layoutState}
-				/>
-			)}
-			{layoutState.isCoverShown && (
-				<Cover layoutDispatch={layoutDispatch} />
-			)}
-			{layoutState.areScoresShown && (
-				<Scoreboard bgImage={imageOne} layoutState={layoutState} />
-			)}
-			{layoutState.isAboutShown && <About />}
-			{layoutState.isResultShown && (
-				<Result
-					layoutDispatch={layoutDispatch}
-					layoutState={layoutState}
-				/>
-			)}
-
-			<Container>
+		<Router>
+			<React.Fragment>
 				<Nav layoutDispatch={layoutDispatch} />
-
-				<ImageContainer
-					onClick={(e) => {
-						getClickArea(e);
-					}}
-				>
-					{/* consolidated characterDropdown, characterReveal and userSelection into ImageElements */}
-					<ImageElements
-						layoutState={layoutState}
-						layoutDispatch={layoutDispatch}
-						imageDims={imageDims}
-						addClick={addClick}
+				<Switch>
+					{!layoutState.hasGameStarted && (
+						<Route
+							exact
+							path="/"
+							component={(props) => <Redirect to="/cover" />}
+						/>
+					)}
+					<Route
+						exact
+						path="/"
+						component={(props) => (
+							<Image
+								currentImage={
+									layoutState[
+										layoutState.images[
+											layoutState.currentImageIndex
+										].string
+									]
+								}
+								currentClickPercentage={
+									layoutState.currentClickPercentage
+								}
+								clicksArray={layoutState.clicksArray}
+								isSelectCharacterShown={
+									layoutState.isSelectCharacterShown
+								}
+								currentClickCoords={
+									layoutState.currentClickCoords
+								}
+								layoutDispatch={layoutDispatch}
+							/>
+						)}
+					/>
+					<Route
+						exact
+						path="/menu"
+						component={(props) => (
+							<Menu
+								{...props}
+								layoutDispatch={layoutDispatch}
+								layoutState={layoutState}
+							/>
+						)}
+					/>
+					<Route
+						exact
+						path="/cover"
+						component={(props) => (
+							<Cover {...props} layoutDispatch={layoutDispatch} />
+						)}
 					/>
 
-					<Image
-						src={
-							layoutState.images[layoutState.currentImageIndex]
-								.src
-						}
-						alt=""
-						ref={imageRef}
-					></Image>
-				</ImageContainer>
-			</Container>
-
-			{/* need to pass current image instead of imageOne */}
-			{/* these are the different "pages" */}
-
-			<Spacer height={'48px'} />
-		</React.Fragment>
+					<Route
+						exact
+						path="/result"
+						component={(props) => (
+							<Result
+								{...props}
+								layoutDispatch={layoutDispatch}
+								layoutState={layoutState}
+							/>
+						)}
+					/>
+					<Route
+						exact
+						path="/scoreboard"
+						component={(props) => (
+							<Scoreboard
+								{...props}
+								bgImage={imageOne}
+								layoutState={layoutState}
+							/>
+						)}
+					/>
+					<Route
+						exact
+						path="/about"
+						component={(props) => <About {...props} />}
+					/>
+				</Switch>
+				<GlobalStyle />
+			</React.Fragment>
+		</Router>
 	);
 }
 
