@@ -58,7 +58,7 @@ export default function Cover({ layoutDispatch }) {
 				<StartGameBtn
 					onClick={() => {
 						layoutDispatch({ type: consts.START_GAME });
-						history.push('/');
+						history.push('/find');
 					}}
 				>
 					Start

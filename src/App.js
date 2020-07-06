@@ -119,7 +119,7 @@ function layoutReducer(state, action) {
 
 			const characterFoundState = {
 				...state,
-				clicksArray: [...state.clicksArray, characterFoundClick],
+				clicksArray: [characterFoundClick, ...state.clicksArray],
 				isSelectCharacterShown: false,
 			};
 
@@ -139,7 +139,7 @@ function layoutReducer(state, action) {
 			};
 			const allClicks =
 				state.clicksArray.length > 0
-					? [...state.clicksArray, wrongClick]
+					? [wrongClick, ...state.clicksArray]
 					: [wrongClick];
 
 			return {
@@ -197,7 +197,6 @@ function layoutReducer(state, action) {
 				nextRoundState.allScores.userScores.NameBeenSet = true;
 			}
 
-			nextRoundState.isResultShown = false;
 			nextRoundState.hasResultBeenCalculated = false;
 			return nextRoundState;
 
@@ -393,7 +392,7 @@ function App() {
 				});
 			}
 		}
-	}, [layoutState]);
+	}, [layoutState, history]);
 
 	// sign in to firebase anonymously
 	useEffect(() => {
@@ -426,16 +425,16 @@ function App() {
 		<React.Fragment>
 			<Nav layoutDispatch={layoutDispatch} />
 			<Switch>
-				{!layoutState.hasGameStarted && (
-					<Route
-						exact
-						path="/"
-						component={(props) => <Redirect to="/cover" />}
-					/>
-				)}
 				<Route
 					exact
 					path="/"
+					component={(props) => (
+						<Cover {...props} layoutDispatch={layoutDispatch} />
+					)}
+				/>
+				<Route
+					exact
+					path="/find"
 					component={(props) => (
 						<Image
 							currentImage={
@@ -468,14 +467,6 @@ function App() {
 						/>
 					)}
 				/>
-				<Route
-					exact
-					path="/cover"
-					component={(props) => (
-						<Cover {...props} layoutDispatch={layoutDispatch} />
-					)}
-				/>
-
 				<Route
 					exact
 					path="/result"

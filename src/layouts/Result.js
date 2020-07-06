@@ -4,6 +4,7 @@ import { Spacer } from '../GlobalStyle';
 import * as consts from '../constants';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { getMinutesFromMillis, sortLeaderboard } from '../utils';
+import { useHistory } from 'react-router-dom';
 
 const Background = styled.div`
 	position: absolute;
@@ -153,6 +154,7 @@ const LoadingIcon = styled.svg`
 `;
 
 export default function Result({ layoutDispatch, layoutState }) {
+	const history = useHistory();
 	return (
 		<>
 			<Background
@@ -195,11 +197,12 @@ export default function Result({ layoutDispatch, layoutState }) {
 							<Spacer height={'48px'} />
 							<NextBtn
 								type="button"
-								onClick={() =>
+								onClick={() => {
 									layoutDispatch({
 										type: consts.NEXT_ROUND,
-									})
-								}
+									});
+									history.push('/find');
+								}}
 							>
 								Next Round
 							</NextBtn>
