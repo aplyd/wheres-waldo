@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { RiMenuLine } from 'react-icons/ri';
 import { Spacer } from '../GlobalStyle';
 import * as consts from '../constants';
+import { useHistory } from 'react-router-dom';
 
 const Container = styled.div`
 	position: fixed;
@@ -29,15 +30,16 @@ const Title = styled.h1`
 `;
 
 export default function Nav({ layoutDispatch }) {
-	useEffect(() => {
-		console.log('nav rerendered');
-	}, []);
+	const history = useHistory();
 
 	return (
 		<>
 			<Container>
 				<div
-					onClick={() => layoutDispatch({ type: consts.TOGGLE_MENU })}
+					onClick={() => {
+						history.push('/menu');
+						layoutDispatch({ type: consts.TOGGLE_MENU });
+					}}
 				>
 					<MenuIcon as={RiMenuLine} />
 				</div>

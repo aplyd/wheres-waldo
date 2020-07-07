@@ -38,7 +38,7 @@ function layoutReducer(state, action) {
 		case consts.TOGGLE_MENU:
 			return {
 				...state,
-				isImageShown: false,
+				isMenuOpen: !state.isMenuOpen,
 			};
 		case consts.SAVE_USERNAME:
 			return {
@@ -66,24 +66,11 @@ function layoutReducer(state, action) {
 			return {
 				...state,
 				isMenuOpen: false,
-				isImageShown: true,
 				hasGameStarted: true,
 			};
 
 		case consts.NEW_GAME:
-			return { ...initialLayoutState };
-
-		case consts.SHOW_ABOUT:
-			return {
-				...state,
-				isImageShown: false,
-			};
-
-		case consts.SHOW_SCORES:
-			return {
-				...state,
-				isImageShown: false,
-			};
+			return initialLayoutState;
 
 		case consts.IMAGE_RESIZE:
 			return {
@@ -423,7 +410,7 @@ function App() {
 
 	return (
 		<React.Fragment>
-			<Nav layoutDispatch={layoutDispatch} />
+			{!layoutState.isMenuOpen && <Nav layoutDispatch={layoutDispatch} />}
 			<Switch>
 				<Route
 					exact

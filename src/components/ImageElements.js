@@ -31,7 +31,7 @@ export default function ImageElements({
 				clicksArray.map((result, index) => {
 					return (
 						<ShowResult
-							key={index}
+							key={`${result.x}${result.y}`}
 							x={result.x}
 							y={result.y}
 							found={result.characterFound}

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
 import { Spacer } from '../GlobalStyle';
 import * as consts from '../constants';
+import { useHistory } from 'react-router-dom';
 
 const Container = styled.div`
 	position: fixed;
@@ -67,28 +68,41 @@ const Character = styled.div`
 `;
 
 export default function Menu({ layoutDispatch, layoutState }) {
+	const history = useHistory();
+
 	const menuItems = [
 		{
 			title: 'Resume',
-			action: () => layoutDispatch({ type: consts.TOGGLE_MENU }),
+			action: () => {
+				history.goBack();
+				layoutDispatch({ type: consts.TOGGLE_MENU });
+			},
 		},
 		{
 			title: 'New Game',
-			action: () => layoutDispatch({ type: consts.NEW_GAME }),
+			action: () => {
+				layoutDispatch({ type: consts.NEW_GAME });
+				history.push('/');
+			},
 		},
 		{
 			title: 'Scoreboard',
-			action: () => layoutDispatch({ type: consts.SHOW_SCORES }),
+			action: () => history.push('/scoreboard'),
 		},
 		{
 			title: 'About',
-			action: () => layoutDispatch({ type: consts.SHOW_ABOUT }),
+			action: () => history.push('/about'),
 		},
 	];
 
 	return (
 		<Container>
-			<div onClick={() => layoutDispatch({ type: consts.TOGGLE_MENU })}>
+			<div
+				onClick={() => {
+					history.goBack();
+					layoutDispatch({ type: consts.TOGGLE_MENU });
+				}}
+			>
 				<CloseIcon as={MdClose} />
 			</div>
 
