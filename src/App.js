@@ -1,6 +1,6 @@
 import React, { useReducer, useEffect } from 'react';
 import { GlobalStyle } from './GlobalStyle';
-import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import imageOne from './images/imageOne.jpg';
 import imageTwo from './images/imageTwo.jpg';
 import imageThree from './images/imageThree.jpg';
@@ -68,9 +68,6 @@ function layoutReducer(state, action) {
 				isMenuOpen: false,
 				hasGameStarted: true,
 			};
-
-		case consts.NEW_GAME:
-			return initialLayoutState;
 
 		case consts.IMAGE_RESIZE:
 			return {

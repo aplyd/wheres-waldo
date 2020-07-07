@@ -79,13 +79,6 @@ export default function Menu({ layoutDispatch, layoutState }) {
 			},
 		},
 		{
-			title: 'New Game',
-			action: () => {
-				layoutDispatch({ type: consts.NEW_GAME });
-				history.push('/');
-			},
-		},
-		{
 			title: 'Scoreboard',
 			action: () => history.push('/scoreboard'),
 		},
@@ -94,6 +87,16 @@ export default function Menu({ layoutDispatch, layoutState }) {
 			action: () => history.push('/about'),
 		},
 	];
+
+	const characters = Object.entries(
+		layoutState[layoutState.images[layoutState.currentImageIndex].string]
+	).filter((char) => {
+		if (char[0] !== 'src') {
+			return char[1];
+		}
+		return null;
+	});
+	console.log(characters);
 
 	return (
 		<Container>
@@ -119,16 +122,11 @@ export default function Menu({ layoutDispatch, layoutState }) {
 					);
 				})}
 				<CharacterPreviews>
-					{Object.values(
-						layoutState[
-							layoutState.images[layoutState.currentImageIndex]
-								.string
-						]
-					).map((char, index) => {
+					{characters.map((char, index) => {
 						return (
 							<Character key={index}>
-								<img src={char.image} alt="" />
-								<h2>{char.name}</h2>
+								<img src={char[1].image} alt="" />
+								<h2>{char[1].name}</h2>
 							</Character>
 						);
 					})}

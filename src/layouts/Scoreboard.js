@@ -5,22 +5,17 @@ import * as consts from '../constants';
 
 const Background = styled.div`
 	background-image: ${(props) => `url(${props.bgImage})`};
-	background-size: contain;
+	background-size: auto;
 	filter: blur(4px);
 	--webkit-filter: blur(4px);
-	position: absolute;
+	position: fixed;
 	z-index: 1003;
-	top: 0;
-	left: 0;
-	right: 0;
-	height: 100%;
-	@media only screen and (max-width: 850px) {
-		height: calc(100% + 1150px);
-	}
+	width: 100%;
+	height: calc(100% - 52px);
 `;
 
 const Container = styled.div`
-	height: 100%;
+	height: calc(100% - 52px);
 	z-index: 1009;
 	position: absolute;
 	top: 52px;
@@ -36,7 +31,7 @@ const ScoresContainer = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-rows: 1;
-	@media only screen and (max-width: 850px) {
+	@media only screen and (max-width: 940px) {
 		grid-template-columns: 1fr;
 		grid-template-rows: 1fr 1fr 1fr;
 	}
@@ -54,7 +49,7 @@ const ScoreCard = styled.div`
 		border-radius: 8px;
 		overflow-x: hidden;
 		overflow-y: scroll;
-		width: 263px;
+		width: 300px;
 		height: 470px;
 		background-color: white;
 		margin: 24px auto 0 auto;
@@ -62,7 +57,7 @@ const ScoreCard = styled.div`
 
 	&& table {
 		border-collapse: collapse;
-		width: 263px;
+		width: 300px;
 		margin: 0 auto;
 	}
 
@@ -74,8 +69,10 @@ const ScoreCard = styled.div`
 	}
 
 	&& td {
-		max-width: 127px;
+		max-width: 130px;
+		min-width: 40px;
 		padding: 8px 24px;
+		white-space: nowrap;
 	}
 `;
 

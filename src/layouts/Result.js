@@ -7,15 +7,13 @@ import { getMinutesFromMillis, sortLeaderboard } from '../utils';
 import { useHistory } from 'react-router-dom';
 
 const Background = styled.div`
-	position: absolute;
+	position: fixed;
 	z-index: 1004;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+	width: 110%;
+	height: 100%;
 	background-image: ${(props) => `url(${props.bgImage})`};
 	background-repeat: repeat-y;
-	background-size: cover;
+	background-size: auto;
 	filter: blur(4px);
 	--webkit-filter: blur(4px);
 `;
@@ -82,7 +80,6 @@ const NextBtn = styled.button`
 	padding: 25px 32px 16px 32px;
 	box-shadow: none;
 	border: none;
-	margin-left: 35px;
 `;
 
 const AllScoresContainer = styled.div`
@@ -101,7 +98,7 @@ const AllScoresContainer = styled.div`
 		padding-top: 16px;
 		border-collapse: collapse;
 		z-index: 1000;
-		width: 263px;
+		width: 300px;
 	}
 
 	&& thead,
@@ -112,8 +109,9 @@ const AllScoresContainer = styled.div`
 	}
 
 	&& td {
-		max-width: 127px;
+		max-width: 130px;
 		padding: 8px 24px;
+		white-space: nowrap;
 	}
 	@media screen and (max-width: 800px) {
 		width: 100%;
@@ -131,7 +129,7 @@ const ScoresBackground = styled.div`
 	height: 370px;
 	overflow-y: scroll;
 	overflow-x: hidden;
-	width: 263px;
+	width: 300px;
 	position: relative;
 `;
 
