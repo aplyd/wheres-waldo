@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -118,3 +119,11 @@ export default function ShowResult({
 		</>
 	);
 }
+
+ShowResult.propTypes = {
+	found: PropTypes.bool,
+	windowScrollX: PropTypes.number,
+	windowScrollY: PropTypes.number,
+	x: PropTypes.number,
+	y: PropTypes.number,
+};

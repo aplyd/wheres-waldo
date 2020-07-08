@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ImageElements from '../components/ImageElements';
@@ -147,5 +148,21 @@ function Image({
 		</Container>
 	);
 }
+
+Image.propTypes = {
+	clicksArray: PropTypes.array,
+	currentClickCoords: PropTypes.object,
+	currentClickPercentage: PropTypes.shape({
+		windowScrollX: PropTypes.number,
+		windowScrollY: PropTypes.number,
+		x: PropTypes.number,
+		y: PropTypes.number,
+	}),
+	currentImage: PropTypes.shape({
+		src: PropTypes.string,
+	}),
+	isSelectCharacterShown: PropTypes.bool,
+	layoutDispatch: PropTypes.func,
+};
 
 export default React.memo(Image);

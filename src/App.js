@@ -353,7 +353,7 @@ function App() {
 				// handle gameover - store final finish timestamp and reveal all scores
 			} else {
 				layoutDispatch({ type: consts.LOADING_FINAL_RESULTS });
-				history.push('/scoreboard');
+				history.push('/leaderboard');
 
 				addFinishTimestampAndCalculateTotal({
 					image: `${
@@ -455,7 +455,7 @@ function App() {
 				/>
 				<Route
 					exact
-					path="/scoreboard"
+					path="/leaderboard"
 					component={(props) => (
 						<Scoreboard
 							{...props}

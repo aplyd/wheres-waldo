@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 import { RiMenuLine } from 'react-icons/ri';
@@ -52,3 +53,7 @@ export default function Nav({ layoutDispatch }) {
 		</>
 	);
 }
+
+Nav.propTypes = {
+	layoutDispatch: PropTypes.func,
+};

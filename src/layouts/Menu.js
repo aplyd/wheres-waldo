@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
@@ -66,19 +67,19 @@ const Character = styled.div`
 	}
 `;
 
-export default function Menu({ layoutDispatch, layoutState }) {
+export default function Menu({ layoutState }) {
 	const history = useHistory();
 
 	const menuItems = [
 		{
-			title: 'Resume',
+			title: 'Find',
 			action: () => {
-				history.goBack();
+				history.push('/find');
 			},
 		},
 		{
-			title: 'Scoreboard',
-			action: () => history.push('/scoreboard'),
+			title: 'Leaderboard',
+			action: () => history.push('/leaderboard'),
 		},
 		{
 			title: 'About',
@@ -131,3 +132,10 @@ export default function Menu({ layoutDispatch, layoutState }) {
 		</Container>
 	);
 }
+
+Menu.propTypes = {
+	layoutState: PropTypes.shape({
+		currentImageIndex: PropTypes.number,
+		images: PropTypes.array,
+	}),
+};

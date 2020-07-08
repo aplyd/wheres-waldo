@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
@@ -70,3 +71,7 @@ export default function Cover({ layoutDispatch }) {
 		</>
 	);
 }
+
+Cover.propTypes = {
+	layoutDispatch: PropTypes.func,
+};

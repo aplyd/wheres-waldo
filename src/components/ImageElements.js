@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 import ShowResult from './ShowResult';
@@ -62,5 +63,26 @@ function ImageElements({
 		</>
 	);
 }
+
+ImageElements.propTypes = {
+	addClick: PropTypes.func,
+	clicksArray: PropTypes.shape({
+		length: PropTypes.number,
+		map: PropTypes.func,
+	}),
+	currentClickCoords: PropTypes.object,
+	currentClickPercentage: PropTypes.shape({
+		windowScrollX: PropTypes.number,
+		windowScrollY: PropTypes.number,
+		x: PropTypes.number,
+		y: PropTypes.number,
+	}),
+	currentImage: PropTypes.any,
+	imageDims: PropTypes.shape({
+		height: PropTypes.number,
+	}),
+	isSelectCharacterShown: PropTypes.bool,
+	layoutDispatch: PropTypes.func,
+};
 
 export default React.memo(ImageElements);

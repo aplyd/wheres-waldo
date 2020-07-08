@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 import { getMinutesFromMillis, sortLeaderboard } from '../utils';
@@ -153,3 +154,9 @@ export default function Scoreboard({ bgImage, layoutState, layoutDispatch }) {
 		</>
 	);
 }
+
+Scoreboard.propTypes = {
+	bgImage: PropTypes.string,
+	layoutDispatch: PropTypes.func,
+	layoutState: PropTypes.object,
+};

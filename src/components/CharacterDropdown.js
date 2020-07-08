@@ -46,9 +46,7 @@ const CloseDropdown = styled(SelectionItem)`
 function CharacterDropdown({
 	currentClickPercentage,
 	layoutDispatch,
-	imageHeight,
 	addClick,
-	images,
 	currentClickCoords,
 	currentImage,
 }) {
@@ -124,11 +122,18 @@ function CharacterDropdown({
 
 CharacterDropdown.propTypes = {
 	addClick: PropTypes.func,
-	currentClickPercentage: PropTypes.shape({
-		x: PropTypes.any,
-		y: PropTypes.any,
+	currentClickCoords: PropTypes.shape({
+		x: PropTypes.number,
+		y: PropTypes.number,
 	}),
-	imageHeight: PropTypes.any,
+	currentClickPercentage: PropTypes.shape({
+		windowScrollX: PropTypes.number,
+		windowScrollY: PropTypes.number,
+		x: PropTypes.number,
+		y: PropTypes.number,
+	}),
+	currentImage: PropTypes.any,
+	imageHeight: PropTypes.number,
 	layoutDispatch: PropTypes.func,
 	layoutState: PropTypes.shape({
 		currentClickCoords: PropTypes.shape({
@@ -136,11 +141,11 @@ CharacterDropdown.propTypes = {
 			y: PropTypes.number,
 		}),
 		currentClickPercentage: PropTypes.shape({
-			windowScrollX: PropTypes.any,
-			windowScrollY: PropTypes.any,
+			windowScrollX: PropTypes.number,
+			windowScrollY: PropTypes.number,
 		}),
-		currentImageIndex: PropTypes.any,
-		images: PropTypes.any,
+		currentImageIndex: PropTypes.number,
+		images: PropTypes.array,
 	}),
 };
 

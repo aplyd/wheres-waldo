@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 import { Spacer } from '../GlobalStyle';
@@ -127,7 +128,7 @@ const ScoresBackground = styled.div`
 	margin: 0 auto;
 	background-color: white;
 	border-radius: 8px;
-	height: 370px;
+	height: 470px;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	width: 300px;
@@ -166,9 +167,9 @@ export default function Result({ layoutDispatch, layoutState }) {
 						<LoadingIcon as={AiOutlineLoading} />
 					) : (
 						<>
-							<Spacer height={'24px'} />
+							<Spacer height={'31px'} />
 							<Title>Good job!</Title>
-							<Spacer height={'24px'} />
+							<Spacer height={'32px'} />
 							<SubTitle>your time</SubTitle>{' '}
 							<Time>
 								{getMinutesFromMillis(
@@ -181,7 +182,7 @@ export default function Result({ layoutDispatch, layoutState }) {
 							</Time>
 							<Spacer height={'48px'} />
 							<Prompt>Add your name to the leaderboard?</Prompt>
-							<Spacer height={'24px'} />
+							<Spacer height={'81px'} />
 							<NameInput
 								placeholder="Name"
 								autoFocus
@@ -194,7 +195,7 @@ export default function Result({ layoutDispatch, layoutState }) {
 								value={layoutState.allScores.userScores.name}
 								maxLength="10"
 							/>
-							<Spacer height={'48px'} />
+							<Spacer height={'76px'} />
 							<NextBtn
 								type="button"
 								onClick={() => {
@@ -259,3 +260,13 @@ export default function Result({ layoutDispatch, layoutState }) {
 		</>
 	);
 }
+
+Result.propTypes = {
+	layoutDispatch: PropTypes.func,
+	layoutState: PropTypes.shape({
+		allScores: PropTypes.object,
+		currentImageIndex: PropTypes.number,
+		images: PropTypes.array,
+		isLoadingResult: PropTypes.bool,
+	}),
+};
