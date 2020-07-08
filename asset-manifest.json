@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/wheres-waldo/static/css/main.c6b22233.chunk.css",
-    "main.js": "/wheres-waldo/static/js/main.e65639c0.chunk.js",
-    "main.js.map": "/wheres-waldo/static/js/main.e65639c0.chunk.js.map",
+    "main.js": "/wheres-waldo/static/js/main.fa537fe3.chunk.js",
+    "main.js.map": "/wheres-waldo/static/js/main.fa537fe3.chunk.js.map",
     "runtime-main.js": "/wheres-waldo/static/js/runtime-main.65f9ca55.js",
     "runtime-main.js.map": "/wheres-waldo/static/js/runtime-main.65f9ca55.js.map",
     "static/js/2.3c875192.chunk.js": "/wheres-waldo/static/js/2.3c875192.chunk.js",
     "static/js/2.3c875192.chunk.js.map": "/wheres-waldo/static/js/2.3c875192.chunk.js.map",
     "index.html": "/wheres-waldo/index.html",
-    "precache-manifest.4359686522ce2858e48bb85b8c175cb8.js": "/wheres-waldo/precache-manifest.4359686522ce2858e48bb85b8c175cb8.js",
+    "precache-manifest.60a6f9847b1b61e299afb9c9d354fd3b.js": "/wheres-waldo/precache-manifest.60a6f9847b1b61e299afb9c9d354fd3b.js",
     "service-worker.js": "/wheres-waldo/service-worker.js",
     "static/css/main.c6b22233.chunk.css.map": "/wheres-waldo/static/css/main.c6b22233.chunk.css.map",
     "static/js/2.3c875192.chunk.js.LICENSE.txt": "/wheres-waldo/static/js/2.3c875192.chunk.js.LICENSE.txt",
@@ -21,6 +21,6 @@
     "static/js/runtime-main.65f9ca55.js",
     "static/js/2.3c875192.chunk.js",
     "static/css/main.c6b22233.chunk.css",
-    "static/js/main.e65639c0.chunk.js"
+    "static/js/main.fa537fe3.chunk.js"
   ]
 }
