@@ -43,7 +43,7 @@ const CloseDropdown = styled(SelectionItem)`
 	text-align: center;
 `;
 
-export default function CharacterDropdown({
+function CharacterDropdown({
 	currentClickPercentage,
 	layoutDispatch,
 	imageHeight,
@@ -104,7 +104,7 @@ export default function CharacterDropdown({
 							e.stopPropagation();
 							addClick(char.name);
 						}}
-						key={index}
+						key={`${char.name}`}
 					>
 						<h2>{char.name}</h2>
 					</SelectionItem>
@@ -143,3 +143,5 @@ CharacterDropdown.propTypes = {
 		images: PropTypes.any,
 	}),
 };
+
+export default React.memo(CharacterDropdown);

@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
 import { Spacer } from '../GlobalStyle';
-import * as consts from '../constants';
 import { useHistory } from 'react-router-dom';
 
 const Container = styled.div`
@@ -75,7 +74,6 @@ export default function Menu({ layoutDispatch, layoutState }) {
 			title: 'Resume',
 			action: () => {
 				history.goBack();
-				layoutDispatch({ type: consts.TOGGLE_MENU });
 			},
 		},
 		{
@@ -96,14 +94,12 @@ export default function Menu({ layoutDispatch, layoutState }) {
 		}
 		return null;
 	});
-	console.log(characters);
 
 	return (
 		<Container>
 			<div
 				onClick={() => {
 					history.goBack();
-					layoutDispatch({ type: consts.TOGGLE_MENU });
 				}}
 			>
 				<CloseIcon as={MdClose} />
@@ -114,7 +110,7 @@ export default function Menu({ layoutDispatch, layoutState }) {
 
 				{menuItems.map((item, index) => {
 					return (
-						<React.Fragment key={index}>
+						<React.Fragment key={item.title}>
 							<MenuItem onClick={item.action}>
 								<h2>{item.title}</h2>
 							</MenuItem>
@@ -124,7 +120,7 @@ export default function Menu({ layoutDispatch, layoutState }) {
 				<CharacterPreviews>
 					{characters.map((char, index) => {
 						return (
-							<Character key={index}>
+							<Character key={char[1].name + 123}>
 								<img src={char[1].image} alt="" />
 								<h2>{char[1].name}</h2>
 							</Character>

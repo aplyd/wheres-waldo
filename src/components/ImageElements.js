@@ -14,7 +14,7 @@ const UserSelection = styled.div`
 	border-radius: 8px;
 `;
 
-export default function ImageElements({
+function ImageElements({
 	clicksArray,
 	isSelectCharacterShown,
 	currentClickPercentage,
@@ -62,3 +62,5 @@ export default function ImageElements({
 		</>
 	);
 }
+
+export default React.memo(ImageElements);

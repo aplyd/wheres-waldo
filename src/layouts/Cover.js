@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Spacer } from '../GlobalStyle';
 import bgImage from '../images/imageTwo.jpg';
 import * as consts from '../constants';
+import Nav from '../layouts/Nav';
 
 const Background = styled.div`
 	background-image: url(${bgImage});
@@ -52,6 +53,7 @@ export default function Cover({ layoutDispatch }) {
 	const history = useHistory();
 	return (
 		<>
+			<Nav layoutDispatch={layoutDispatch} />
 			<Container>
 				<Title>Where's Waldo?</Title>
 				<Spacer height={'62px'} />

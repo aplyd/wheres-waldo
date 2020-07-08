@@ -5,6 +5,7 @@ import * as consts from '../constants';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { getMinutesFromMillis, sortLeaderboard } from '../utils';
 import { useHistory } from 'react-router-dom';
+import Nav from '../layouts/Nav';
 
 const Background = styled.div`
 	position: fixed;
@@ -155,6 +156,7 @@ export default function Result({ layoutDispatch, layoutState }) {
 	const history = useHistory();
 	return (
 		<>
+			<Nav layoutDispatch={layoutDispatch} />
 			<Background
 				bgImage={layoutState.images[layoutState.currentImageIndex].src}
 			/>
@@ -232,7 +234,7 @@ export default function Result({ layoutDispatch, layoutState }) {
 									).map((user, index) => {
 										return (
 											<TR
-												key={`${index}${user.uid}`}
+												key={`${user.time}${user.currentVisit}`}
 												currentVisit={user.currentVisit}
 											>
 												<td>{index + 1}</td>

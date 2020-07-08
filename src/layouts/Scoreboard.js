@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { getMinutesFromMillis, sortLeaderboard } from '../utils';
 import * as consts from '../constants';
+import Nav from '../layouts/Nav';
 
 const Background = styled.div`
 	background-image: ${(props) => `url(${props.bgImage})`};
@@ -90,9 +91,10 @@ const TitleContainer = styled.div`
 	}
 `;
 
-export default function Scoreboard({ bgImage, layoutState }) {
+export default function Scoreboard({ bgImage, layoutState, layoutDispatch }) {
 	return (
 		<>
+			<Nav layoutDispatch={layoutDispatch} />
 			<Background bgImage={bgImage}></Background>
 			<Container bgImage={bgImage}>
 				<TitleContainer>
@@ -121,7 +123,7 @@ export default function Scoreboard({ bgImage, layoutState }) {
 											{scores.map((score, index) => {
 												return (
 													<TR
-														key={`${score.name}${score.time}${index}`}
+														key={`${score.name}${index}`}
 														currentVisit={
 															score.currentVisit
 														}

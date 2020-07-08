@@ -11,9 +11,8 @@ import wendyImg from './images/wendy.jpg';
 import wizardImg from './images/wizard.jpg';
 import odlawImg from './images/odlaw.jpg';
 
-import Image from './components/Image';
+import Image from './layouts/Image';
 import Cover from './layouts/Cover';
-import Nav from './layouts/Nav';
 import Menu from './layouts/Menu';
 import About from './layouts/About';
 import Result from './layouts/Result';
@@ -34,11 +33,6 @@ function layoutReducer(state, action) {
 			return {
 				...state,
 				uid: action.uid,
-			};
-		case consts.TOGGLE_MENU:
-			return {
-				...state,
-				isMenuOpen: !state.isMenuOpen,
 			};
 		case consts.SAVE_USERNAME:
 			return {
@@ -65,7 +59,6 @@ function layoutReducer(state, action) {
 			}).catch((err) => console.log(err));
 			return {
 				...state,
-				isMenuOpen: false,
 				hasGameStarted: true,
 			};
 
@@ -221,7 +214,6 @@ const initialLayoutState = {
 	},
 	uid: null,
 	hasNameBeenSet: false,
-	isMenuOpen: false,
 	isImageShown: false,
 	isLoadingResult: false,
 	hasGameStarted: false,
@@ -407,7 +399,6 @@ function App() {
 
 	return (
 		<React.Fragment>
-			{!layoutState.isMenuOpen && <Nav layoutDispatch={layoutDispatch} />}
 			<Switch>
 				<Route
 					exact
@@ -470,13 +461,16 @@ function App() {
 							{...props}
 							bgImage={imageOne}
 							layoutState={layoutState}
+							layoutDispatch={layoutDispatch}
 						/>
 					)}
 				/>
 				<Route
 					exact
 					path="/about"
-					component={(props) => <About {...props} />}
+					component={(props) => (
+						<About {...props} layoutDispatch={layoutDispatch} />
+					)}
 				/>
 			</Switch>
 			<GlobalStyle />

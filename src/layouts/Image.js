@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import ImageElements from './ImageElements';
+import ImageElements from '../components/ImageElements';
 import * as consts from '../constants';
 import useResizeObserver from '../hooks/useResizeObserver';
+import Nav from './Nav';
 
 const Container = styled.div`
 	width: 100%;
@@ -27,7 +28,7 @@ const Img = styled.img`
 	} */
 `;
 
-export default function Image({
+function Image({
 	currentImage,
 	layoutDispatch,
 	clicksArray,
@@ -124,6 +125,7 @@ export default function Image({
 
 	return (
 		<Container>
+			<Nav layoutDispatch={layoutDispatch} />
 			<ImageContainer
 				onClick={(e) => {
 					getClickArea(e);
@@ -145,3 +147,5 @@ export default function Image({
 		</Container>
 	);
 }
+
+export default React.memo(Image);
